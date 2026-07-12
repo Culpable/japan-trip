@@ -711,16 +711,7 @@
     }
     .pikachu-stage { position: relative; display: block; width: 86px; height: 76px; margin: 0 auto; }
     .pikachu-stage img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
-    .costume-accessory { position: absolute; display: block; pointer-events: none; z-index: 2; }
-    [data-costume="neon"] .costume-accessory { left: 27px; top: 27px; width: 34px; height: 9px; border-radius: 4px; background: #151619; box-shadow: -8px 0 0 -2px #151619, 8px 0 0 -2px #151619; }
-    [data-costume="cafe"] .costume-accessory { left: 25px; top: 7px; width: 38px; height: 13px; border-radius: 70% 70% 40% 40%; background: #e44848; transform: rotate(-8deg); }
-    [data-costume="ninja"] .costume-accessory { left: 15px; top: 16px; width: 56px; height: 8px; background: #b72f31; transform: rotate(-4deg); box-shadow: 39px 7px 0 -2px #b72f31; }
-    [data-costume="hike"] .costume-accessory { left: 23px; top: 7px; width: 42px; height: 15px; border-radius: 70% 70% 20% 20%; background: #3d7a34; box-shadow: 16px 9px 0 -4px #3d7a34; }
-    [data-costume="kimono"] .costume-accessory { left: 35px; bottom: 2px; width: 18px; height: 18px; background: #f06d91; transform: rotate(45deg); box-shadow: 13px -13px 0 #f7a9bd; }
-    [data-costume="osaka"] .costume-accessory { display: none; }
-    .pikachu-companion.is-walking { animation: companion-walk .42s ease-in-out infinite alternate; }
     .pikachu-companion.is-dancing { animation: companion-dance .26s ease-in-out 6 alternate; }
-    @keyframes companion-walk { to { transform: translateY(-5px) rotate(2deg); } }
     @keyframes companion-dance { from { transform: rotate(-10deg) scale(1.03); } to { transform: rotate(10deg) translateY(-8px) scale(1.08); } }
     .sound-toggle { margin-left: auto; }
     .print-action { margin-left: 0; }
@@ -880,11 +871,6 @@
       .pikachu-companion { width: 82px; border-radius: 22px; }
       .pikachu-stage { width: 64px; height: 58px; }
       .pikachu-speech { max-width: 150px; }
-      [data-costume="neon"] .costume-accessory { left: 18px; top: 20px; }
-      [data-costume="cafe"] .costume-accessory { left: 15px; top: 4px; }
-      [data-costume="ninja"] .costume-accessory { left: 7px; top: 11px; }
-      [data-costume="hike"] .costume-accessory { left: 14px; top: 4px; }
-      [data-costume="kimono"] .costume-accessory { left: 25px; }
       .sound-toggle { margin-left: 0; }
       .next-booking { grid-template-columns: auto 1fr; padding: .85rem; }
       .booking-link { grid-column: 2; justify-self: start; }
@@ -1006,7 +992,6 @@
     <span class="pikachu-speech" id="pikachuSpeech">Ready for adventure!</span>
     <span class="pikachu-stage">
       <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.gif" alt="Pikachu">
-      <span class="costume-accessory" aria-hidden="true"></span>
     </span>
   </button>
 
@@ -1311,15 +1296,8 @@
         companion.dataset.costume = moments[region].costume;
         speech.textContent = moments[region].speech;
         revealCompanionSpeech();
-      }, { rootMargin: '-32% 0px -48% 0px', threshold: 0 });
+      }, { rootMargin: '-49% 0px -50% 0px', threshold: 0 });
       regions.forEach((region) => observer.observe(region));
-
-      let walkingTimer;
-      window.addEventListener('scroll', () => {
-        companion.classList.add('is-walking');
-        window.clearTimeout(walkingTimer);
-        walkingTimer = window.setTimeout(() => companion.classList.remove('is-walking'), 180);
-      }, { passive: true });
     }
 
     function updateTripState() {
