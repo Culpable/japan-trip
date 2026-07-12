@@ -1,0 +1,158 @@
+<bug_sweep>
+<bug_1>
+<summary>
+<title>[Stamps] Date previews permanently unlock future passport stamps</title>
+<one_line_description>Opening a future date preview writes every previewed day to persistent storage, so the real pre-trip view can show stamps that have not been earned.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - function: `previewableNow`, Lines 1354-1359
+- /Users/sacino/japan-trip/index.html - function: `updateStamps`, Lines 1484-1501
+</file_locations>
+
+<issue_description>
+<description>The production `date` query parameter changes the clock used by `updateStamps`, and the function always merges the calculated days into `localStorage`. A visit to `?date=2026-08-15` stores days 1-15. Returning to `?date=2026-07-12` still renders all 15 stamps because the set only grows. This contradicts the automatic unlock rule and makes the production-safe preview tooling mutate real progress. Browser reproduction at 393 x 852 confirmed 15 stamps remained visible before the trip after previewing 15 August. Recommendation: keep preview-derived stamps ephemeral, or derive rendered stamps from the effective date while persisting only progress earned from the real current clock.</description>
+
+<code_example>
+
+```javascript
+function previewableNow() {
+  const preview = new URLSearchParams(window.location.search).get('date');
+  // The preview becomes the clock consumed by updateStamps.
+}
+
+const stamps = new Set(stored);
+const earnedThrough = clock.currentDate &lt; startDate ? 0 : clock.currentDate &gt; endDate ? 15 : clock.dayNumber;
+for (let day = 1; day &lt;= earnedThrough; day += 1) stamps.add(day);
+localStorage.setItem(STAMP_KEY, JSON.stringify([...stamps]));
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Preview isolation** | A future `date` preview renders that future state without changing earned progress. | Previewing 15 August permanently stores all 15 stamps. |
+| **Pre-trip state** | Returning to 12 July shows zero earned stamps. | All 15 future stamps remain visible and stored. |
+</expected_vs_actual>
+</issue_description>
+</bug_1>
+
+<bug_2>
+<summary>
+<title>[Stamps] A valid JSON value with the wrong shape aborts wallet initialisation</title>
+<one_line_description>A non-array value in the stamp storage key throws inside `new Set`, leaving both booking and hotel wallets empty.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - function: `updateStamps`, Lines 1484-1501
+- /Users/sacino/japan-trip/index.html - function: `updateTripState`, Lines 1740-1774
+</file_locations>
+
+<issue_description>
+<description>The error handler only catches invalid JSON syntax. Valid JSON such as `{}` survives parsing and is passed to `new Set`, which requires an iterable and throws `TypeError: object is not iterable`. `updateTripState` calls `renderWallets` after `updateStamps`, so the exception prevents all four confirmed bookings and all seven hotels from rendering. The app is already marked initialised, and the minute interval repeats the exception rather than recovering. Browser reproduction confirmed zero booking rows and zero hotel rows after reloading with `{}` in `jalena-trip-stamps-v1`. Recommendation: validate `Array.isArray(stored)` and validate numeric day values before constructing the set; reset invalid stored data to an empty array.</description>
+
+<code_example>
+
+```javascript
+let stored = [];
+try { stored = JSON.parse(localStorage.getItem(STAMP_KEY) || '[]'); }
+catch { stored = []; }
+const stamps = new Set(stored);
+
+updateActivityMoments(clock);
+updateStamps(clock);
+renderWallets(clock);
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Storage recovery** | Invalid or obsolete stamp data is discarded and the itinerary continues initialising. | A valid JSON object throws because it is not iterable. |
+| **Wallet availability** | Four booking rows and seven hotel rows remain available. | Both wallets remain empty after the stamp exception. |
+</expected_vs_actual>
+</issue_description>
+</bug_2>
+
+<bug_3>
+<summary>
+<title>[Companion] The minute update desynchronises Pikachu from the visible region</title>
+<one_line_description>Every automatic trip-state refresh overwrites the companion costume with the current-day costume while its speech and tips still belong to the filtered region.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - function: `updateProgress`, Lines 1555-1578
+- /Users/sacino/japan-trip/index.html - function: `initialiseCompanion`, Lines 1706-1738
+- /Users/sacino/japan-trip/index.html - function: `initialiseApp`, Lines 1799-1805
+</file_locations>
+
+<issue_description>
+<description>`initialiseCompanion` correctly assigns costume, speech and tips from the region intersecting the viewport. However, `updateProgress` independently writes `data-costume` from the current trip day, and `initialiseApp` runs that update every 60 seconds. The observer does not run again when the viewport remains stationary. On a Day 6 preview filtered to Osaka, the companion initially had costume `osaka` and speech `Takoyaki mission.`; calling the same minute update changed only the costume to `cafe`, leaving Osaka speech and tips. Recommendation: make the companion observer the single owner of viewport-region presentation, or store the current visible region and have the periodic update respect it.</description>
+
+<code_example>
+
+```javascript
+function updateProgress(clock) {
+  document.querySelector('#pikachuCompanion').dataset.costume = costumeForDay(clock.dayNumber || 1);
+}
+
+currentRegion = visible.target.dataset.region;
+companion.dataset.costume = moments[currentRegion].costume;
+speech.textContent = moments[currentRegion].speech;
+
+window.setInterval(updateTripState, 60000);
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Filtered Osaka state** | Costume, speech and tips all remain Osaka-specific while Osaka is the only visible region. | After the minute update, the costume becomes the Day 6 cafe variant while speech remains `Takoyaki mission.`. |
+| **State ownership** | One source controls the companion's region presentation. | The progress updater and intersection observer write conflicting costume state. |
+</expected_vs_actual>
+</issue_description>
+</bug_3>
+
+<bug_4>
+<summary>
+<title>[Booking wallet] Elapsed reservations stay active and the next booking is buried below past rows</title>
+<one_line_description>The booking wallet uses date-only completion and static source order, so it neither marks elapsed same-day reservations past nor promotes the next confirmed booking.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - data: `bookings`, Lines 1294-1299
+- /Users/sacino/japan-trip/index.html - function: `renderWallets`, Lines 1516-1531
+- /Users/sacino/japan-trip/index.html - function: `updateNextBooking`, Lines 1589-1612
+</file_locations>
+
+<issue_description>
+<description>`updateNextBooking` uses each booking's exact instant when available, but `renderWallets` only compares its ISO date string and maps the original array without sorting. At noon on 6 August, the 10:30AM Dior Cafe reservation remains full opacity even though teamLab is correctly identified as next. On 9 August, the next booking, Kimono Miyabi Kyoto, appears fourth below three dimmed past rows rather than first. This diverges from the agreed next-up booking wallet behaviour and makes the most useful reservation harder to reach on mobile. Recommendation: calculate a common completion timestamp/status for both components, then render upcoming bookings first in chronological order followed by completed bookings.</description>
+
+<code_example>
+
+```javascript
+bookingWallet.replaceChildren(...bookings.map((booking) =&gt; {
+  const row = document.createElement('article');
+  row.className = `wallet-item${booking.date &lt; clock.currentDate ? ' is-past' : ''}`;
+  return row;
+}));
+
+const next = bookings.find((booking) =&gt;
+  booking.instant ? clock.now &lt; new Date(booking.instant) : clock.currentDate &lt;= booking.date
+);
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Same-day completion** | Dior Cafe is marked past after 10:30AM on 6 August. | Dior Cafe remains active until the calendar date changes. |
+| **Wallet order** | The next upcoming booking appears first for quick access. | Static array order keeps all past bookings above the next booking. |
+</expected_vs_actual>
+</issue_description>
+</bug_4>
+</bug_sweep>

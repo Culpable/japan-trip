@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bug_sweep>
+<bug_1>
+<summary>
+<title>[Authentication] An unlocked tab never enforces the 45-day expiry</title>
+<one_line_description>Authentication expiry is checked only during page initialisation, so an already-open itinerary remains unlocked after its saved access has expired.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - function: `initialiseAuth`, Lines 1819-1837
+- /Users/sacino/japan-trip/index.html - function: `initialiseApp`, Lines 1799-1806
+</file_locations>
+
+<issue_description>
+<description>`initialiseAuth` compares the stored expiry with `Date.now()` only once, when the document loads. The only recurring timer created by `initialiseApp` calls `updateTripState`; it never revalidates authentication. A tab kept open across the expiry boundary therefore continues exposing the itinerary indefinitely, contrary to the stated 45-day access period. Revalidate the expiry on a timer and when the document becomes visible, then return to the gate without duplicating application initialisation.</description>
+
+<code_example>
+
+```javascript
+const expiry = Number(localStorage.getItem(AUTH_KEY) || 0);
+if (expiry &gt; Date.now()) { unlockSite(); return; }
+
+window.setInterval(updateTripState, 60000);
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Expiry** | Access returns to the password gate as soon as the 45-day grant expires. | The itinerary remains unlocked until the tab is reloaded or manually locked. |
+</expected_vs_actual>
+</issue_description>
+</bug_1>
+
+<bug_2>
+<summary>
+<title>[Authentication] Storage failures leave valid users permanently locked</title>
+<one_line_description>A localStorage exception aborts authentication without showing a recoverable error or allowing a valid password to open the current session.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - function: `initialiseAuth`, Lines 1819-1835
+- /Users/sacino/japan-trip/index.html - function: `initialiseDialogs`, Lines 1549-1552
+</file_locations>
+
+<issue_description>
+<description>Every authentication storage read, removal and write is unguarded. Browsers can throw `SecurityError` when storage is blocked and `QuotaExceededError` when a write cannot be committed. A read failure stops `initialiseAuth` before the form listener is installed; a write failure occurs after a correct password is verified but before `unlockSite`, leaving the user on the gate with no message. Manual lock can fail for the same reason. Wrap storage access, preserve a current-tab fallback when persistence is unavailable, and surface a clear warning that 45-day persistence could not be saved.</description>
+
+<code_example>
+
+```javascript
+const expiry = Number(localStorage.getItem(AUTH_KEY) || 0);
+localStorage.removeItem(AUTH_KEY);
+localStorage.setItem(AUTH_KEY, String(Date.now() + FORTY_FIVE_DAYS));
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Blocked storage** | A correct password opens the current session and explains that persistent access is unavailable. | The authentication flow rejects with an uncaught exception and remains locked. |
+| **Manual lock** | Lock always returns the page to the gate. | A storage removal exception prevents the reload and leaves the itinerary visible. |
+</expected_vs_actual>
+</issue_description>
+</bug_2>
+
+<bug_3>
+<summary>
+<title>[PWA Install] The install prompt can be lost while the password gate is open</title>
+<one_line_description>The `beforeinstallprompt` listener is registered only after unlock, so an eligible returning browser can dispatch the one-shot event before the application is listening.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - function: `initialiseOffline`, Lines 1787-1796
+- /Users/sacino/japan-trip/index.html - functions: `initialiseApp` and `unlockSite`, Lines 1799-1816
+</file_locations>
+
+<issue_description>
+<description>`initialiseOffline` owns both the `beforeinstallprompt` listener and the install button state, but it is called only from `initialiseApp` after authentication succeeds. On a returning device that already has the service worker but has no valid auth grant, the browser can determine installability and fire `beforeinstallprompt` while the password gate is still open. The event is not replayed, so unlocking leaves the Install app control hidden for that navigation. Capture the event during top-level script initialisation, keep the control hidden while locked, and expose the saved prompt after unlock.</description>
+
+<code_example>
+
+```javascript
+function initialiseApp() {
+  initialiseOffline();
+}
+
+function unlockSite() {
+  document.body.classList.remove('is-locked');
+  initialiseApp();
+}
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Install availability** | An eligible browser can install the itinerary after authentication. | The one-shot install prompt may fire before unlock and the Install app control remains hidden. |
+</expected_vs_actual>
+</issue_description>
+</bug_3>
+
+<bug_4>
+<summary>
+<title>[Offline Navigation] An online 404 can replace the cached itinerary shell</title>
+<one_line_description>The service worker stores every navigation response as `index.html`, including unsuccessful responses from an invalid path.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/sw.js - fetch event listener, Lines 26-39
+</file_locations>
+
+<issue_description>
+<description>The navigation branch clones and caches the network response without checking `response.ok`. Visiting a missing URL within the service-worker scope on GitHub Pages returns an HTTP 404 response, which still fulfils `fetch` and is written over the known-good `./index.html` fallback. The next offline navigation then returns the cached 404 instead of the itinerary. Cache only successful same-origin itinerary responses and retain the last known-good shell when the network response is not usable.</description>
+
+<code_example>
+
+```javascript
+fetch(event.request).then((response) =&gt; {
+  const copy = response.clone();
+  caches.open(CACHE_NAME).then((cache) =&gt; cache.put('./index.html', copy));
+  return response;
+})
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Offline fallback** | The last successful itinerary remains the navigation fallback. | Any resolved navigation response, including a 404 page, replaces the fallback. |
+</expected_vs_actual>
+</issue_description>
+</bug_4>
+
+<bug_5>
+<summary>
+<title>[Cache Isolation] Activation deletes caches belonging to other GitHub Pages applications</title>
+<one_line_description>The service worker deletes every cache on the shared `culpable.github.io` origin except its own cache name.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/sw.js - activate event listener, Lines 18-23
+</file_locations>
+
+<issue_description>
+<description>Cache Storage is shared by origin, not by service-worker scope. During activation, the worker filters only on inequality with `jalena-japan-trip-v1` and deletes all other cache keys. Because GitHub Pages project sites share the `https://culpable.github.io` origin, installing or updating this itinerary can erase offline data created by unrelated project sites on that account. Restrict cleanup to cache names carrying an itinerary-specific prefix before comparing versions.</description>
+
+<code_example>
+
+```javascript
+caches.keys().then((keys) =&gt; Promise.all(
+  keys.filter((key) =&gt; key !== CACHE_NAME).map((key) =&gt; caches.delete(key))
+))
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Cache cleanup** | Activation removes only obsolete Jalena itinerary caches. | Activation removes every differently named cache for the entire GitHub Pages origin. |
+</expected_vs_actual>
+</issue_description>
+</bug_5>
+
+<bug_6>
+<summary>
+<title>[Offline Updates] Cache-first assets can remain stale across online deployments</title>
+<one_line_description>Previously cached manifests, icons and local media never revalidate unless the service-worker script itself changes.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/sw.js - cache declaration and fetch event listener, Lines 1-10 and 42-50
+- /Users/sacino/japan-trip/manifest.webmanifest - install asset declarations, Lines 1-25
+</file_locations>
+
+<issue_description>
+<description>Non-navigation requests use unconditional cache-first delivery. A normal deployment that updates `manifest.webmanifest`, an app icon, Pikachu media or the OG image at the same URL but does not change `sw.js` leaves existing clients on the old cached response indefinitely. Navigation updates remain network-first, so the new HTML can be paired with stale assets. Use a deliberate cache-version release process or a stale-while-revalidate strategy that refreshes same-origin assets in the background while retaining offline availability.</description>
+
+<code_example>
+
+```javascript
+caches.match(event.request).then((cached) =&gt; cached || fetch(event.request).then((response) =&gt; {
+  caches.open(CACHE_NAME).then((cache) =&gt; cache.put(event.request, response.clone()));
+  return response;
+}))
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Online update** | Online clients receive deployed local asset updates while retaining an offline copy. | Once cached, same-URL assets are served forever unless the service worker changes or storage is cleared. |
+</expected_vs_actual>
+</issue_description>
+</bug_6>
+<bug_7>
+<summary>
+<title>[Stamps] Date previews permanently unlock future passport stamps</title>
+<one_line_description>Opening a future date preview writes every previewed day to persistent storage, so the real pre-trip view can show stamps that have not been earned.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - function: `previewableNow`, Lines 1354-1359
+- /Users/sacino/japan-trip/index.html - function: `updateStamps`, Lines 1484-1501
+</file_locations>
+
+<issue_description>
+<description>The production `date` query parameter changes the clock used by `updateStamps`, and the function always merges the calculated days into `localStorage`. A visit to `?date=2026-08-15` stores days 1-15. Returning to `?date=2026-07-12` still renders all 15 stamps because the set only grows. This contradicts the automatic unlock rule and makes the production-safe preview tooling mutate real progress. Browser reproduction at 393 x 852 confirmed 15 stamps remained visible before the trip after previewing 15 August. Recommendation: keep preview-derived stamps ephemeral, or derive rendered stamps from the effective date while persisting only progress earned from the real current clock.</description>
+
+<code_example>
+
+```javascript
+function previewableNow() {
+  const preview = new URLSearchParams(window.location.search).get('date');
+  // The preview becomes the clock consumed by updateStamps.
+}
+
+const stamps = new Set(stored);
+const earnedThrough = clock.currentDate &lt; startDate ? 0 : clock.currentDate &gt; endDate ? 15 : clock.dayNumber;
+for (let day = 1; day &lt;= earnedThrough; day += 1) stamps.add(day);
+localStorage.setItem(STAMP_KEY, JSON.stringify([...stamps]));
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Preview isolation** | A future `date` preview renders that future state without changing earned progress. | Previewing 15 August permanently stores all 15 stamps. |
+| **Pre-trip state** | Returning to 12 July shows zero earned stamps. | All 15 future stamps remain visible and stored. |
+</expected_vs_actual>
+</issue_description>
+</bug_7>
+
+<bug_8>
+<summary>
+<title>[Stamps] A valid JSON value with the wrong shape aborts wallet initialisation</title>
+<one_line_description>A non-array value in the stamp storage key throws inside `new Set`, leaving both booking and hotel wallets empty.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - function: `updateStamps`, Lines 1484-1501
+- /Users/sacino/japan-trip/index.html - function: `updateTripState`, Lines 1740-1774
+</file_locations>
+
+<issue_description>
+<description>The error handler only catches invalid JSON syntax. Valid JSON such as `{}` survives parsing and is passed to `new Set`, which requires an iterable and throws `TypeError: object is not iterable`. `updateTripState` calls `renderWallets` after `updateStamps`, so the exception prevents all four confirmed bookings and all seven hotels from rendering. The app is already marked initialised, and the minute interval repeats the exception rather than recovering. Browser reproduction confirmed zero booking rows and zero hotel rows after reloading with `{}` in `jalena-trip-stamps-v1`. Recommendation: validate `Array.isArray(stored)` and validate numeric day values before constructing the set; reset invalid stored data to an empty array.</description>
+
+<code_example>
+
+```javascript
+let stored = [];
+try { stored = JSON.parse(localStorage.getItem(STAMP_KEY) || '[]'); }
+catch { stored = []; }
+const stamps = new Set(stored);
+
+updateActivityMoments(clock);
+updateStamps(clock);
+renderWallets(clock);
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Storage recovery** | Invalid or obsolete stamp data is discarded and the itinerary continues initialising. | A valid JSON object throws because it is not iterable. |
+| **Wallet availability** | Four booking rows and seven hotel rows remain available. | Both wallets remain empty after the stamp exception. |
+</expected_vs_actual>
+</issue_description>
+</bug_8>
+
+<bug_9>
+<summary>
+<title>[Companion] The minute update desynchronises Pikachu from the visible region</title>
+<one_line_description>Every automatic trip-state refresh overwrites the companion costume with the current-day costume while its speech and tips still belong to the filtered region.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - function: `updateProgress`, Lines 1555-1578
+- /Users/sacino/japan-trip/index.html - function: `initialiseCompanion`, Lines 1706-1738
+- /Users/sacino/japan-trip/index.html - function: `initialiseApp`, Lines 1799-1805
+</file_locations>
+
+<issue_description>
+<description>`initialiseCompanion` correctly assigns costume, speech and tips from the region intersecting the viewport. However, `updateProgress` independently writes `data-costume` from the current trip day, and `initialiseApp` runs that update every 60 seconds. The observer does not run again when the viewport remains stationary. On a Day 6 preview filtered to Osaka, the companion initially had costume `osaka` and speech `Takoyaki mission.`; calling the same minute update changed only the costume to `cafe`, leaving Osaka speech and tips. Recommendation: make the companion observer the single owner of viewport-region presentation, or store the current visible region and have the periodic update respect it.</description>
+
+<code_example>
+
+```javascript
+function updateProgress(clock) {
+  document.querySelector('#pikachuCompanion').dataset.costume = costumeForDay(clock.dayNumber || 1);
+}
+
+currentRegion = visible.target.dataset.region;
+companion.dataset.costume = moments[currentRegion].costume;
+speech.textContent = moments[currentRegion].speech;
+
+window.setInterval(updateTripState, 60000);
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Filtered Osaka state** | Costume, speech and tips all remain Osaka-specific while Osaka is the only visible region. | After the minute update, the costume becomes the Day 6 cafe variant while speech remains `Takoyaki mission.`. |
+| **State ownership** | One source controls the companion's region presentation. | The progress updater and intersection observer write conflicting costume state. |
+</expected_vs_actual>
+</issue_description>
+</bug_9>
+
+<bug_10>
+<summary>
+<title>[Booking wallet] Elapsed reservations stay active and the next booking is buried below past rows</title>
+<one_line_description>The booking wallet uses date-only completion and static source order, so it neither marks elapsed same-day reservations past nor promotes the next confirmed booking.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - data: `bookings`, Lines 1294-1299
+- /Users/sacino/japan-trip/index.html - function: `renderWallets`, Lines 1516-1531
+- /Users/sacino/japan-trip/index.html - function: `updateNextBooking`, Lines 1589-1612
+</file_locations>
+
+<issue_description>
+<description>`updateNextBooking` uses each booking's exact instant when available, but `renderWallets` only compares its ISO date string and maps the original array without sorting. At noon on 6 August, the 10:30AM Dior Cafe reservation remains full opacity even though teamLab is correctly identified as next. On 9 August, the next booking, Kimono Miyabi Kyoto, appears fourth below three dimmed past rows rather than first. This diverges from the agreed next-up booking wallet behaviour and makes the most useful reservation harder to reach on mobile. Recommendation: calculate a common completion timestamp/status for both components, then render upcoming bookings first in chronological order followed by completed bookings.</description>
+
+<code_example>
+
+```javascript
+bookingWallet.replaceChildren(...bookings.map((booking) =&gt; {
+  const row = document.createElement('article');
+  row.className = `wallet-item${booking.date &lt; clock.currentDate ? ' is-past' : ''}`;
+  return row;
+}));
+
+const next = bookings.find((booking) =&gt;
+  booking.instant ? clock.now &lt; new Date(booking.instant) : clock.currentDate &lt;= booking.date
+);
+```
+
+</code_example>
+
+<expected_vs_actual>
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Same-day completion** | Dior Cafe is marked past after 10:30AM on 6 August. | Dior Cafe remains active until the calendar date changes. |
+| **Wallet order** | The next upcoming booking appears first for quick access. | Static array order keeps all past bookings above the next booking. |
+</expected_vs_actual>
+</issue_description>
+</bug_10>
+</bug_sweep>
