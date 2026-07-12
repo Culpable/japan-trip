@@ -4,8 +4,10 @@ const path = require('node:path');
 
 const iconPath = path.join(__dirname, '..', 'assets', 'apple-touch-icon.png');
 
-// Ignore the 24px rounded dark frame, then make the yellow field transparent.
-// The remaining bounds represent Pikachu's visible non-background footprint.
+// Measure inside the central safe zone (24px inset each side), then make the
+// yellow field transparent. The icon is now full-bleed with no baked frame, so
+// the OS mask supplies the corners; the remaining bounds represent Pikachu's
+// visible non-background footprint and must stay boldly centred.
 const INNER_SIZE = 132;
 const MIN_FOOTPRINT_RATIO = 0.48;
 const geometry = execFileSync(
