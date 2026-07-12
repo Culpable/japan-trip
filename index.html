@@ -910,6 +910,11 @@
     body.is-locked { overflow: hidden; }
     body.is-locked > :not(.auth-gate):not(script) { visibility: hidden; }
     body:not(.is-locked) .auth-gate { display: none; }
+    /* Native <dialog>.showModal() dims the page but does NOT stop it scrolling: wheel/touch
+       gestures on the ::backdrop (or overscrolling past the dialog body) still move the page,
+       leaving the modal's scrollbar "stuck". Pinning the body to its current scroll position
+       locks the background reliably, including iOS standalone where overflow:hidden alone leaks. */
+    body.dialog-locked { position: fixed; left: 0; right: 0; width: 100%; overflow: hidden; }
     .auth-gate {
       position: fixed;
       inset: 0;
@@ -1101,7 +1106,7 @@
     .dialog-head p { margin: 0; color: #898984; font-size: .64rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
     .dialog-head h2 { margin: .2rem 0 0; font: 800 1.35rem/1.1 "Nunito Sans", sans-serif; }
     .dialog-close { flex: 0 0 auto; width: 42px; height: 42px; border: 1px solid #d9d6ce; border-radius: 50%; background: #f3f1ed; color: #242522; font-size: 1.2rem; cursor: pointer; }
-    .dialog-body { max-height: calc(min(82vh, 760px) - 76px); overflow: auto; padding: 1.15rem; }
+    .dialog-body { max-height: calc(min(82vh, 760px) - 76px); overflow: auto; overscroll-behavior: contain; padding: 1.15rem; }
     .dialog-section + .dialog-section { margin-top: 1.35rem; }
     .dialog-section-title { margin: 0 0 .7rem; color: #686963; font-size: .67rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
     .wallet-list { display: grid; gap: .6rem; }
@@ -1554,6 +1559,34 @@
       });
     }
 
+    // --- Modal background scroll lock -------------------------------------------------
+    // Native <dialog>.showModal() leaves the page behind the backdrop scrollable, so a stray
+    // wheel/touch gesture scrolls the itinerary instead of the modal (the "stuck scrollbar" bug).
+    // These helpers pin the body while a dialog is open and restore the reader's exact position.
+    let lockedScrollY = 0;
+    function lockBodyForDialog() {
+      if (document.body.classList.contains('dialog-locked')) return; // one modal at a time; ignore re-entry
+      lockedScrollY = window.scrollY;
+      // Offset the pinned body upward so the background stays visually put, and reserve the width
+      // freed by the vanished scrollbar so pointer-device layouts do not jump sideways.
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.top = `-${lockedScrollY}px`;
+      if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`;
+      document.body.classList.add('dialog-locked');
+    }
+    function releaseBodyForDialog() {
+      if (!document.body.classList.contains('dialog-locked')) return;
+      document.body.classList.remove('dialog-locked');
+      document.body.style.top = '';
+      document.body.style.paddingRight = '';
+      window.scrollTo(0, lockedScrollY); // restore where the reader was before the modal opened
+    }
+    // Present a modal and lock the background in one step so every open path stays consistent.
+    function showModalDialog(dialog) {
+      dialog.showModal();
+      lockBodyForDialog();
+    }
+
     function openDayView(dayNumber) {
       const day = tripDays[dayNumber - 1];
       const plan = dayPlans[dayNumber - 1];
@@ -1563,7 +1596,7 @@
       const transit = transitByDay[dayNumber];
       const transitSection = transit ? `<section class="dialog-section"><p class="dialog-section-title">Transit</p><div class="wallet-item"><div><strong>${transit.route}</strong><span>${transit.detail}<br>${transit.local}</span></div><span class="wallet-badge">${transit.mode}</span></div></section>` : '';
       body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Plan</p><ul class="quick-list">${[...day.querySelectorAll('.card > ul > li')].map((item) => `<li>${item.textContent}</li>`).join('')}</ul></section>${transitSection}<section class="dialog-section"><p class="dialog-section-title">Stay</p><div class="wallet-item"><div><strong>${hotel.name}</strong><span>${hotel.address}</span></div><span class="wallet-badge">Booked</span></div></section><div class="utility-actions"><a class="mini-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
-      document.querySelector('#dayDialog').showModal();
+      showModalDialog(document.querySelector('#dayDialog'));
     }
 
     function bookingHasElapsed(booking, clock) {
@@ -1605,15 +1638,21 @@
         const closeButton = event.target.closest('[data-close-dialog]');
         if (closeButton) document.querySelector(`#${closeButton.dataset.closeDialog}`).close();
       });
-      document.querySelectorAll('dialog').forEach((dialog) => dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) dialog.close();
-      }));
+      document.querySelectorAll('dialog').forEach((dialog) => {
+        // Backdrop click closes the dialog (the backdrop is the dialog element itself).
+        dialog.addEventListener('click', (event) => {
+          if (event.target === dialog) dialog.close();
+        });
+        // Release the background scroll lock however the dialog closes: close button, backdrop
+        // click, Escape, or showAuthGate closing it. The native close event covers every path.
+        dialog.addEventListener('close', releaseBodyForDialog);
+      });
       // Reopen the wallet from the top each time. The dialog body is a persistent scroll
       // container, so without this reset it would reopen wherever it was last left.
       const openBookingDialog = () => {
         const dialog = document.querySelector('#bookingDialog');
         const body = dialog.querySelector('.dialog-body');
-        dialog.showModal();
+        showModalDialog(dialog);
         // Reset after showModal: a closed dialog is display:none, so scrollTop set beforehand
         // would not stick and the wallet would reopen wherever it was last scrolled.
         if (body) body.scrollTop = 0;
