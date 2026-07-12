@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="A 15-day Hong Kong, Shenzhen and Japan itinerary for August 2026.">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <link rel="canonical" href="https://culpable.github.io/japan-trip/">
@@ -279,7 +279,9 @@
     .controls {
       width: min(var(--content-width), calc(100% - 2rem));
       margin: 0 auto;
-      top: .7rem;
+      /* The sticky offset tracks the status-bar inset so the filter bar never slides
+         beneath a notch or clock when the site runs as an installed app. */
+      top: calc(.7rem + env(safe-area-inset-top, 0px));
       gap: .65rem;
       align-items: center;
       padding: .85rem 1rem;
@@ -502,6 +504,9 @@
     footer {
       /* 100% (not 100vw) excludes the scrollbar so footer text lines up with the main column */
       padding: 3rem max(1rem, calc((100% - var(--content-width))/2));
+      /* Extra bottom room clears the home indicator in the installed app so the closing line
+         isn't tucked under it. */
+      padding-bottom: calc(3rem + env(safe-area-inset-bottom, 0px));
       background: #262723;
       color: white;
     }
@@ -511,7 +516,7 @@
       .hero { margin-top: 1rem; padding: 1.2rem; border-radius: 18px; }
       .hero-bottom { display: block; }
       .meta { margin-top: .8rem; text-align: left; }
-      .controls { top: .4rem; border-radius: 16px; }
+      .controls { top: calc(.4rem + env(safe-area-inset-top, 0px)); border-radius: 16px; }
       .controls::before { display: none; }
       main { padding-top: 1rem; }
       .urgent { margin-bottom: 2.5rem; }
@@ -690,8 +695,11 @@
     }
     .pikachu-companion {
       position: fixed;
-      right: clamp(.75rem, 2vw, 1.5rem);
-      bottom: clamp(.75rem, 2vw, 1.5rem);
+      /* env() keeps the sprite clear of curved screen corners and the home indicator when the
+         site runs as an installed app; the extra 8px on the bottom offsets the solid drop shadow
+         below the card so the perceived margin matches the right-hand one. */
+      right: calc(clamp(1rem, 2.5vw, 1.5rem) + env(safe-area-inset-right, 0px));
+      bottom: calc(clamp(1rem, 2.5vw, 1.5rem) + 8px + env(safe-area-inset-bottom, 0px));
       z-index: 30;
       width: 104px;
       padding: .55rem;
@@ -835,8 +843,12 @@
     .delight-toast {
       position: fixed;
       left: 50%;
-      bottom: 1.5rem;
+      bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
       z-index: 70;
+      /* Long messages (like the storage-fallback notice) wrap inside a readable pill instead of
+         stretching edge to edge across small screens. */
+      max-width: min(calc(100vw - 2rem), 34rem);
+      text-align: center;
       padding: .8rem 1rem;
       border: 2px solid #242522;
       border-radius: 999px;
@@ -905,7 +917,12 @@
       display: grid;
       place-items: center;
       overflow: auto;
-      padding: 1rem;
+      /* Keep the password card off the notch and home indicator in the installed app. */
+      padding:
+        calc(1rem + env(safe-area-inset-top, 0px))
+        calc(1rem + env(safe-area-inset-right, 0px))
+        calc(1rem + env(safe-area-inset-bottom, 0px))
+        calc(1rem + env(safe-area-inset-left, 0px));
       background:
         radial-gradient(circle at 76% 18%, rgba(204, 74, 53, .16), transparent 26%),
         linear-gradient(rgba(30, 37, 34, .035) 1px, transparent 1px),
@@ -1096,7 +1113,7 @@
     .quick-list { margin: .8rem 0 0; padding: 0; list-style: none; }
     .quick-list li { padding: .6rem 0; border-top: 1px solid #dedbd3; font-size: .85rem; line-height: 1.45; }
     .quick-list li::before { content: "·"; margin-right: .5rem; color: #a44324; }
-    .offline-badge { display: none; position: fixed; left: .75rem; bottom: .75rem; z-index: 40; padding: .55rem .7rem; border-radius: 999px; background: #242522; color: #fff; font-size: .68rem; font-weight: 900; box-shadow: 0 5px 18px rgba(36,37,34,.2); }
+    .offline-badge { display: none; position: fixed; left: calc(.75rem + env(safe-area-inset-left, 0px)); bottom: calc(.75rem + env(safe-area-inset-bottom, 0px)); z-index: 40; padding: .55rem .7rem; border-radius: 999px; background: #242522; color: #fff; font-size: .68rem; font-weight: 900; box-shadow: 0 5px 18px rgba(36,37,34,.2); }
     body.is-offline .offline-badge { display: block; }
 
     @media (max-width: 820px) {
@@ -1451,7 +1468,9 @@
       if (clock.dayNumber === 1) return [['Perth departure', 'Australia/Perth'], ['Hong Kong arrival', 'Asia/Hong_Kong']];
       if (clock.dayNumber === 5) return [['Hong Kong departure', 'Asia/Hong_Kong'], ['Tokyo arrival', 'Asia/Tokyo']];
       if (clock.dayNumber === 15) return [['Tokyo departure', 'Asia/Tokyo'], ['Perth home', 'Australia/Perth']];
-      if (clock.currentDate < startDate) return [['Japan time', 'Asia/Tokyo'], ['Perth time', 'Australia/Perth']];
+      // Both before the trip and after it has finished, show neutral clocks rather than a stale
+      // "Trip time" label for a trip that isn't currently running.
+      if (!clock.inTrip) return [['Japan time', 'Asia/Tokyo'], ['Perth time', 'Australia/Perth']];
       return [[clock.dayNumber && clock.dayNumber <= 4 ? 'Trip time · HK' : 'Trip time · Japan', clock.timeZone], ['Perth time', 'Australia/Perth']];
     }
 
@@ -1589,10 +1608,23 @@
       document.querySelectorAll('dialog').forEach((dialog) => dialog.addEventListener('click', (event) => {
         if (event.target === dialog) dialog.close();
       }));
-      document.querySelector('#bookingsShortcut').onclick = () => document.querySelector('#bookingDialog').showModal();
+      // Reopen the wallet from the top each time. The dialog body is a persistent scroll
+      // container, so without this reset it would reopen wherever it was last left.
+      const openBookingDialog = () => {
+        const dialog = document.querySelector('#bookingDialog');
+        const body = dialog.querySelector('.dialog-body');
+        dialog.showModal();
+        // Reset after showModal: a closed dialog is display:none, so scrollTop set beforehand
+        // would not stick and the wallet would reopen wherever it was last scrolled.
+        if (body) body.scrollTop = 0;
+        return { dialog, body };
+      };
+      document.querySelector('#bookingsShortcut').onclick = openBookingDialog;
       document.querySelector('#openHotels').onclick = () => {
-        document.querySelector('#bookingDialog').showModal();
-        document.querySelector('#hotelWalletSection').scrollIntoView({ block: 'start' });
+        const { dialog, body } = openBookingDialog();
+        const section = dialog.querySelector('#hotelWalletSection');
+        // Scroll the dialog's own body (not the page behind the modal) to the hotel section.
+        if (body && section) body.scrollTop = section.offsetTop - body.offsetTop;
       };
       document.querySelector('#lockSite').onclick = () => {
         const cleared = clearAuthExpiry();
@@ -1923,6 +1955,10 @@
 
     function showAuthGate(message) {
       window.clearTimeout(authExpiryTimer);
+      // Close any open dialog first. A dialog opened with showModal() sits in the top layer and
+      // makes the rest of the document inert, so locking from inside the booking wallet would
+      // otherwise leave the gate's password field unfocusable behind a stuck backdrop.
+      document.querySelectorAll('dialog[open]').forEach((dialog) => dialog.close());
       document.body.classList.add('is-locked');
       syncInstallControl();
       document.querySelector('#authGate').setAttribute('aria-hidden', 'false');
