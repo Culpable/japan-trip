@@ -478,7 +478,7 @@
       color: #24613b;
       font-weight: 800;
     }
-    .confirmed::before { content: "✓ Confirmed · "; font-size: inherit; letter-spacing: 0; }
+    .confirmed::before { content: "✓\0000a0\0000a0Confirmed · "; font-size: inherit; letter-spacing: 0; }
     .revision { outline: 0; }
     .revision .card::before {
       content: "Revised route";
@@ -718,7 +718,6 @@
     .pikachu-stage img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
     .pikachu-companion.is-dancing { animation: companion-dance .26s ease-in-out 6 alternate; }
     .pikachu-companion { transition: opacity .2s ease, visibility .2s ease, transform .2s ease; }
-    .pikachu-companion.is-docked-away { opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(20px) scale(.92); }
     @keyframes companion-dance { from { transform: rotate(-10deg) scale(1.03); } to { transform: rotate(10deg) translateY(-8px) scale(1.08); } }
     .sound-toggle { margin-left: auto; }
     .print-action { margin-left: 0; }
@@ -998,11 +997,12 @@
     .hotel-now p:not(.utility-label) { margin: .22rem 0 0; color: #66717b; font-size: .75rem; font-weight: 700; line-height: 1.4; }
     .utility-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .65rem; }
     .mini-action, .day-action {
-      min-height: 38px;
+      min-height: 32px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: .5rem .7rem;
+      gap: .38rem;
+      padding: .32rem .82rem;
       border: 1px solid rgba(23, 47, 72, .16);
       border-radius: 999px;
       background: #fff;
@@ -1010,7 +1010,12 @@
       font: 800 .72rem/1 "Nunito Sans", sans-serif;
       text-decoration: none;
       cursor: pointer;
+      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease, background .14s ease;
     }
+    .action-ico { width: 14px; height: 14px; flex-shrink: 0; }
+    .mini-action:hover, .day-action:hover { transform: translateY(-1px); box-shadow: 0 3px 9px rgba(23, 47, 72, .14); border-color: color-mix(in srgb, var(--accent) 55%, rgba(23, 47, 72, .16)); }
+    .day-action.primary:hover { background: color-mix(in srgb, var(--accent) 86%, #000); border-color: color-mix(in srgb, var(--accent) 86%, #000); }
+    .mini-action:active, .day-action:active { transform: translateY(0); box-shadow: none; }
     .time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
     .time-zone strong { display: block; color: #172f48; font-size: .86rem; }
     .time-zone span { display: block; margin-top: .15rem; color: #6b7680; font-size: .66rem; font-weight: 800; text-transform: uppercase; }
@@ -1181,9 +1186,9 @@
           <h3 id="hotelNowName">Checking your stay…</h3>
           <p id="hotelNowDetail"></p>
           <div class="utility-actions">
-            <a class="mini-action" id="hotelMap" href="#" target="_blank" rel="noopener noreferrer">Open map</a>
-            <button class="mini-action" id="copyHotel" type="button">Copy address</button>
-            <button class="mini-action" id="openHotels" type="button">All stays</button>
+            <a class="mini-action" id="hotelMap" href="#" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Open map</span></a>
+            <button class="mini-action" id="copyHotel" type="button"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2.5"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/></svg><span>Copy address</span></button>
+            <button class="mini-action" id="openHotels" type="button"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span>All stays</span></button>
           </div>
         </article>
         <article class="time-now">
@@ -1332,7 +1337,29 @@
     ];
 
     const mapsUrl = (query) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
-    const weatherUrl = (city) => `https://www.google.com/search?q=${encodeURIComponent(`${city} weather`)}`;
+    // Direct AccuWeather forecast pages per destination, keyed by the exact weatherCity
+    // strings used in dayPlans. If an unmapped city ever appears we fall back to
+    // AccuWeather's own location search rather than dropping back to a Google search.
+    const weatherPages = {
+      'Shenzhen': 'https://www.accuweather.com/en/cn/shenzhen/58194/weather-forecast/58194',
+      'Guangzhou': 'https://www.accuweather.com/en/cn/guangzhou/102255/weather-forecast/102255',
+      'Hong Kong': 'https://www.accuweather.com/en/hk/hong-kong/1123655/weather-forecast/1123655',
+      'Tokyo': 'https://www.accuweather.com/en/jp/tokyo/226396/weather-forecast/226396',
+      'Fujikawaguchiko': 'https://www.accuweather.com/en/jp/fujikawaguchiko-machi/2334040/weather-forecast/2334040',
+      'Kyoto': 'https://www.accuweather.com/en/jp/kyoto-shi/224436/weather-forecast/224436',
+      'Nara': 'https://www.accuweather.com/en/jp/nara-shi/224769/weather-forecast/224769',
+      'Osaka': 'https://www.accuweather.com/en/jp/osaka-shi/225007/weather-forecast/225007',
+      'Narita': 'https://www.accuweather.com/en/jp/narita-shi/216940/weather-forecast/216940'
+    };
+    const weatherUrl = (city) => weatherPages[city] || `https://www.accuweather.com/en/search-locations?query=${encodeURIComponent(city)}`;
+
+    // Inline SVG glyphs sit on the left of the action pills; stroke uses currentColor
+    // so each icon adopts the pill's own text colour (white on the primary, accent on the rest).
+    const actionIcons = {
+      dayView: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg>',
+      maps: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+      weather: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>'
+    };
 
     function dateKeyInZone(date, timeZone) {
       const parts = new Intl.DateTimeFormat('en-AU', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' })
@@ -1450,7 +1477,7 @@
         }
         const actions = document.createElement('div');
         actions.className = 'day-actions';
-        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">Day view</button><a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">Maps</a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">Weather</a>`;
+        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button><a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
         card.append(actions);
       });
     }
@@ -1511,7 +1538,7 @@
       const body = document.querySelector('#dayDialogBody');
       const transit = transitByDay[dayNumber];
       const transitSection = transit ? `<section class="dialog-section"><p class="dialog-section-title">Transit</p><div class="wallet-item"><div><strong>${transit.route}</strong><span>${transit.detail}<br>${transit.local}</span></div><span class="wallet-badge">${transit.mode}</span></div></section>` : '';
-      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Plan</p><ul class="quick-list">${[...day.querySelectorAll('.card > ul > li')].map((item) => `<li>${item.textContent}</li>`).join('')}</ul></section>${transitSection}<section class="dialog-section"><p class="dialog-section-title">Stay</p><div class="wallet-item"><div><strong>${hotel.name}</strong><span>${hotel.address}</span></div><span class="wallet-badge">Booked</span></div></section><div class="utility-actions"><a class="mini-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">Open day map</a><a class="mini-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">Check weather</a></div>`;
+      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Plan</p><ul class="quick-list">${[...day.querySelectorAll('.card > ul > li')].map((item) => `<li>${item.textContent}</li>`).join('')}</ul></section>${transitSection}<section class="dialog-section"><p class="dialog-section-title">Stay</p><div class="wallet-item"><div><strong>${hotel.name}</strong><span>${hotel.address}</span></div><span class="wallet-badge">Booked</span></div></section><div class="utility-actions"><a class="mini-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
       document.querySelector('#dayDialog').showModal();
     }
 
@@ -1542,7 +1569,7 @@
       hotelWallet.replaceChildren(...hotels.map((hotel) => {
         const row = document.createElement('article');
         row.className = `wallet-item${hotel.checkOut <= clock.currentDate ? ' is-past' : ''}`;
-        row.innerHTML = `<div><strong>${hotel.name}</strong><span>${hotel.location} · ${hotel.dates}<br>${hotel.address}</span></div><a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">Map</a>`;
+        row.innerHTML = `<div><strong>${hotel.name}</strong><span>${hotel.location} · ${hotel.dates}<br>${hotel.address}</span></div><a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Map</span></a>`;
         return row;
       }));
     }
@@ -1751,8 +1778,6 @@
         revealCompanionSpeech();
       }, { rootMargin: '-49% 0px -50% 0px', threshold: 0 });
       regions.forEach((region) => observer.observe(region));
-      const dashboardObserver = new IntersectionObserver(([entry]) => companion.classList.toggle('is-docked-away', entry.isIntersecting), { threshold: .18 });
-      dashboardObserver.observe(document.querySelector('.trip-dashboard'));
     }
 
     function updateTripState() {
