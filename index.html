@@ -6,8 +6,6 @@
   <meta name="description" content="A 15-day Hong Kong, Shenzhen and Japan itinerary for August 2026.">
   <title>Jalena Japan Trip Itinerary | August 2026</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap');
-
     :root {
       --ink: #1e2522;
       --muted: #64706a;
@@ -285,13 +283,16 @@
     .chip[data-filter="fuji"] { background: #eaf4df; color: #285b16; }
     .chip[data-filter="kyoto"] { background: #eeecff; color: #302d73; }
     .chip[data-filter="osaka"] { background: #fcedE7; color: #75311b; }
-    .chip:hover, .chip.active { box-shadow: inset 0 0 0 2px currentColor; color: inherit; }
+    /* Ring in the chip's own theme colour; no color override so each chip keeps its palette when active */
+    .chip:hover, .chip.active { box-shadow: inset 0 0 0 2px currentColor; }
     .action { margin-left: auto; color: #6e6f6a; background: transparent; border: 1px solid var(--line); }
     .action:hover { background: #252622; color: white; }
 
-    main { width: min(var(--content-width), calc(100% - 2rem)); padding: 1.5rem 0 7rem; }
+    /* scroll-margin keeps the sticky filter bar from covering content when a chip scrolls the page here */
+    main { width: min(var(--content-width), calc(100% - 2rem)); padding: 1.5rem 0 7rem; scroll-margin-top: 5rem; }
     .urgent {
       grid-template-columns: auto 1fr;
+      align-items: baseline;
       gap: .65rem;
       padding: 1rem 1.3rem;
       margin: 0 0 3.5rem;
@@ -323,7 +324,8 @@
       display: flex;
       align-items: center;
       gap: .65rem;
-      margin: 0 0 .75rem 126px;
+      /* 108px matches the card column so the heading sits flush over the cards */
+      margin: 0 0 .75rem 108px;
       color: #878883;
     }
     .region-head::after { content: ""; height: 1px; flex: 1; background: var(--line); }
@@ -336,28 +338,31 @@
       letter-spacing: .13em;
       text-transform: uppercase;
     }
-    .region h2 br { display: none; }
     .region-dates { flex: 0 0 auto; color: inherit; font-size: .85rem; font-weight: 800; letter-spacing: .1em; }
     .region-dates::before { content: "· "; }
 
-    .days::before { left: 95px; background: var(--line); }
+    /* --datew is the date-column width; the rail and dot both centre on it so they stay aligned at every breakpoint */
+    .days { --datew: 96px; }
+    .days::before { left: calc(var(--datew) - .5px); background: var(--line); }
     .day {
       grid-template-columns: 108px 1fr;
       align-items: start;
       padding: 0 0 1rem;
     }
+    .day:last-child { padding-bottom: 0; }
     .date {
-      width: 96px;
+      width: var(--datew);
       padding-top: 1.55rem;
       text-align: center;
     }
     .date::after {
       content: "";
       position: absolute;
-      top: 2.2rem;
-      right: -5px;
+      top: 2.24rem;
+      left: 100%;
       width: 10px;
       height: 10px;
+      transform: translateX(-50%);
       border: 3px solid var(--paper);
       border-radius: 50%;
       background: var(--accent);
@@ -435,14 +440,17 @@
     }
     .note a { color: inherit; font-weight: 800; text-underline-offset: .18em; }
     .booking {
-      display: inline-block;
+      /* block + fit-content keeps the badge shrink-wrapped while stacking adjacent notes vertically */
+      display: block;
+      width: fit-content;
       background: #fff4b7;
       color: #964111;
       font-weight: 800;
     }
     .booking::before { content: "⚑ "; font-size: inherit; letter-spacing: 0; }
     .confirmed {
-      display: inline-block;
+      display: block;
+      width: fit-content;
       background: #d8eadb;
       color: #24613b;
       font-weight: 800;
@@ -464,7 +472,8 @@
     }
 
     footer {
-      padding: 3rem max(1rem, calc((100vw - var(--content-width))/2));
+      /* 100% (not 100vw) excludes the scrollbar so footer text lines up with the main column */
+      padding: 3rem max(1rem, calc((100% - var(--content-width))/2));
       background: #262723;
       color: white;
     }
@@ -481,9 +490,9 @@
       .region-head { margin-left: 0; }
       .region h2 { white-space: nowrap; }
       .day { grid-template-columns: 66px 1fr; }
-      .days::before { left: 55px; }
-      .date { width: 57px; padding-top: 1.35rem; }
-      .date::after { top: 1.95rem; right: -6px; }
+      .days { --datew: 57px; }
+      .date { padding-top: 1.35rem; }
+      .date::after { top: 1.79rem; }
       .date strong { font-size: 1.5rem; }
       .day-label { font-size: .62rem; }
       .card { padding: 1rem; border-radius: 16px; }
@@ -500,9 +509,8 @@
       .region h2 { font-size: .72rem; letter-spacing: .08em; }
       .region-dates { font-size: .7rem; }
       .day { grid-template-columns: 53px 1fr; }
-      .days::before { left: 44px; }
-      .date { width: 46px; }
-      .date::after { right: -5px; width: 8px; height: 8px; }
+      .days { --datew: 46px; }
+      .date::after { top: 1.73rem; width: 8px; height: 8px; }
       .date strong { font-size: 1.25rem; }
       .card { padding: .9rem; }
     }
@@ -510,9 +518,9 @@
     @media print {
       .hero { width: 100%; margin: 0 0 .5cm; }
       .region { margin-bottom: 1cm; }
-      .region-head { margin-left: 2.5cm; }
+      .region-head { margin-left: 2.4cm; }
       .day { grid-template-columns: 2.4cm 1fr; padding-bottom: .35cm; }
-      .days::before { left: 2cm; }
+      .days { --datew: 2.2cm; }
       .card { padding: .4cm; }
     }
   </style>
@@ -546,7 +554,7 @@
     </aside>
 
     <section class="region" data-region="china">
-      <header class="region-head"><span class="region-index">01 / CHINA</span><h2>Hong Kong<br>& Shenzhen</h2><span class="region-dates">01–05 AUG</span></header>
+      <header class="region-head"><span class="region-index">01 / CHINA</span><h2>Hong Kong & Shenzhen</h2><span class="region-dates">01–05 AUG</span></header>
       <div class="days">
         <article class="day"><div class="date"><strong>01</strong><span class="day-label">SAT · AUG</span></div><div class="card"><h3>Arrive Hong Kong → cross to Shenzhen</h3><ul><li class="flight">CX 184 · Perth T1 → Hong Kong · 8:20AM–4:20PM</li><li>Cross Lo Wu or Shenzhen Bay border into China</li><li>Set up DiDi, WeChat Pay, Alipay and Meituan</li><li>Check in and explore the local neighbourhood</li></ul></div></article>
         <article class="day"><div class="date"><strong>02</strong><span class="day-label">SUN · AUG</span></div><div class="card"><h3>Huaqiangbei & Shenzhen city life</h3><ul><li>Explore the Huaqiangbei electronics markets</li><li>Try Meituan drone food delivery</li><li>Visit Futian CBD and the Nanshan tech area</li><li>Browse wet markets and local food halls</li></ul></div></article>
@@ -573,7 +581,7 @@
     </section>
 
     <section class="region" data-region="kyoto">
-      <header class="region-head"><span class="region-index">04 / KANSAI</span><h2>Kyoto<br>& Nara</h2><span class="region-dates">10–13 AUG</span></header>
+      <header class="region-head"><span class="region-index">04 / KANSAI</span><h2>Kyoto & Nara</h2><span class="region-dates">10–13 AUG</span></header>
       <div class="days">
         <article class="day revision"><div class="date"><strong>10</strong><span class="day-label">MON · AUG</span></div><div class="card"><h3>Start Kyoto: Shinkansen & Gion</h3><ul><li>Travel to Kyoto by Shinkansen from the Fuji area</li><li>Reserve a Fuji-facing seat where the route allows</li><li>Check in and wander Nishiki Market</li><li>Explore Gion at dusk and the stone-paved lanes</li></ul><p class="note">Revised: 10 August now begins the Kyoto and Nara section. There is no Hakone or Fuji sightseeing today.</p></div></article>
         <article class="day revision"><div class="date"><strong>11</strong><span class="day-label">TUE · AUG</span></div><div class="card"><h3>Kyoto: kimono, bamboo & torii gates</h3><ul><li>Reach Arashiyama Bamboo Grove before 8:00AM</li><li>Explore Tenryu-ji and the Arashiyama riverside</li><li>Kimono and yukata rental at Kimono Miyabi Kyoto at 10:00AM</li><li>Cross Kyoto to Fushimi Inari</li><li>Walk through the torii gates, allowing about two hours</li></ul><p class="note confirmed">Kimono Miyabi Kyoto · Tuesday 11 August 2026 · 10:00AM</p><p class="note">Arashiyama is in northwest Kyoto and Fushimi Inari is southeast. An early start keeps the route comfortable.</p></div></article>
@@ -582,7 +590,7 @@
     </section>
 
     <section class="region" data-region="osaka">
-      <header class="region-head"><span class="region-index">05 / KANSAI</span><h2>Osaka<br>& Koyasan</h2><span class="region-dates">13–15 AUG</span></header>
+      <header class="region-head"><span class="region-index">05 / KANSAI</span><h2>Osaka & Koyasan</h2><span class="region-dates">13–15 AUG</span></header>
       <div class="days">
         <article class="day"><div class="date"><strong>13</strong><span class="day-label">THU · AUG</span></div><div class="card"><h3>Universal Studios & Osaka night</h3><ul><li>Universal Studios Japan and Super Nintendo World</li><li>Umeda Sky Building at night if energy allows</li><li>Ride the Don Quijote Ferris wheel</li><li>Dotonbori street food and takoyaki crawl</li></ul><p class="note booking">USJ Express Pass and Super Nintendo World entry sell out months ahead</p></div></article>
         <article class="day"><div class="date"><strong>14</strong><span class="day-label">FRI · AUG</span></div><div class="card"><h3>Koyasan day trip → return to Tokyo</h3><ul><li>Visit the sacred Buddhist mountain town</li><li>Walk Okunoin Cemetery beneath the cedar forest</li><li>See Kongobuji Temple and Konpon Daito pagoda</li><li>Leave by 2:00PM and travel back to Tokyo to pack</li></ul><p class="note">Nankai Koya Line from Osaka Namba plus cable car takes about 1.5 hours each way.</p></div></article>
