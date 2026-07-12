@@ -470,7 +470,7 @@
       color: #964111;
       font-weight: 800;
     }
-    .booking::before { content: "⚑ "; font-size: inherit; letter-spacing: 0; }
+    .booking::before { content: "⚑\0000a0\0000a0"; font-size: inherit; letter-spacing: 0; }
     .confirmed {
       display: block;
       width: fit-content;
@@ -1569,7 +1569,7 @@
       hotelWallet.replaceChildren(...hotels.map((hotel) => {
         const row = document.createElement('article');
         row.className = `wallet-item${hotel.checkOut <= clock.currentDate ? ' is-past' : ''}`;
-        row.innerHTML = `<div><strong>${hotel.name}</strong><span>${hotel.location} · ${hotel.dates}<br>${hotel.address}</span></div><a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Map</span></a>`;
+        row.innerHTML = `<div><strong>${hotel.name}</strong><span>${hotel.location} · ${hotel.dates}<br>${hotel.address}</span></div><a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a>`;
         return row;
       }));
     }
@@ -1613,7 +1613,10 @@
       const currentDay = isBefore ? 0 : isAfter ? 15 : clock.dayNumber;
       const position = isBefore ? 0 : isAfter ? 100 : ((currentDay - 1) / 14) * 100;
       document.querySelector('#progressFill').style.width = `${position}%`;
-      document.querySelector('#progressPikachu').style.left = `${Math.max(7, Math.min(93, position))}%`;
+      // Park the mascot on the true start (HK) before departure and on Home after the trip;
+      // mid-trip it tracks the current day. The card's padding leaves the sprite fully visible
+      // at 0% and 100%, so the old 7–93% inset (which made it look mid-journey) isn't needed.
+      document.querySelector('#progressPikachu').style.left = `${position}%`;
       [...stops.children].forEach((stop, index) => {
         stop.classList.toggle('is-complete', isAfter || index + 1 < currentDay);
         stop.classList.toggle('is-today', !isBefore && !isAfter && index + 1 === currentDay);
