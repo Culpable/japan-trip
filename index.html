@@ -11,17 +11,17 @@
   <meta property="og:description" content="A 15-day Hong Kong, Shenzhen and Japan itinerary for August 2026.">
   <meta property="og:site_name" content="Jalena Japan Trip Itinerary">
   <meta property="og:locale" content="en_AU">
-  <meta property="og:image" content="https://culpable.github.io/japan-trip/og-image.png">
-  <meta property="og:image:secure_url" content="https://culpable.github.io/japan-trip/og-image.png">
+  <meta property="og:image" content="https://culpable.github.io/japan-trip/og-image.png?v=2">
+  <meta property="og:image:secure_url" content="https://culpable.github.io/japan-trip/og-image.png?v=2">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Pikachu wearing an indigo Japanese yukata beside Mount Fuji and a red rising sun.">
+  <meta property="og:image:alt" content="Pikachu beside subtle Mount Fuji, torii gate and rising sun artwork for the Japan itinerary.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Jalena Japan Trip Itinerary | August 2026">
   <meta name="twitter:description" content="A 15-day Hong Kong, Shenzhen and Japan itinerary for August 2026.">
-  <meta name="twitter:image" content="https://culpable.github.io/japan-trip/og-image.png">
-  <meta name="twitter:image:alt" content="Pikachu wearing an indigo Japanese yukata beside Mount Fuji and a red rising sun.">
+  <meta name="twitter:image" content="https://culpable.github.io/japan-trip/og-image.png?v=2">
+  <meta name="twitter:image:alt" content="Pikachu beside subtle Mount Fuji, torii gate and rising sun artwork for the Japan itinerary.">
   <title>Jalena Japan Trip Itinerary | August 2026</title>
   <style>
     :root {
@@ -709,7 +709,7 @@
       line-height: 1.25;
       box-shadow: 0 4px 0 rgba(36, 37, 34, .12);
     }
-    .pikachu-stage { position: relative; width: 86px; height: 76px; margin: 0 auto; }
+    .pikachu-stage { position: relative; display: block; width: 86px; height: 76px; margin: 0 auto; }
     .pikachu-stage img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
     .costume-accessory { position: absolute; display: block; pointer-events: none; z-index: 2; }
     [data-costume="neon"] .costume-accessory { left: 27px; top: 27px; width: 34px; height: 9px; border-radius: 4px; background: #151619; box-shadow: -8px 0 0 -2px #151619, 8px 0 0 -2px #151619; }
@@ -717,7 +717,7 @@
     [data-costume="ninja"] .costume-accessory { left: 15px; top: 16px; width: 56px; height: 8px; background: #b72f31; transform: rotate(-4deg); box-shadow: 39px 7px 0 -2px #b72f31; }
     [data-costume="hike"] .costume-accessory { left: 23px; top: 7px; width: 42px; height: 15px; border-radius: 70% 70% 20% 20%; background: #3d7a34; box-shadow: 16px 9px 0 -4px #3d7a34; }
     [data-costume="kimono"] .costume-accessory { left: 35px; bottom: 2px; width: 18px; height: 18px; background: #f06d91; transform: rotate(45deg); box-shadow: 13px -13px 0 #f7a9bd; }
-    [data-costume="osaka"] .costume-accessory { left: 18px; top: 14px; width: 52px; height: 7px; background: #fff; box-shadow: 34px 7px 0 -2px #fff; }
+    [data-costume="osaka"] .costume-accessory { display: none; }
     .pikachu-companion.is-walking { animation: companion-walk .42s ease-in-out infinite alternate; }
     .pikachu-companion.is-dancing { animation: companion-dance .26s ease-in-out 6 alternate; }
     @keyframes companion-walk { to { transform: translateY(-5px) rotate(2deg); } }
@@ -843,10 +843,13 @@
       font-size: .8rem;
       font-weight: 900;
       box-shadow: 0 6px 0 #ffdb43;
-      transform: translate(-50%, 140%);
-      transition: transform .3s ease;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translate(-50%, calc(100% + 3rem));
+      transition: opacity .2s ease, transform .3s ease, visibility .3s ease;
     }
-    .delight-toast.is-visible { transform: translate(-50%, 0); }
+    .delight-toast.is-visible { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
     body.arcade-mode { background-color: #151629; background-image: linear-gradient(rgba(51, 255, 214, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 66, 177, .08) 1px, transparent 1px); }
     body.arcade-mode .hero, body.arcade-mode .controls, body.arcade-mode .trip-dashboard { box-shadow: 0 0 0 2px #ff42b1, 0 0 28px rgba(51, 255, 214, .45); }
 
@@ -882,7 +885,6 @@
       [data-costume="ninja"] .costume-accessory { left: 7px; top: 11px; }
       [data-costume="hike"] .costume-accessory { left: 14px; top: 4px; }
       [data-costume="kimono"] .costume-accessory { left: 25px; }
-      [data-costume="osaka"] .costume-accessory { left: 9px; top: 10px; }
       .sound-toggle { margin-left: 0; }
       .next-booking { grid-template-columns: auto 1fr; padding: .85rem; }
       .booking-link { grid-column: 2; justify-self: start; }

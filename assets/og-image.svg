@@ -1,37 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="630" viewBox="0 0 1200 630">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <pattern id="washi" width="24" height="24" patternUnits="userSpaceOnUse">
-      <path d="M0 1h24M1 0v24" stroke="#1e2522" stroke-opacity=".035"/>
-      <circle cx="6" cy="8" r="1" fill="#1e2522" fill-opacity=".055"/>
-      <circle cx="18" cy="17" r=".8" fill="#cc4a35" fill-opacity=".07"/>
+      <path d="M0 1h24M1 0v24" stroke="#1e2522" stroke-opacity=".025"/>
+      <circle cx="6" cy="8" r="1" fill="#1e2522" fill-opacity=".04"/>
+      <circle cx="18" cy="17" r=".8" fill="#cc4a35" fill-opacity=".05"/>
     </pattern>
-    <pattern id="seigaiha" width="28" height="16" patternUnits="userSpaceOnUse">
-      <path d="M0 16a14 14 0 0 1 28 0M7 16a7 7 0 0 1 14 0" fill="none" stroke="#f4f0e7" stroke-width="1.5" stroke-opacity=".8"/>
+    <pattern id="seigaiha" width="48" height="24" patternUnits="userSpaceOnUse">
+      <path d="M0 24a24 24 0 0 1 48 0M8 24a16 16 0 0 1 32 0M16 24a8 8 0 0 1 16 0" fill="none" stroke="#194f45" stroke-width="1.5" stroke-opacity=".07"/>
     </pattern>
-    <clipPath id="card"><rect width="1200" height="630" rx="34"/></clipPath>
+    <clipPath id="card"><rect width="1200" height="630"/></clipPath>
   </defs>
 
   <g clip-path="url(#card)">
     <rect width="1200" height="630" fill="#f4f0e7"/>
     <rect width="1200" height="630" fill="url(#washi)"/>
+    <rect x="650" width="550" height="630" fill="url(#seigaiha)"/>
 
-    <!-- Rising sun and distant landscape -->
-    <circle cx="925" cy="230" r="194" fill="#cc4a35"/>
-    <path d="M614 500 760 349l86 74 120-157 188 234Z" fill="#194f45" opacity=".2"/>
-    <path d="M717 500 874 305l54 67 37-48 142 176Z" fill="#fffdf7"/>
-    <path d="m874 305 54 67 37-48 25 32-38 2-25 29-26-22-49 4Z" fill="#d7e0db"/>
-    <path d="M0 514c165-37 298-19 441 9 132 26 250 39 391 14 170-30 245-22 368 8v85H0Z" fill="#194f45"/>
-    <path d="M0 545c210-31 335 1 483 25 195 31 376-28 717 11v49H0Z" fill="#123a34"/>
-
-    <!-- Torii gate -->
-    <g fill="#9e3528" opacity=".98">
-      <rect x="1051" y="286" width="18" height="241"/>
-      <rect x="1153" y="286" width="18" height="241"/>
-      <rect x="1024" y="300" width="174" height="18" rx="3"/>
-      <path d="M1010 273h202l-13 22h-176Z"/>
+    <!-- Quiet Japan-inspired scenery stays behind the title and character. -->
+    <circle cx="1032" cy="176" r="108" fill="#cc4a35" opacity=".13"/>
+    <text x="1038" y="560" fill="#cc4a35" font-family="Hiragino Mincho ProN, Yu Mincho, serif" font-size="250" font-weight="700" opacity=".055">旅</text>
+    <path d="M668 510 842 308l67 81 47-58 171 179Z" fill="#194f45" opacity=".105"/>
+    <path d="m842 308 67 81 47-58 29 31-53 2-24 32-32-24-58 5Z" fill="#fffdf7" opacity=".86"/>
+    <g fill="#9e3528" opacity=".16">
+      <rect x="1082" y="336" width="12" height="172"/>
+      <rect x="1154" y="336" width="12" height="172"/>
+      <rect x="1062" y="347" width="124" height="12" rx="2"/>
+      <path d="M1052 329h144l-10 16h-124Z"/>
+    </g>
+    <g fill="#cc4a35" opacity=".14">
+      <path d="m742 128 8 11-8 11-8-11Z" transform="rotate(18 742 139)"/>
+      <path d="m1105 244 7 10-7 10-7-10Z" transform="rotate(-24 1105 254)"/>
+      <path d="m1020 88 6 9-6 9-6-9Z" transform="rotate(32 1020 97)"/>
     </g>
 
-    <!-- Title block -->
+    <!-- Title block remains the main event. -->
     <text x="72" y="94" fill="#cc4a35" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="5">PERTH  →  HONG KONG  →  JAPAN</text>
     <text x="72" y="188" fill="#1e2522" font-family="Arial, Helvetica, sans-serif" font-size="70" font-weight="800" letter-spacing="-3">Jalena Japan</text>
     <text x="72" y="264" fill="#1e2522" font-family="Arial, Helvetica, sans-serif" font-size="70" font-weight="800" letter-spacing="-3">Trip Itinerary</text>
@@ -41,12 +43,12 @@
     <text x="72" y="440" fill="#64706a" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="500">bamboo groves and late-night food streets.</text>
     <g transform="translate(72 487)">
       <rect width="118" height="42" rx="21" fill="#cc4a35"/>
-      <text x="59" y="28" text-anchor="middle" fill="#fffdf7" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" letter-spacing="2">東へ</text>
+      <text x="59" y="28" text-anchor="middle" fill="#fffdf7" font-family="Hiragino Sans, Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="2">東へ</text>
       <text x="138" y="28" fill="#1e2522" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="2">EASTBOUND</text>
     </g>
 
-    <!-- The site character and yukata are composited by scripts/build-og-image.sh. -->
-
-    <rect x="18" y="18" width="1164" height="594" rx="25" fill="none" stroke="#1e2522" stroke-opacity=".16" stroke-width="2"/>
+    <path d="M0 538c188-26 316-8 459 17 173 30 342 26 507 1 88-13 166-12 234-4v78H0Z" fill="#194f45" opacity=".92"/>
+    <path d="M0 579c202-25 390 9 564 28 214 24 399-12 636-5v28H0Z" fill="#123a34"/>
+    <rect x="18" y="18" width="1164" height="594" rx="25" fill="none" stroke="#1e2522" stroke-opacity=".14" stroke-width="2"/>
   </g>
 </svg>
