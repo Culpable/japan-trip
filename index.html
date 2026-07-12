@@ -523,6 +523,358 @@
       .days { --datew: 2.2cm; }
       .card { padding: .4cm; }
     }
+
+    /* Live trip state is calculated in JavaScript from the itinerary's fixed 2026 dates. */
+    .live-greeting {
+      margin: .65rem 0 0;
+      color: #176bb4;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .trip-dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1.25rem;
+      align-items: center;
+      margin: 0 0 1rem;
+      padding: 1.35rem 1.5rem;
+      overflow: hidden;
+      border: 1px solid #cfd8e2;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 90% 10%, rgba(255, 218, 74, .34), transparent 24%),
+        linear-gradient(135deg, #f8fbff, #edf6ff);
+      box-shadow: 0 12px 28px rgba(23, 107, 180, .08);
+    }
+    .trip-kicker {
+      margin: 0 0 .3rem;
+      color: #176bb4;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .trip-status {
+      margin: 0;
+      color: #172f48;
+      font: 800 clamp(1.35rem, 2.6vw, 2.15rem)/1.08 "Nunito Sans", sans-serif;
+      letter-spacing: -.035em;
+    }
+    .trip-detail { margin: .45rem 0 0; color: #5d6c7a; font-size: .9rem; font-weight: 700; }
+    .jump-today {
+      padding: .75rem 1rem;
+      border: 0;
+      border-radius: 999px;
+      background: #172f48;
+      color: white;
+      font: 800 .82rem/1 "Nunito Sans", sans-serif;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #ffcc28;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .jump-today:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #ffcc28; }
+    .day.is-complete { opacity: .68; }
+    .day.is-complete .date strong::after { content: " ✓"; color: var(--accent); font-size: .68rem; vertical-align: .35em; }
+    .day.is-today { scroll-margin-top: 6rem; }
+    .day.is-today .card {
+      position: relative;
+      box-shadow: 0 0 0 3px var(--accent), 0 18px 42px color-mix(in srgb, var(--accent) 18%, transparent);
+      transform: translateY(-2px);
+    }
+    .today-badge {
+      display: inline-block;
+      margin: 0 0 .55rem;
+      padding: .28rem .58rem;
+      border-radius: 999px;
+      background: #242522;
+      color: #fff;
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .trip-progress { grid-column: 1 / -1; min-width: 0; padding-top: 1.8rem; }
+    .progress-track {
+      position: relative;
+      height: 12px;
+      margin: .35rem 14px 0;
+      border-radius: 999px;
+      background: rgba(23, 47, 72, .12);
+    }
+    .progress-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #c17b12 0 27%, #176bb4 27% 54%, #397a1b 54% 61%, #564ec5 61% 81%, #a44324 81% 100%);
+      transition: width .8s cubic-bezier(.2, .8, .2, 1);
+    }
+    .progress-stops { position: absolute; inset: 0; }
+    .progress-stop {
+      position: absolute;
+      top: 50%;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+    }
+    .progress-stop::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 10px;
+      height: 10px;
+      border: 2px solid #f8fbff;
+      border-radius: 50%;
+      background: #aeb8c2;
+      transform: translate(-50%, -50%);
+    }
+    .progress-stop.is-complete::before { background: #172f48; }
+    .progress-stop.is-today::before { width: 14px; height: 14px; background: #ffcc28; box-shadow: 0 0 0 3px rgba(255, 204, 40, .3); }
+    .progress-pikachu {
+      position: absolute;
+      left: 0;
+      bottom: 8px;
+      width: 52px;
+      height: 52px;
+      transform: translateX(-50%);
+      transition: left .8s cubic-bezier(.2, .8, .2, 1);
+      filter: drop-shadow(0 5px 4px rgba(23, 47, 72, .2));
+      z-index: 2;
+    }
+    .progress-pikachu img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      gap: .5rem;
+      margin-top: .7rem;
+      color: #647383;
+      font-size: .65rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .pikachu-companion {
+      position: fixed;
+      right: clamp(.75rem, 2vw, 1.5rem);
+      bottom: clamp(.75rem, 2vw, 1.5rem);
+      z-index: 30;
+      width: 104px;
+      padding: .55rem;
+      border: 2px solid #242522;
+      border-radius: 28px;
+      background: #ffdb43;
+      box-shadow: 0 8px 0 #242522, 0 18px 36px rgba(36, 37, 34, .22);
+      cursor: pointer;
+      transform-origin: 50% 100%;
+    }
+    .pikachu-companion:hover { transform: translateY(-3px) rotate(-2deg); }
+    .pikachu-speech {
+      position: absolute;
+      right: calc(100% + .7rem);
+      top: .15rem;
+      width: max-content;
+      max-width: 190px;
+      padding: .55rem .7rem;
+      border: 2px solid #242522;
+      border-radius: 14px 14px 4px 14px;
+      background: #fff;
+      color: #242522;
+      font-size: .72rem;
+      font-weight: 800;
+      line-height: 1.25;
+      box-shadow: 0 4px 0 rgba(36, 37, 34, .12);
+    }
+    .pikachu-stage { position: relative; width: 86px; height: 76px; margin: 0 auto; }
+    .pikachu-stage img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+    .costume-accessory { position: absolute; display: block; pointer-events: none; z-index: 2; }
+    [data-costume="neon"] .costume-accessory { left: 27px; top: 27px; width: 34px; height: 9px; border-radius: 4px; background: #151619; box-shadow: -8px 0 0 -2px #151619, 8px 0 0 -2px #151619; }
+    [data-costume="cafe"] .costume-accessory { left: 25px; top: 7px; width: 38px; height: 13px; border-radius: 70% 70% 40% 40%; background: #e44848; transform: rotate(-8deg); }
+    [data-costume="ninja"] .costume-accessory { left: 15px; top: 16px; width: 56px; height: 8px; background: #b72f31; transform: rotate(-4deg); box-shadow: 39px 7px 0 -2px #b72f31; }
+    [data-costume="hike"] .costume-accessory { left: 23px; top: 7px; width: 42px; height: 15px; border-radius: 70% 70% 20% 20%; background: #3d7a34; box-shadow: 16px 9px 0 -4px #3d7a34; }
+    [data-costume="kimono"] .costume-accessory { left: 35px; bottom: 2px; width: 18px; height: 18px; background: #f06d91; transform: rotate(45deg); box-shadow: 13px -13px 0 #f7a9bd; }
+    [data-costume="osaka"] .costume-accessory { left: 18px; top: 14px; width: 52px; height: 7px; background: #fff; box-shadow: 34px 7px 0 -2px #fff; }
+    .pikachu-companion.is-walking { animation: companion-walk .42s ease-in-out infinite alternate; }
+    .pikachu-companion.is-dancing { animation: companion-dance .26s ease-in-out 6 alternate; }
+    @keyframes companion-walk { to { transform: translateY(-5px) rotate(2deg); } }
+    @keyframes companion-dance { from { transform: rotate(-10deg) scale(1.03); } to { transform: rotate(10deg) translateY(-8px) scale(1.08); } }
+    .sound-toggle { margin-left: auto; }
+    .print-action { margin-left: 0; }
+    .controls::before { content: "Aug 1–15"; }
+    .next-booking {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: .85rem;
+      align-items: center;
+      margin: 0 0 1rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid #d9d6ce;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .78);
+    }
+    .next-booking-tag {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      background: #242522;
+      color: #ffdb43;
+      font-size: .65rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+    .next-booking-label { margin: 0 0 .1rem; color: #858681; font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .next-booking h3 { margin: 0; color: #242522; font: 800 1rem/1.25 "Nunito Sans", sans-serif; }
+    .next-booking-time { margin: .2rem 0 0; color: #6c6d68; font-size: .8rem; font-weight: 700; }
+    .booking-link {
+      padding: .6rem .75rem;
+      border-radius: 999px;
+      background: #e9f3ff;
+      color: #0b5795;
+      font-size: .75rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .day.effect-teamlab.is-today .card {
+      background: linear-gradient(120deg, #dff6ff, #e7e2ff, #ffe8f0, #dff6ff);
+      background-size: 300% 300%;
+      animation: teamlab-glow 7s ease infinite;
+    }
+    .day.effect-ninja.is-today .card::after {
+      content: "";
+      position: absolute;
+      right: 2rem;
+      top: 1.5rem;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .75);
+      box-shadow: 18px -12px 0 6px rgba(255, 255, 255, .45), 40px 5px 0 2px rgba(255, 255, 255, .55);
+      animation: ninja-smoke 3.2s ease-in-out infinite;
+    }
+    .day.effect-sakura.is-today .card::after {
+      content: "✿  ·  ✿";
+      position: absolute;
+      right: 1.2rem;
+      top: .8rem;
+      color: #e56f9b;
+      font-size: 1.1rem;
+      letter-spacing: .25rem;
+      animation: sakura-fall 4s ease-in-out infinite;
+    }
+    @keyframes teamlab-glow { 0%, 100% { background-position: 0 50%; } 50% { background-position: 100% 50%; } }
+    @keyframes ninja-smoke { 0%, 100% { opacity: .25; transform: translateY(10px) scale(.7); } 50% { opacity: .9; transform: translateY(-8px) scale(1.08); } }
+    @keyframes sakura-fall { 0%, 100% { opacity: .45; transform: translateY(-4px) rotate(-4deg); } 50% { opacity: 1; transform: translateY(12px) rotate(7deg); } }
+    .pokemon-trigger { cursor: pointer; box-shadow: inset 0 0 0 1px rgba(23, 107, 180, .22); }
+    .pokemon-trigger::after { content: "  tap for luck"; opacity: .58; font-size: .68em; font-weight: 800; text-transform: uppercase; }
+    .lightning-flash {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      opacity: 0;
+      background: rgba(255, 226, 70, .22);
+    }
+    .lightning-flash::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 8%;
+      width: min(24vw, 220px);
+      height: 78vh;
+      background: #ffd429;
+      clip-path: polygon(52% 0, 100% 0, 66% 38%, 94% 38%, 18% 100%, 42% 54%, 14% 54%);
+      filter: drop-shadow(0 0 24px #fff7a4);
+      transform: translateX(-50%) rotate(7deg);
+    }
+    .lightning-flash.is-active { animation: lightning-flash .8s ease-out; }
+    @keyframes lightning-flash { 0%, 30%, 60% { opacity: 0; } 15%, 45% { opacity: 1; } 100% { opacity: 0; } }
+    .pokeball-burst { position: fixed; inset: 0; z-index: 55; pointer-events: none; overflow: hidden; }
+    .pokeball {
+      position: absolute;
+      left: 50%;
+      top: 55%;
+      width: 46px;
+      height: 46px;
+      border: 4px solid #242522;
+      border-radius: 50%;
+      background: linear-gradient(#e54b4b 0 43%, #242522 43% 57%, #fff 57% 100%);
+      animation: pokeball-pop 1.2s cubic-bezier(.2, .8, .2, 1) forwards;
+    }
+    .pokeball::after { content: ""; position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; border: 3px solid #242522; border-radius: 50%; background: white; transform: translate(-50%, -50%); }
+    .pokeball:nth-child(2) { animation-delay: .08s; }
+    .pokeball:nth-child(3) { animation-delay: .16s; }
+    @keyframes pokeball-pop { 0% { opacity: 0; transform: translate(-50%, 30px) scale(.4); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--x), -55vh) rotate(var(--r)) scale(1.15); } }
+    .delight-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 1.5rem;
+      z-index: 70;
+      padding: .8rem 1rem;
+      border: 2px solid #242522;
+      border-radius: 999px;
+      background: #fff;
+      color: #242522;
+      font-size: .8rem;
+      font-weight: 900;
+      box-shadow: 0 6px 0 #ffdb43;
+      transform: translate(-50%, 140%);
+      transition: transform .3s ease;
+    }
+    .delight-toast.is-visible { transform: translate(-50%, 0); }
+    body.arcade-mode { background-color: #151629; background-image: linear-gradient(rgba(51, 255, 214, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 66, 177, .08) 1px, transparent 1px); }
+    body.arcade-mode .hero, body.arcade-mode .controls, body.arcade-mode .trip-dashboard { box-shadow: 0 0 0 2px #ff42b1, 0 0 28px rgba(51, 255, 214, .45); }
+
+    @media (max-width: 900px) {
+      .chip, .sound-toggle, .print-action, .jump-today, .booking-link { min-height: 44px; }
+      .sound-toggle { display: inline-flex; align-items: center; }
+      .booking-link { display: inline-flex; align-items: center; }
+      .note a { display: inline-flex; align-items: center; min-height: 44px; }
+      .pikachu-speech {
+        display: block;
+        right: 0;
+        top: auto;
+        bottom: calc(100% + .75rem);
+        max-width: 170px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(8px);
+        transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+      }
+      .pikachu-companion.speech-visible .pikachu-speech { opacity: 1; visibility: visible; transform: translateY(0); }
+    }
+
+    @media (max-width: 620px) {
+      .trip-dashboard { grid-template-columns: 1fr; padding: 1.1rem; border-radius: 18px; }
+      .jump-today { justify-self: start; }
+      .progress-labels span:nth-child(even) { display: none; }
+      .progress-pikachu { width: 44px; height: 44px; }
+      .pikachu-companion { width: 82px; border-radius: 22px; }
+      .pikachu-stage { width: 64px; height: 58px; }
+      .pikachu-speech { max-width: 150px; }
+      [data-costume="neon"] .costume-accessory { left: 18px; top: 20px; }
+      [data-costume="cafe"] .costume-accessory { left: 15px; top: 4px; }
+      [data-costume="ninja"] .costume-accessory { left: 7px; top: 11px; }
+      [data-costume="hike"] .costume-accessory { left: 14px; top: 4px; }
+      [data-costume="kimono"] .costume-accessory { left: 25px; }
+      [data-costume="osaka"] .costume-accessory { left: 9px; top: 10px; }
+      .sound-toggle { margin-left: 0; }
+      .next-booking { grid-template-columns: auto 1fr; padding: .85rem; }
+      .booking-link { grid-column: 2; justify-self: start; }
+    }
+
+    @media print {
+      .live-greeting, .trip-dashboard, .today-badge, .pikachu-companion, .next-booking, .lightning-flash, .pokeball-burst, .delight-toast { display: none !important; }
+      .day.is-complete { opacity: 1; }
+      .day.is-today .card { box-shadow: none; transform: none; }
+    }
   </style>
 </head>
 <body>
@@ -530,6 +882,7 @@
     <div>
       <p class="eyebrow">Perth → Hong Kong → China → Japan</p>
       <h1>Jalena Japan Trip Itinerary</h1>
+      <p class="live-greeting" id="liveGreeting">The adventure begins soon</p>
       <div class="hero-bottom">
         <p class="lede">Fifteen days moving through neon cities, sacred mountains, bamboo groves and late-night food streets.</p>
         <p class="meta">01–15 August 2026<br>15 days · 14 nights<br>All dates verified</p>
@@ -544,10 +897,40 @@
     <button class="chip" data-filter="fuji">Fuji</button>
     <button class="chip" data-filter="kyoto">Kyoto / Nara</button>
     <button class="chip" data-filter="osaka">Osaka / Koyasan</button>
-    <button class="action" onclick="window.print()">Print / save PDF</button>
+    <button class="action sound-toggle" id="soundToggle" type="button" aria-pressed="false">Sound: off</button>
+    <button class="action print-action" onclick="window.print()">Print / save PDF</button>
   </nav>
 
   <main>
+    <section class="trip-dashboard" aria-live="polite">
+      <div>
+        <p class="trip-kicker" id="tripKicker">Trip countdown</p>
+        <h2 class="trip-status" id="tripStatus">Calculating the adventure…</h2>
+        <p class="trip-detail" id="tripDetail">01–15 August 2026</p>
+      </div>
+      <button class="jump-today" id="jumpToday" type="button">Preview day one</button>
+      <div class="trip-progress" aria-label="Fifteen-day trip progress">
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+          <div class="progress-stops" id="progressStops"></div>
+          <div class="progress-pikachu" id="progressPikachu" aria-hidden="true">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.gif" alt="">
+          </div>
+        </div>
+        <div class="progress-labels" aria-hidden="true"><span>HK</span><span>Tokyo</span><span>Fuji</span><span>Kyoto</span><span>Osaka</span><span>Home</span></div>
+      </div>
+    </section>
+
+    <section class="next-booking" id="nextBooking" aria-live="polite">
+      <span class="next-booking-tag" aria-hidden="true">NEXT</span>
+      <div>
+        <p class="next-booking-label">Next confirmed moment</p>
+        <h3 id="nextBookingName">Checking the calendar…</h3>
+        <p class="next-booking-time" id="nextBookingTime"></p>
+      </div>
+      <a class="booking-link" id="nextBookingLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open reservation</a>
+    </section>
+
     <aside class="urgent">
       <span class="urgent-mark">!</span>
       <p><strong>Still to book:</strong> Shibuya Sky · USJ Express Pass</p>
@@ -599,11 +982,386 @@
     </section>
   </main>
 
+  <button class="pikachu-companion" id="pikachuCompanion" type="button" data-costume="travel" aria-label="Make Pikachu dance">
+    <span class="pikachu-speech" id="pikachuSpeech">Ready for adventure!</span>
+    <span class="pikachu-stage">
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/25.gif" alt="Pikachu">
+      <span class="costume-accessory" aria-hidden="true"></span>
+    </span>
+  </button>
+
+  <div class="lightning-flash" id="lightningFlash" aria-hidden="true"></div>
+  <div class="pokeball-burst" id="pokeballBurst" aria-hidden="true"></div>
+  <div class="delight-toast" id="delightToast" role="status" aria-live="polite"></div>
+
   <footer><p>Pack light. Book early. Leave room for the unexpected.</p><small>Route revision · 10 August starts in Kyoto · August 2026</small></footer>
 
   <script>
     const chips = document.querySelectorAll('.chip');
     const regions = document.querySelectorAll('[data-region]');
+    const tripDays = [...document.querySelectorAll('.day')];
+    const startDate = '2026-08-01';
+    const endDate = '2026-08-15';
+    const bookings = [
+      { name: 'Dior Café', shortName: 'Dior Café', date: '2026-08-06', instant: '2026-08-06T10:30:00+09:00', time: '10:30AM', displayDate: 'Thursday 6 August', link: 'https://www.tablecheck.com/en/reservation/4LEMYV' },
+      { name: 'teamLab Planets', shortName: 'teamLab', date: '2026-08-06', instant: '2026-08-06T16:30:00+09:00', time: '4:30PM', displayDate: 'Thursday 6 August' },
+      { name: 'Ninja Restaurant', shortName: 'Ninja dinner', date: '2026-08-08', time: null, displayDate: 'Saturday 8 August' },
+      { name: 'Kimono Miyabi Kyoto', shortName: 'Kimono rental', date: '2026-08-11', instant: '2026-08-11T10:00:00+09:00', time: '10:00AM', displayDate: 'Tuesday 11 August' }
+    ];
+
+    // The HTML is intentionally ordered by day, so one source of truth drives every live state.
+    tripDays.forEach((day, index) => {
+      day.dataset.date = `2026-08-${String(index + 1).padStart(2, '0')}`;
+    });
+    const dayEffects = { 6: 'teamlab', 8: 'ninja', 11: 'sakura' };
+    Object.entries(dayEffects).forEach(([dayNumber, effect]) => tripDays[dayNumber - 1].classList.add(`effect-${effect}`));
+
+    function dateKeyInZone(date, timeZone) {
+      const parts = new Intl.DateTimeFormat('en-AU', {
+        timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).formatToParts(date).reduce((values, part) => ({ ...values, [part.type]: part.value }), {});
+      return `${parts.year}-${parts.month}-${parts.day}`;
+    }
+
+    function localHour(date, timeZone) {
+      return Number(new Intl.DateTimeFormat('en-AU', {
+        timeZone,
+        hour: '2-digit',
+        hourCycle: 'h23'
+      }).format(date));
+    }
+
+    function dayDistance(from, to) {
+      const asUtc = (key) => {
+        const [year, month, day] = key.split('-').map(Number);
+        return Date.UTC(year, month - 1, day);
+      };
+      return Math.round((asUtc(to) - asUtc(from)) / 86400000);
+    }
+
+    // ?date=2026-08-08 is a read-only preview hook for testing trip states before departure.
+    function previewableNow() {
+      const preview = new URLSearchParams(window.location.search).get('date');
+      if (!preview) return new Date();
+      const parsed = new Date(preview.includes('T') ? preview : `${preview}T12:00:00+09:00`);
+      return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
+    }
+
+    function tripClock(now) {
+      const hongKongDate = dateKeyInZone(now, 'Asia/Hong_Kong');
+      const currentDate = hongKongDate <= '2026-08-04'
+        ? hongKongDate
+        : dateKeyInZone(now, 'Asia/Tokyo');
+      const inTrip = currentDate >= startDate && currentDate <= endDate;
+      const dayNumber = inTrip ? dayDistance(startDate, currentDate) + 1 : null;
+      const timeZone = dayNumber && dayNumber <= 4 ? 'Asia/Hong_Kong' : 'Asia/Tokyo';
+      return { now, currentDate, inTrip, dayNumber, timeZone };
+    }
+
+    function locationForDay(dayNumber) {
+      if (dayNumber <= 4) return 'Hong Kong & Shenzhen';
+      if (dayNumber <= 8) return 'Tokyo';
+      if (dayNumber === 9) return 'Fuji';
+      if (dayNumber <= 12) return 'Kyoto & Nara';
+      if (dayNumber <= 14) return 'Osaka & Koyasan';
+      return 'Tokyo';
+    }
+
+    function showFullRoute() {
+      regions.forEach((region) => { region.hidden = false; });
+      chips.forEach((chip) => chip.classList.toggle('active', chip.dataset.filter === 'all'));
+    }
+
+    function costumeForDay(dayNumber) {
+      if (dayNumber <= 4) return 'neon';
+      if (dayNumber === 6) return 'cafe';
+      if (dayNumber === 8) return 'ninja';
+      if (dayNumber === 9) return 'hike';
+      if (dayNumber >= 10 && dayNumber <= 12) return 'kimono';
+      if (dayNumber >= 13 && dayNumber <= 14) return 'osaka';
+      return 'travel';
+    }
+
+    function updateProgress(clock) {
+      const stops = document.querySelector('#progressStops');
+      if (!stops.children.length) {
+        tripDays.forEach((day, index) => {
+          const stop = document.createElement('button');
+          stop.className = 'progress-stop';
+          stop.type = 'button';
+          stop.style.left = `${(index / (tripDays.length - 1)) * 100}%`;
+          stop.setAttribute('aria-label', `Go to day ${index + 1}`);
+          stop.addEventListener('click', () => {
+            showFullRoute();
+            day.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
+          stops.append(stop);
+        });
+      }
+
+      const isBefore = clock.currentDate < startDate;
+      const isAfter = clock.currentDate > endDate;
+      const currentDay = isBefore ? 0 : isAfter ? 15 : clock.dayNumber;
+      const position = isBefore ? 0 : isAfter ? 100 : ((currentDay - 1) / 14) * 100;
+      document.querySelector('#progressFill').style.width = `${position}%`;
+      document.querySelector('#progressPikachu').style.left = `${position}%`;
+      [...stops.children].forEach((stop, index) => {
+        stop.classList.toggle('is-complete', isAfter || index + 1 < currentDay);
+        stop.classList.toggle('is-today', !isBefore && !isAfter && index + 1 === currentDay);
+      });
+
+      const companion = document.querySelector('#pikachuCompanion');
+      companion.dataset.costume = costumeForDay(clock.dayNumber || (isAfter ? 15 : 1));
+      document.querySelector('#pikachuSpeech').textContent = isBefore
+        ? 'Suitcase packed. Almost time!'
+        : isAfter
+          ? 'What an adventure!'
+          : `Day ${clock.dayNumber}. Let’s go!`;
+      revealCompanionSpeech();
+    }
+
+    function revealCompanionSpeech() {
+      if (!window.matchMedia('(max-width: 900px)').matches) return;
+      const companion = document.querySelector('#pikachuCompanion');
+      companion.classList.add('speech-visible');
+      window.clearTimeout(revealCompanionSpeech.timer);
+      revealCompanionSpeech.timer = window.setTimeout(() => companion.classList.remove('speech-visible'), 2600);
+    }
+
+    function updateNextBooking(clock) {
+      const next = bookings.find((booking) => booking.instant
+        ? clock.now < new Date(booking.instant)
+        : clock.currentDate <= booking.date);
+      const name = document.querySelector('#nextBookingName');
+      const time = document.querySelector('#nextBookingTime');
+      const link = document.querySelector('#nextBookingLink');
+
+      if (!next) {
+        name.textContent = 'All confirmed moments complete';
+        time.textContent = 'The booked itinerary has reached its finale.';
+        link.hidden = true;
+        return;
+      }
+
+      name.textContent = next.name;
+      const isToday = next.date === clock.currentDate;
+      let timing = isToday ? 'Today' : next.displayDate;
+      if (next.time) timing += ` · ${next.time}`;
+      else timing += ' · time in reservation';
+      if (isToday && next.instant) {
+        const minutes = Math.max(0, Math.round((new Date(next.instant) - clock.now) / 60000));
+        const hours = Math.floor(minutes / 60);
+        const remainder = minutes % 60;
+        timing += ` · ${hours ? `${hours}h ` : ''}${remainder}m away`;
+        document.querySelector('#liveGreeting').textContent += ` · ${next.shortName} at ${next.time}`;
+      }
+      time.textContent = timing;
+      link.hidden = !next.link;
+      if (next.link) link.href = next.link;
+    }
+
+    let soundEnabled = false;
+    let audioContext;
+    function playChime(notes = [659, 784, 988]) {
+      if (!soundEnabled) return;
+      audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+      notes.forEach((frequency, index) => {
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        const startsAt = audioContext.currentTime + index * .09;
+        oscillator.type = 'triangle';
+        oscillator.frequency.value = frequency;
+        gain.gain.setValueAtTime(.0001, startsAt);
+        gain.gain.exponentialRampToValueAtTime(.12, startsAt + .015);
+        gain.gain.exponentialRampToValueAtTime(.0001, startsAt + .18);
+        oscillator.connect(gain).connect(audioContext.destination);
+        oscillator.start(startsAt);
+        oscillator.stop(startsAt + .2);
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.querySelector('#delightToast');
+      toast.textContent = message;
+      toast.classList.add('is-visible');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove('is-visible'), 2200);
+    }
+
+    function initialiseSound() {
+      const toggle = document.querySelector('#soundToggle');
+      toggle.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        toggle.textContent = `Sound: ${soundEnabled ? 'on' : 'off'}`;
+        toggle.setAttribute('aria-pressed', String(soundEnabled));
+        if (soundEnabled) {
+          playChime();
+          showToast('Travel chimes are on');
+        }
+      });
+    }
+
+    function triggerLightning() {
+      const flash = document.querySelector('#lightningFlash');
+      flash.classList.remove('is-active');
+      void flash.offsetWidth;
+      flash.classList.add('is-active');
+      playChime([988, 1319, 1568]);
+      showToast('Pikachu used Thunderbolt!');
+    }
+
+    function triggerPokeballs() {
+      const burst = document.querySelector('#pokeballBurst');
+      burst.replaceChildren();
+      ['-190px', '0px', '190px'].forEach((x, index) => {
+        const ball = document.createElement('span');
+        ball.className = 'pokeball';
+        ball.style.setProperty('--x', x);
+        ball.style.setProperty('--r', `${index % 2 ? 430 : -430}deg`);
+        burst.append(ball);
+      });
+      playChime([523, 659, 784]);
+      showToast('Walk-in luck activated');
+      window.setTimeout(() => burst.replaceChildren(), 1500);
+    }
+
+    function initialiseEasterEggs() {
+      let pikachuClicks = 0;
+      document.querySelector('#pikachuCompanion').addEventListener('click', () => {
+        pikachuClicks += 1;
+        playChime([784, 988]);
+        if (pikachuClicks === 5) {
+          triggerLightning();
+          pikachuClicks = 0;
+        }
+      });
+
+      const pokemonItem = [...document.querySelectorAll('.card li')].find((item) => item.textContent.includes('Pokémon Cafe'));
+      pokemonItem.classList.add('pokemon-trigger');
+      pokemonItem.tabIndex = 0;
+      pokemonItem.setAttribute('role', 'button');
+      pokemonItem.setAttribute('aria-label', 'Try Pokémon Cafe walk-in luck');
+      pokemonItem.addEventListener('click', triggerPokeballs);
+      pokemonItem.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          triggerPokeballs();
+        }
+      });
+
+      const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+      let konamiIndex = 0;
+      window.addEventListener('keydown', (event) => {
+        konamiIndex = event.key === konami[konamiIndex] ? konamiIndex + 1 : 0;
+        if (konamiIndex === konami.length) {
+          document.body.classList.toggle('arcade-mode');
+          showToast(document.body.classList.contains('arcade-mode') ? 'Arcade mode unlocked' : 'Arcade mode closed');
+          playChime([523, 659, 784, 1047]);
+          konamiIndex = 0;
+        }
+      });
+    }
+
+    function initialiseCompanion() {
+      const companion = document.querySelector('#pikachuCompanion');
+      const speech = document.querySelector('#pikachuSpeech');
+      const moments = {
+        china: { costume: 'neon', speech: 'Hong Kong & Shenzhen: neon mode!' },
+        tokyo: { costume: 'cafe', speech: 'Tokyo, I choose you!' },
+        fuji: { costume: 'hike', speech: 'Fuji peek-a-chu.' },
+        kyoto: { costume: 'kimono', speech: 'Kyoto glow-up.' },
+        osaka: { costume: 'osaka', speech: 'Takoyaki mission.' }
+      };
+
+      companion.addEventListener('click', () => {
+        companion.classList.remove('is-dancing');
+        void companion.offsetWidth;
+        companion.classList.add('is-dancing');
+        revealCompanionSpeech();
+      });
+      companion.addEventListener('animationend', () => companion.classList.remove('is-dancing'));
+
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries.find((entry) => entry.isIntersecting);
+        if (!visible) return;
+        const region = visible.target.dataset.region;
+        companion.dataset.costume = moments[region].costume;
+        speech.textContent = moments[region].speech;
+        revealCompanionSpeech();
+      }, { rootMargin: '-32% 0px -48% 0px', threshold: 0 });
+      regions.forEach((region) => observer.observe(region));
+
+      let walkingTimer;
+      window.addEventListener('scroll', () => {
+        companion.classList.add('is-walking');
+        window.clearTimeout(walkingTimer);
+        walkingTimer = window.setTimeout(() => companion.classList.remove('is-walking'), 180);
+      }, { passive: true });
+    }
+
+    function updateTripState() {
+      const clock = tripClock(previewableNow());
+      const status = document.querySelector('#tripStatus');
+      const kicker = document.querySelector('#tripKicker');
+      const detail = document.querySelector('#tripDetail');
+      const greeting = document.querySelector('#liveGreeting');
+      const jumpButton = document.querySelector('#jumpToday');
+      let targetDay = tripDays[0];
+
+      tripDays.forEach((day) => {
+        const isPast = day.dataset.date < clock.currentDate;
+        const isToday = day.dataset.date === clock.currentDate;
+        day.classList.toggle('is-complete', isPast);
+        day.classList.toggle('is-today', isToday);
+        day.classList.toggle('is-upcoming', !isPast && !isToday);
+        day.querySelector('.today-badge')?.remove();
+        if (isToday) {
+          const badge = document.createElement('span');
+          badge.className = 'today-badge';
+          badge.textContent = 'Today’s adventure';
+          day.querySelector('.card').prepend(badge);
+          targetDay = day;
+        }
+      });
+
+      if (clock.currentDate < startDate) {
+        const daysUntil = dayDistance(clock.currentDate, startDate);
+        kicker.textContent = 'Trip countdown';
+        status.textContent = `${daysUntil} ${daysUntil === 1 ? 'day' : 'days'} until Jalena’s Japan adventure`;
+        detail.textContent = 'The route is ready · 01–15 August 2026';
+        greeting.textContent = 'The adventure begins soon';
+        jumpButton.textContent = 'Preview day one';
+      } else if (clock.currentDate > endDate) {
+        kicker.textContent = 'Adventure complete';
+        status.textContent = 'Trip completed · 15 unforgettable days';
+        detail.textContent = 'Hong Kong, Shenzhen and Japan · August 2026';
+        greeting.textContent = 'Welcome home, travellers';
+        jumpButton.textContent = 'Revisit the final day';
+        targetDay = tripDays.at(-1);
+      } else {
+        const location = locationForDay(clock.dayNumber);
+        const hour = localHour(clock.now, clock.timeZone);
+        const salutation = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+        const currentHeading = targetDay.querySelector('h3').textContent;
+        kicker.textContent = `Day ${clock.dayNumber} of 15 · ${location}`;
+        status.textContent = currentHeading;
+        detail.textContent = `${Math.round((clock.dayNumber / 15) * 100)}% of the adventure · local trip time`;
+        greeting.textContent = `${salutation} from ${location}`;
+        jumpButton.textContent = 'Jump to today';
+      }
+
+      jumpButton.onclick = () => {
+        showFullRoute();
+        targetDay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      };
+      window.tripState = clock;
+      updateProgress(clock);
+      updateNextBooking(clock);
+    }
+
     chips.forEach((chip) => chip.addEventListener('click', () => {
       chips.forEach((item) => item.classList.remove('active'));
       chip.classList.add('active');
@@ -611,6 +1369,12 @@
       regions.forEach((region) => { region.hidden = filter !== 'all' && region.dataset.region !== filter; });
       document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
     }));
+    updateTripState();
+    initialiseCompanion();
+    initialiseSound();
+    initialiseEasterEggs();
+    // Recalculate every minute so an open tab crosses bookings and trip days without a refresh.
+    window.setInterval(updateTripState, 60000);
   </script>
 </body>
 </html>
