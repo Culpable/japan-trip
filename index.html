@@ -330,6 +330,7 @@
       --text: #40413e;
       display: block;
       margin: 0 0 3.75rem;
+      scroll-margin-top: 6rem;
     }
     .region[data-region="china"] { --accent: #c17b12; --surface: #fff1d7; --pill: #f6dfbc; --text: #643b09; }
     .region[data-region="tokyo"] { --accent: #176bb4; --surface: #e4f2ff; --pill: #cfe5f8; --text: #073b6b; }
@@ -1365,7 +1366,10 @@
       chip.classList.add('active');
       const filter = chip.dataset.filter;
       regions.forEach((region) => { region.hidden = filter !== 'all' && region.dataset.region !== filter; });
-      document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+      const target = filter === 'all'
+        ? document.querySelector('main')
+        : [...regions].find((region) => region.dataset.region === filter);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }));
     updateTripState();
     initialiseCompanion();
