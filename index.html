@@ -2423,8 +2423,13 @@
           hour: 'numeric',
           minute: '2-digit'
         }).format(new Date(data.updateTime));
+        const perthTime = new Intl.DateTimeFormat('en-AU', {
+          timeZone: 'Australia/Perth',
+          hour: 'numeric',
+          minute: '2-digit'
+        }).format(new Date(data.updateTime));
         nowEl.textContent = `${emoji} ${temperature}° · ${label}`;
-        subEl.textContent = `Hong Kong Observatory · updated ${observationTime} HKT · tap for details`;
+        subEl.textContent = `Hong Kong Observatory · updated ${observationTime} HKT (${perthTime} AWST) · tap for details`;
       } catch { fallback(); }
     }
 

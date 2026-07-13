@@ -45,4 +45,14 @@ test('the Hong Kong card presents the observation timestamp returned by the prov
     /subEl\.textContent\s*=\s*[^;]*(time|observed|updated)/i,
     'the weather subtitle should present the observation time to the traveller'
   );
+  assert.match(
+    weatherFunction,
+    /Australia\/Perth/,
+    'the weather subtitle should also format the observation time in AWST'
+  );
+  assert.match(
+    weatherFunction,
+    /\(\$\{perthTime\} AWST\)/,
+    'the AWST observation time should be shown in brackets after HKT'
+  );
 });
