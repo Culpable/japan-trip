@@ -1139,7 +1139,11 @@
     .wallet-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .75rem; align-items: center; padding: .85rem; border: 1px solid #dedbd3; border-radius: 15px; background: #fff; }
     .wallet-item.is-past { opacity: .55; }
     .wallet-item strong { display: block; font-size: .9rem; }
-    .wallet-item span { display: block; margin-top: .2rem; color: #777873; font-size: .72rem; font-weight: 700; line-height: 1.4; }
+    /* Scope the muted metadata style to the row's detail line only (the first div's span).
+       A broad `.wallet-item span` also caught the <span> inside .mini-action links, pushing
+       the "Map"/"Open" labels down and greying them out - only visible in the booking modal. */
+    .wallet-item > div > span { display: block; margin-top: .2rem; color: #777873; font-size: .72rem; font-weight: 700; line-height: 1.4; }
+    .wallet-actions { display: flex; flex-wrap: wrap; gap: .4rem; justify-content: flex-end; }
     .wallet-badge { padding: .42rem .55rem; border-radius: 999px; background: #d8eadb; color: #24613b; font-size: .6rem; font-weight: 900; text-transform: uppercase; }
     .quick-list { margin: .8rem 0 0; padding: 0; list-style: none; }
     .quick-list li { padding: .6rem 0; border-top: 1px solid #dedbd3; font-size: .85rem; line-height: 1.45; }
@@ -1166,6 +1170,7 @@
       .trip-dialog { max-height: calc(100dvh - 1rem); border-radius: 20px; }
       .dialog-body { max-height: calc(100dvh - 86px); }
       .wallet-item { grid-template-columns: 1fr; }
+      .wallet-actions { justify-content: flex-start; }
       .wallet-badge { width: fit-content; }
     }
     /* ---- Pre-trip countdown delight -------------------------------------------- */
@@ -1482,10 +1487,10 @@
     const startDate = '2026-08-01';
     const endDate = '2026-08-15';
     const bookings = [
-      { emoji: '☕', name: 'Dior Café', shortName: 'Dior Café', date: '2026-08-06', instant: '2026-08-06T10:30:00+09:00', time: '10:30AM', displayDate: 'Thursday 6 August', link: 'https://www.tablecheck.com/en/reservation/4LEMYV' },
-      { emoji: '🎨', name: 'teamLab Planets', shortName: 'teamLab', date: '2026-08-06', instant: '2026-08-06T16:30:00+09:00', time: '4:30PM', displayDate: 'Thursday 6 August' },
-      { emoji: '🥷🏻', name: 'Ninja Restaurant', shortName: 'Ninja dinner', date: '2026-08-08', time: null, displayDate: 'Saturday 8 August' },
-      { emoji: '👘', name: 'Kimono Miyabi Kyoto', shortName: 'Kimono rental', date: '2026-08-11', instant: '2026-08-11T10:00:00+09:00', time: '10:00AM', displayDate: 'Tuesday 11 August' }
+      { emoji: '☕', name: 'Dior Café', shortName: 'Dior Café', date: '2026-08-06', instant: '2026-08-06T10:30:00+09:00', time: '10:30AM', displayDate: 'Thursday 6 August', link: 'https://www.tablecheck.com/en/reservation/4LEMYV', address: 'Café Dior by Anne-Sophie Pic, House of Dior Ginza 4F, 6-10-1 Ginza, Chuo City, Tokyo 104-0061, Japan' },
+      { emoji: '🎨', name: 'teamLab Planets', shortName: 'teamLab', date: '2026-08-06', instant: '2026-08-06T16:30:00+09:00', time: '4:30PM', displayDate: 'Thursday 6 August', address: 'teamLab Planets TOKYO, 6-1-16 Toyosu, Koto City, Tokyo 135-0061, Japan' },
+      { emoji: '🥷🏻', name: 'Ninja Restaurant', shortName: 'Ninja dinner', date: '2026-08-08', time: null, displayDate: 'Saturday 8 August', address: 'Ninja Akasaka, Akasaka Tokyu Plaza 1F, 2-14-3 Nagatacho, Chiyoda City, Tokyo 100-0014, Japan' },
+      { emoji: '👘', name: 'Kimono Miyabi Kyoto', shortName: 'Kimono rental', date: '2026-08-11', instant: '2026-08-11T10:00:00+09:00', time: '10:00AM', displayDate: 'Tuesday 11 August', address: 'Kimono Miyabi Kyoto (Kiyomizu), Yasaka Building 204, 10-2 Tsukimicho, Higashiyama-ku, Kyoto 605-0829, Japan' }
     ];
     const hotels = [
       { emoji: '🏙️', location: 'Shenzhen', name: 'The Langham, Shenzhen', address: '7888 Shennan Boulevard, Futian District, Shenzhen 518040, China', checkIn: '2026-08-01', checkOut: '2026-08-04', dates: '1–4 August · 3 nights' },
@@ -1610,13 +1615,12 @@
     // A shared prep list the two of them tick off together; progress persists per-device.
     // The first two mirror the "Still to book" banner so bookings live in one place.
     const preTripTasks = [
-      { id: 'book-shibuya', label: 'Book Shibuya Sky timed entry' },
+      { id: 'book-shibuya', label: 'Book Shibuya Sky timed entry (on the 24th of July)' },
       { id: 'book-usj', label: 'Book USJ Express Pass + Nintendo World' },
       { id: 'passports', label: 'Passports valid 6+ months' },
       { id: 'money', label: 'Set up Suica, WeChat Pay & Alipay' },
       { id: 'esim', label: 'Buy a Japan eSIM / pocket wifi' },
-      { id: 'idp', label: 'International Driving Permit (for Mario Kart)' },
-      { id: 'insurance', label: 'Travel insurance sorted' },
+      { id: 'idp', label: 'International Driving Permit (only if we still want to do Mario Kart)' },
       { id: 'pack', label: 'Start the packing list' }
     ];
 
@@ -1704,7 +1708,7 @@
     const weatherPages = {
       'Shenzhen': 'https://www.accuweather.com/en/cn/shenzhen/58194/weather-forecast/58194',
       'Guangzhou': 'https://www.accuweather.com/en/cn/guangzhou/102255/weather-forecast/102255',
-      'Hong Kong': 'https://www.accuweather.com/en/hk/hong-kong/1123655/weather-forecast/1123655',
+      'Hong Kong': 'https://www.hko.gov.hk/en/wxinfo/currwx/current.htm',
       'Tokyo': 'https://www.accuweather.com/en/jp/tokyo/226396/weather-forecast/226396',
       'Fujikawaguchiko': 'https://www.accuweather.com/en/jp/fujikawaguchiko-machi/2334040/weather-forecast/2334040',
       'Kyoto': 'https://www.accuweather.com/en/jp/kyoto-shi/224436/weather-forecast/224436',
@@ -1952,8 +1956,12 @@
       bookingWallet.replaceChildren(...orderedBookings(clock).map((booking) => {
         const row = document.createElement('article');
         row.className = `wallet-item${bookingHasElapsed(booking, clock) ? ' is-past' : ''}`;
-        const action = booking.link ? `<a class="mini-action" href="${booking.link}" target="_blank" rel="noopener noreferrer">Open</a>` : '<span class="wallet-badge">Booked</span>';
-        row.innerHTML = `<div><strong>${booking.emoji ? `${booking.emoji} ` : ''}${booking.name}</strong><span>${booking.displayDate}${booking.time ? ` · ${booking.time}` : ''}</span></div>${action}`;
+        // Every confirmed moment now carries a Map link (pin icon + label) to its venue, mirroring
+        // the hotel rows. Bookings with a reservation link keep an "Open" action beside the map.
+        const mapAction = booking.address ? `<a class="mini-action" href="${mapsUrl(booking.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a>` : '';
+        const openAction = booking.link ? `<a class="mini-action" href="${booking.link}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span>Open</span></a>` : '';
+        const actions = openAction || mapAction ? `<div class="wallet-actions">${openAction}${mapAction}</div>` : '<span class="wallet-badge">Booked</span>';
+        row.innerHTML = `<div><strong>${booking.emoji ? `${booking.emoji} ` : ''}${booking.name}</strong><span>${booking.displayDate}${booking.time ? ` · ${booking.time}` : ''}</span></div>${actions}`;
         return row;
       }));
       const hotelWallet = document.querySelector('#hotelWallet');
@@ -2369,34 +2377,54 @@
       window.setTimeout(() => celebrateMilestone(due), 700);
     }
 
-    // Map WMO weather codes to a friendly emoji + label for the first-stop forecast chip.
+    // Map Hong Kong Observatory weather icons to a compact traveller-friendly summary.
     function weatherCodeInfo(code) {
-      if (code === 0) return { emoji: '☀️', label: 'clear' };
-      if (code <= 2) return { emoji: '🌤️', label: 'mostly sunny' };
-      if (code === 3) return { emoji: '☁️', label: 'cloudy' };
-      if (code <= 48) return { emoji: '🌫️', label: 'foggy' };
-      if (code <= 67) return { emoji: '🌧️', label: 'rain' };
-      if (code <= 77) return { emoji: '🌨️', label: 'snow' };
-      if (code <= 82) return { emoji: '🌦️', label: 'showers' };
-      if (code <= 99) return { emoji: '⛈️', label: 'storms' };
-      return { emoji: '🌏', label: 'mixed' };
+      const conditions = {
+        50: { emoji: '☀️', label: 'sunny' },
+        51: { emoji: '🌤️', label: 'sunny periods' },
+        52: { emoji: '🌤️', label: 'sunny intervals' },
+        53: { emoji: '☁️', label: 'cloudy' },
+        54: { emoji: '☁️', label: 'overcast' },
+        60: { emoji: '🌦️', label: 'light rain' },
+        61: { emoji: '🌧️', label: 'rain' },
+        62: { emoji: '🌧️', label: 'heavy rain' },
+        63: { emoji: '⛈️', label: 'thunderstorms' },
+        80: { emoji: '💨', label: 'windy' },
+        81: { emoji: '☀️', label: 'dry' },
+        82: { emoji: '💧', label: 'humid' },
+        83: { emoji: '🌫️', label: 'foggy' },
+        84: { emoji: '🌫️', label: 'misty' },
+        85: { emoji: '🌫️', label: 'hazy' },
+        90: { emoji: '🥵', label: 'hot' },
+        91: { emoji: '☀️', label: 'warm' },
+        92: { emoji: '🧥', label: 'cool' },
+        93: { emoji: '🥶', label: 'cold' }
+      };
+      return conditions[code] || { emoji: '🌏', label: 'current conditions' };
     }
 
-    // Live current conditions in Hong Kong (day-one arrival) via Open-Meteo (no API key,
-    // CORS-friendly). Falls back to a seasonal note offline or if the request fails.
+    // Use the official Hong Kong Observatory station reading and report page together so
+    // the displayed temperature, named location and click-through source remain aligned.
     async function fetchFirstStopWeather() {
       const nowEl = document.querySelector('#weatherNow');
       const subEl = document.querySelector('#weatherSub');
       if (!nowEl || !subEl) return;
-      const fallback = () => { nowEl.textContent = '🌥️ Hot & humid, ~31°'; subEl.textContent = 'Typical early August · tap for live'; };
+      const fallback = () => { nowEl.textContent = '🌦️ Weather unavailable'; subEl.textContent = 'Hong Kong Observatory · tap for current report'; };
       try {
-        const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=22.3193&longitude=114.1694&current=temperature_2m,weather_code&timezone=Asia%2FHong_Kong');
+        const response = await fetch('https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en', { cache: 'no-store' });
         if (!response.ok) throw new Error('weather request failed');
         const data = await response.json();
-        const temperature = Math.round(data.current.temperature_2m);
-        const { emoji, label } = weatherCodeInfo(data.current.weather_code);
+        const observation = data.temperature?.data?.find((entry) => entry.place === 'Hong Kong Observatory');
+        if (!observation || !Number.isFinite(Number(observation.value)) || !data.updateTime) throw new Error('weather observation missing');
+        const temperature = Math.round(Number(observation.value));
+        const { emoji, label } = weatherCodeInfo(data.icon?.at(-1));
+        const observationTime = new Intl.DateTimeFormat('en-AU', {
+          timeZone: 'Asia/Hong_Kong',
+          hour: 'numeric',
+          minute: '2-digit'
+        }).format(new Date(data.updateTime));
         nowEl.textContent = `${emoji} ${temperature}° · ${label}`;
-        subEl.textContent = 'Live in Hong Kong · tap for forecast';
+        subEl.textContent = `Hong Kong Observatory · updated ${observationTime} HKT · tap for details`;
       } catch { fallback(); }
     }
 

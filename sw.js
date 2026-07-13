@@ -51,6 +51,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  const requestUrl = new URL(event.request.url);
+  if (requestUrl.origin === 'https://data.weather.gov.hk') {
+    event.respondWith(fetch(event.request, { cache: 'no-store' }));
+    return;
+  }
+
   const networkResponse = fetch(event.request);
   const cacheUpdate = networkResponse.then((response) => {
     if (response.ok || response.type === 'opaque') {
