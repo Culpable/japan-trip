@@ -48,7 +48,9 @@ function createHarness() {
 }
 
 function walletNames(rows) {
-  return rows.map((row) => row.innerHTML.match(/<strong>(.*?)<\/strong>/)?.[1]);
+  // The wallet now prefixes each name with a decorative emoji (e.g. "🥷🏻 Ninja Restaurant").
+  // Strip that leading non-ASCII glyph so these assertions stay focused on booking order.
+  return rows.map((row) => row.innerHTML.match(/<strong>(.*?)<\/strong>/)?.[1]?.replace(/^[^\x00-\x7F]+\s+/, ''));
 }
 
 function verifySameDayBookingCompletion() {

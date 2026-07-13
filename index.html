@@ -43,6 +43,9 @@
       --gold: #c89c3c;
       --line: rgba(30, 37, 34, 0.18);
       --white: #fffdf7;
+      /* Status-bar / notch inset, exposed as a variable so the sticky filter dock can pad itself
+         over the unsafe top edge (and so tests can simulate a notch by overriding it). */
+      --safe-top: env(safe-area-inset-top, 0px);
     }
 
     * { box-sizing: border-box; }
@@ -216,7 +219,7 @@
     }
 
     @media print {
-      .controls { display: none; }
+      .controls, .controls-dock { display: none; }
       .hero { min-height: auto; padding: 2cm 1cm; }
       .hero::after, body::before { display: none; }
       main { width: 100%; padding: 1cm; }
@@ -276,12 +279,23 @@
     .lede { margin: 0; max-width: 720px; font: 600 1rem/1.45 "Nunito Sans", sans-serif; color: #666762; }
     .meta { margin: 0 0 0 auto; color: #777873; line-height: 1.45; text-align: right; }
 
+    /* Full-bleed sticky dock behind the pill. It carries the sticky behaviour (top: 0) and pads
+       itself over the status-bar safe area, so the filter pill locks flush to the very top of the
+       screen with an opaque cap above and beside it - no itinerary content shows through while
+       scrolling, including behind the notch in the installed app. */
+    .controls-dock {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding-top: var(--safe-top);
+      background: var(--paper);
+      box-shadow: 0 10px 22px -18px rgba(36, 37, 34, .3);
+    }
     .controls {
+      /* The dock is the sticky element now; the pill just floats inside it. */
+      position: static;
       width: min(var(--content-width), calc(100% - 2rem));
-      margin: 0 auto;
-      /* The sticky offset tracks the status-bar inset so the filter bar never slides
-         beneath a notch or clock when the site runs as an installed app. */
-      top: calc(.7rem + env(safe-area-inset-top, 0px));
+      margin: .45rem auto;
       gap: .65rem;
       align-items: center;
       padding: .85rem 1rem;
@@ -1003,7 +1017,8 @@
     .utility-chip[hidden] { display: none; }
     .chip[data-filter="all"] { order: -4; }
     #todayShortcut { order: -3; }
-    #bookingsShortcut { order: -2; }
+    #bookingsShortcut { order: -2; display: inline-flex; align-items: center; gap: .4rem; }
+    #bookingsShortcut .action-ico { color: var(--green); }
     #installApp { order: -1; }
 
     .travel-utilities {
@@ -1175,6 +1190,7 @@
     </div>
   </header>
 
+  <div class="controls-dock">
   <nav class="controls" aria-label="Filter itinerary by region">
     <button class="chip active" data-filter="all">Full route</button>
     <button class="chip" data-filter="china">HK / Shenzhen</button>
@@ -1183,11 +1199,12 @@
     <button class="chip" data-filter="kyoto">Kyoto / Nara</button>
     <button class="chip" data-filter="osaka">Osaka / Koyasan</button>
     <button class="utility-chip" id="todayShortcut" type="button" hidden>Today</button>
-    <button class="utility-chip" id="bookingsShortcut" type="button">Bookings</button>
+    <button class="utility-chip" id="bookingsShortcut" type="button"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 2 2 0 0 0 0-4Z"/><path d="M14 6.5v11"/></svg><span>Bookings</span></button>
     <button class="utility-chip" id="installApp" type="button" hidden>Install</button>
     <button class="action sound-toggle" id="soundToggle" type="button" aria-pressed="false">Sound: off</button>
     <button class="action print-action" onclick="window.print()">Print / save PDF</button>
   </nav>
+  </div>
 
   <main>
     <section class="trip-dashboard" aria-live="polite">
@@ -1325,19 +1342,19 @@
     const startDate = '2026-08-01';
     const endDate = '2026-08-15';
     const bookings = [
-      { name: 'Dior Café', shortName: 'Dior Café', date: '2026-08-06', instant: '2026-08-06T10:30:00+09:00', time: '10:30AM', displayDate: 'Thursday 6 August', link: 'https://www.tablecheck.com/en/reservation/4LEMYV' },
-      { name: 'teamLab Planets', shortName: 'teamLab', date: '2026-08-06', instant: '2026-08-06T16:30:00+09:00', time: '4:30PM', displayDate: 'Thursday 6 August' },
-      { name: 'Ninja Restaurant', shortName: 'Ninja dinner', date: '2026-08-08', time: null, displayDate: 'Saturday 8 August' },
-      { name: 'Kimono Miyabi Kyoto', shortName: 'Kimono rental', date: '2026-08-11', instant: '2026-08-11T10:00:00+09:00', time: '10:00AM', displayDate: 'Tuesday 11 August' }
+      { emoji: '☕', name: 'Dior Café', shortName: 'Dior Café', date: '2026-08-06', instant: '2026-08-06T10:30:00+09:00', time: '10:30AM', displayDate: 'Thursday 6 August', link: 'https://www.tablecheck.com/en/reservation/4LEMYV' },
+      { emoji: '🎨', name: 'teamLab Planets', shortName: 'teamLab', date: '2026-08-06', instant: '2026-08-06T16:30:00+09:00', time: '4:30PM', displayDate: 'Thursday 6 August' },
+      { emoji: '🥷🏻', name: 'Ninja Restaurant', shortName: 'Ninja dinner', date: '2026-08-08', time: null, displayDate: 'Saturday 8 August' },
+      { emoji: '👘', name: 'Kimono Miyabi Kyoto', shortName: 'Kimono rental', date: '2026-08-11', instant: '2026-08-11T10:00:00+09:00', time: '10:00AM', displayDate: 'Tuesday 11 August' }
     ];
     const hotels = [
-      { location: 'Shenzhen', name: 'The Langham, Shenzhen', address: '7888 Shennan Boulevard, Futian District, Shenzhen 518040, China', checkIn: '2026-08-01', checkOut: '2026-08-04', dates: '1–4 August · 3 nights' },
-      { location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night' },
-      { location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
-      { location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night' },
-      { location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0847, Japan', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights' },
-      { location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', checkIn: '2026-08-13', checkOut: '2026-08-14', dates: '13–14 August · 1 night' },
-      { location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', checkIn: '2026-08-14', checkOut: '2026-08-15', dates: '14–15 August · 1 night' }
+      { emoji: '🏙️', location: 'Shenzhen', name: 'The Langham, Shenzhen', address: '7888 Shennan Boulevard, Futian District, Shenzhen 518040, China', checkIn: '2026-08-01', checkOut: '2026-08-04', dates: '1–4 August · 3 nights' },
+      { emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night' },
+      { emoji: '🗼', location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
+      { emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night' },
+      { emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0847, Japan', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights' },
+      { emoji: '🏯', location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', checkIn: '2026-08-13', checkOut: '2026-08-14', dates: '13–14 August · 1 night' },
+      { emoji: '✈️', location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', checkIn: '2026-08-14', checkOut: '2026-08-15', dates: '14–15 August · 1 night' }
     ];
     const dayPlans = [
       ['The Langham Shenzhen', 'Shenzhen'], ['Huaqiangbei Shenzhen', 'Shenzhen'], ['Guangzhou Circle', 'Guangzhou'], ['The Silveri Hong Kong', 'Hong Kong'],
@@ -1619,14 +1636,14 @@
         const row = document.createElement('article');
         row.className = `wallet-item${bookingHasElapsed(booking, clock) ? ' is-past' : ''}`;
         const action = booking.link ? `<a class="mini-action" href="${booking.link}" target="_blank" rel="noopener noreferrer">Open</a>` : '<span class="wallet-badge">Booked</span>';
-        row.innerHTML = `<div><strong>${booking.name}</strong><span>${booking.displayDate}${booking.time ? ` · ${booking.time}` : ''}</span></div>${action}`;
+        row.innerHTML = `<div><strong>${booking.emoji ? `${booking.emoji} ` : ''}${booking.name}</strong><span>${booking.displayDate}${booking.time ? ` · ${booking.time}` : ''}</span></div>${action}`;
         return row;
       }));
       const hotelWallet = document.querySelector('#hotelWallet');
       hotelWallet.replaceChildren(...hotels.map((hotel) => {
         const row = document.createElement('article');
         row.className = `wallet-item${hotel.checkOut <= clock.currentDate ? ' is-past' : ''}`;
-        row.innerHTML = `<div><strong>${hotel.name}</strong><span>${hotel.location} · ${hotel.dates}<br>${hotel.address}</span></div><a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a>`;
+        row.innerHTML = `<div><strong>${hotel.emoji ? `${hotel.emoji} ` : ''}${hotel.name}</strong><span>${hotel.location} · ${hotel.dates}<br>${hotel.address}</span></div><a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a>`;
         return row;
       }));
     }
@@ -1737,6 +1754,9 @@
     function playChime(notes = [659, 784, 988]) {
       if (!soundEnabled) return;
       audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+      // iOS/Safari (and Chrome's autoplay policy) start the context "suspended" and re-suspend it
+      // after the tab is backgrounded. Resuming inside the triggering gesture keeps chimes audible.
+      if (audioContext.state === 'suspended') audioContext.resume();
       notes.forEach((frequency, index) => {
         const oscillator = audioContext.createOscillator();
         const gain = audioContext.createGain();
