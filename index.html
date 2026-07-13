@@ -1066,6 +1066,10 @@
       transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease, background .14s ease;
     }
     .action-ico { width: 14px; height: 14px; flex-shrink: 0; }
+    /* Optically centre the label beside the icon. Box centres already line up, but with
+       line-height 1 the glyph ink sits ~1px high in its line box, so the text reads high
+       next to the icon. A tiny downward nudge settles it onto the icon's centre line. */
+    .mini-action span, .day-action span { transform: translateY(1px); }
     .mini-action:hover, .day-action:hover { transform: translateY(-1px); box-shadow: 0 3px 9px rgba(23, 47, 72, .14); border-color: color-mix(in srgb, var(--accent) 55%, rgba(23, 47, 72, .16)); }
     .day-action.primary:hover { background: color-mix(in srgb, var(--accent) 86%, #000); border-color: color-mix(in srgb, var(--accent) 86%, #000); }
     .mini-action:active, .day-action:active { transform: translateY(0); box-shadow: none; }
@@ -1959,7 +1963,7 @@
         // Every confirmed moment now carries a Map link (pin icon + label) to its venue, mirroring
         // the hotel rows. Bookings with a reservation link keep an "Open" action beside the map.
         const mapAction = booking.address ? `<a class="mini-action" href="${mapsUrl(booking.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a>` : '';
-        const openAction = booking.link ? `<a class="mini-action" href="${booking.link}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span>Open</span></a>` : '';
+        const openAction = booking.link ? `<a class="mini-action" href="${booking.link}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span>Reservation</span></a>` : '';
         const actions = openAction || mapAction ? `<div class="wallet-actions">${openAction}${mapAction}</div>` : '<span class="wallet-badge">Booked</span>';
         row.innerHTML = `<div><strong>${booking.emoji ? `${booking.emoji} ` : ''}${booking.name}</strong><span>${booking.displayDate}${booking.time ? ` · ${booking.time}` : ''}</span></div>${actions}`;
         return row;
