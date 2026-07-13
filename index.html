@@ -1168,8 +1168,104 @@
       .wallet-item { grid-template-columns: 1fr; }
       .wallet-badge { width: fit-content; }
     }
+    /* ---- Pre-trip countdown delight -------------------------------------------- */
+    /* Scene warming: the dashboard glows warmer as the trip nears. --hype (0..1) is set
+       from JS. Children sit above the glow so text stays crisp. */
+    .trip-dashboard { position: relative; --hype: 0; }
+    .trip-dashboard > * { position: relative; z-index: 1; }
+    .trip-dashboard::after {
+      content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      border-radius: inherit;
+      background: radial-gradient(circle at 85% -10%, rgba(255, 138, 60, .5), transparent 55%);
+      opacity: var(--hype); transition: opacity 1.2s ease;
+    }
+
+    .countdown-delight { grid-column: 1 / -1; min-width: 0; margin-top: .4rem; }
+
+    /* Hype meter: a lightning-gold anticipation bar that always shows a little motion. */
+    .hype-meter { position: relative; height: 12px; border-radius: 999px; background: rgba(23, 47, 72, .1); }
+    .hype-fill {
+      position: relative; height: 100%; width: 0; border-radius: inherit;
+      background: linear-gradient(90deg, #ffcc28, #ff8a3c 62%, #ff5a5f);
+      box-shadow: 0 0 16px rgba(255, 138, 60, .5);
+      transition: width 1s cubic-bezier(.2, .8, .2, 1);
+    }
+    .hype-spark { position: absolute; right: 0; top: 50%; transform: translate(50%, -50%); font-size: .95rem; filter: drop-shadow(0 0 6px #ffdb6b); }
+    .hype-caption { margin: .55rem 0 0; color: #5d6c7a; font-size: .82rem; font-weight: 800; }
+
+    .delight-cards { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: .85rem; }
+    .delight-card {
+      display: block; padding: .8rem .9rem; border: 1px solid #d3e0ee; border-radius: 16px;
+      background: rgba(255, 255, 255, .74); text-decoration: none;
+    }
+    a.delight-card { transition: transform .18s ease, box-shadow .18s ease; }
+    a.delight-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(23, 107, 180, .12); }
+    .delight-card-label { display: block; color: #176bb4; font-size: .62rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .phrase-jp, .weather-now { margin: .35rem 0 0; color: #172f48; font: 800 1.15rem/1.15 "Nunito Sans", sans-serif; }
+    .phrase-meaning, .weather-sub { margin: .16rem 0 0; color: #5d6c7a; font-size: .8rem; font-weight: 700; }
+
+    .daily-note {
+      margin: .85rem 0 0; padding: .7rem .9rem; border-radius: 14px; border-left: 3px solid #ffcc28;
+      background: rgba(255, 204, 40, .16); color: #4a3b12; font-size: .85rem; font-weight: 700; line-height: 1.5;
+    }
+
+    /* Pikachu's daily "outfit": a small accessory badge + a gentle idle bob pre-trip. */
+    .pikachu-accessory {
+      position: absolute; top: -8px; right: -8px; width: 26px; height: 26px;
+      display: grid; place-items: center; font-size: 15px; line-height: 1;
+      background: #fffdf7; border: 2px solid #242522; border-radius: 50%;
+      box-shadow: 0 2px 0 #ffdb43; transform: scale(0);
+      transition: transform .25s cubic-bezier(.2, 1.4, .4, 1);
+    }
+    .pikachu-accessory.is-on { transform: scale(1); }
+    .pikachu-companion[data-mood] .pikachu-stage { animation: mascot-bob 3s ease-in-out infinite; }
+    @keyframes mascot-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+    /* Shared pre-trip prep checklist. */
+    .prep-checklist {
+      margin: 0 0 6rem; padding: 1.4rem 1.6rem; border: 1px solid #ecd9b0; border-radius: 22px;
+      background: linear-gradient(135deg, #fffdf9, #fff6ea); box-shadow: 0 10px 24px rgba(200, 156, 60, .1);
+    }
+    .prep-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+    .prep-kicker { margin: 0; color: #c17b12; font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .prep-title { margin: .15rem 0 0; color: #5a3d0c; font: 800 1.4rem/1 "Nunito Sans", sans-serif; letter-spacing: -.02em; }
+    .prep-progress { flex: none; padding: .4rem .7rem; border-radius: 999px; background: #fff; border: 2px solid #e7c98a; color: #8a5a12; font-weight: 900; font-size: .82rem; }
+    .prep-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .35rem .9rem; }
+    .prep-check { position: relative; display: flex; align-items: center; gap: .6rem; padding: .55rem .3rem; cursor: pointer; font-weight: 700; color: #4a3b12; line-height: 1.35; }
+    .prep-check input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .prep-box { flex: none; width: 22px; height: 22px; border: 2px solid #c9a34d; border-radius: 7px; background: #fff; display: grid; place-items: center; transition: background .15s ease, border-color .15s ease; }
+    .prep-box::after { content: "✓"; color: #fff; font-size: .8rem; font-weight: 900; opacity: 0; transform: scale(.5); transition: opacity .15s ease, transform .15s ease; }
+    .prep-check input:checked + .prep-box { background: #2e8b57; border-color: #2e8b57; }
+    .prep-check input:checked + .prep-box::after { opacity: 1; transform: scale(1); }
+    .prep-check input:focus-visible + .prep-box { outline: 2px solid #176bb4; outline-offset: 2px; }
+    .prep-check input:checked ~ .prep-label { text-decoration: line-through; color: #9a8a63; }
+
+    /* Falling sakura on milestone days. */
+    .petal-drift { position: fixed; inset: 0; z-index: 54; pointer-events: none; overflow: hidden; }
+    .petal { position: absolute; top: -10vh; font-size: 1.1rem; will-change: transform, opacity; animation: petal-fall linear forwards; }
+    @keyframes petal-fall {
+      0% { transform: translateY(-10vh) translateX(0) rotate(0); opacity: 0; }
+      12% { opacity: 1; }
+      100% { transform: translateY(112vh) translateX(var(--drift, 24px)) rotate(360deg); opacity: 0; }
+    }
+
+    /* Sparkles when the countdown number is tapped. */
+    .spark-burst { position: fixed; inset: 0; z-index: 56; pointer-events: none; overflow: hidden; }
+    .spark { position: absolute; font-size: 1rem; will-change: transform, opacity; animation: spark-pop .8s ease-out forwards; }
+    @keyframes spark-pop {
+      0% { transform: translate(0, 0) scale(.4); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translate(var(--sx), var(--sy)) scale(1.15); opacity: 0; }
+    }
+
+    @media (max-width: 620px) {
+      .delight-cards, .prep-list { grid-template-columns: 1fr; }
+      .prep-title { font-size: 1.2rem; }
+    }
+
     @media print {
       .auth-gate, .utility-chip, .travel-utilities, .day-actions, .passport-stamp, .trip-dialog, .offline-badge { display: none !important; }
+      .petal-drift, .spark-burst, .prep-checklist { display: none !important; }
       body.is-locked > :not(.auth-gate):not(script) { visibility: visible; }
     }
   </style>
@@ -1225,6 +1321,25 @@
         <p class="trip-detail" id="tripDetail">01–15 August 2026</p>
       </div>
       <button class="jump-today" id="jumpToday" type="button">Preview day one</button>
+      <div class="countdown-delight" id="countdownDelight" hidden>
+        <div class="hype-meter" aria-hidden="true">
+          <div class="hype-fill" id="hypeFill"><span class="hype-spark">⚡</span></div>
+        </div>
+        <p class="hype-caption" id="hypeCaption"></p>
+        <div class="delight-cards">
+          <div class="delight-card phrase-card">
+            <span class="delight-card-label">Word of the day</span>
+            <p class="phrase-jp" id="phraseJp"></p>
+            <p class="phrase-meaning" id="phraseMeaning"></p>
+          </div>
+          <a class="delight-card weather-card" id="weatherCard" href="#" target="_blank" rel="noopener noreferrer">
+            <span class="delight-card-label">First stop · Hong Kong</span>
+            <p class="weather-now" id="weatherNow">Checking the skies…</p>
+            <p class="weather-sub" id="weatherSub">Tap for the live forecast</p>
+          </a>
+        </div>
+        <p class="daily-note" id="dailyNote" hidden></p>
+      </div>
       <div class="trip-progress" aria-label="Fifteen-day trip progress">
         <div class="progress-track">
           <div class="progress-fill" id="progressFill"></div>
@@ -1267,6 +1382,17 @@
       <span class="urgent-mark">!</span>
       <p><strong>Still to book:</strong> Shibuya Sky · USJ Express Pass</p>
     </aside>
+
+    <section class="prep-checklist" id="prepChecklist" hidden aria-label="Pre-trip preparation checklist">
+      <div class="prep-head">
+        <div>
+          <p class="prep-kicker">Before we fly</p>
+          <h2 class="prep-title">Trip prep, together</h2>
+        </div>
+        <span class="prep-progress" id="prepProgress"></span>
+      </div>
+      <ul class="prep-list" id="prepList"></ul>
+    </section>
 
     <section class="region" data-region="china">
       <header class="region-head"><span class="region-index">01 / CHINA</span><h2>Hong Kong & Shenzhen</h2><span class="region-dates">01–05 AUG</span></header>
@@ -1318,11 +1444,14 @@
     <span class="pikachu-speech" id="pikachuSpeech">Ready for adventure!</span>
     <span class="pikachu-stage">
       <img src="./assets/pikachu-animated.gif" alt="Pikachu">
+      <span class="pikachu-accessory" id="pikachuAccessory" aria-hidden="true"></span>
     </span>
   </button>
 
   <div class="lightning-flash" id="lightningFlash" aria-hidden="true"></div>
   <div class="pokeball-burst" id="pokeballBurst" aria-hidden="true"></div>
+  <div class="petal-drift" id="petalDrift" aria-hidden="true"></div>
+  <div class="spark-burst" id="sparkBurst" aria-hidden="true"></div>
   <div class="delight-toast" id="delightToast" role="status" aria-live="polite"></div>
   <div class="offline-badge" id="offlineBadge" role="status">Offline copy ready</div>
 
@@ -1390,6 +1519,183 @@
       { day: 11, instant: '2026-08-11T10:00:00+09:00', match: 'Kimono and yukata rental' },
       { day: 15, instant: '2026-08-15T09:30:00+09:00', match: 'VN 307/791' }
     ];
+
+    // --- Pre-trip "delight" content ---------------------------------------------------
+    // The two travellers. Used to personalise every greeting so the app feels handmade
+    // rather than generic. "Jalena" (Jake + Helena) stays as the branded page title.
+    const travellers = 'Jake & Helena';
+
+    // Days-until thresholds that earn a one-off celebration (Thunderbolt + Poké Balls +
+    // falling sakura) the first time the app is opened on that day, plus the line shown.
+    const milestoneMessages = {
+      100: '100 sleeps to Japan. The countdown is officially real!',
+      75: '75 sleeps. Time to lock in the big bookings.',
+      50: 'Halfway there in spirit - 50 sleeps to go!',
+      30: 'One month out. Thirty sleeps until Japan!',
+      21: 'Three weeks to go. Start the packing list!',
+      14: 'Two weeks!! Japan is almost close enough to taste.',
+      10: 'Ten sleeps. Double digits are gone next week!',
+      7: 'One week to go, Jake & Helena. 🎌',
+      5: 'Five sleeps. Charge everything and confirm every booking.',
+      3: 'Three sleeps! Lay the suitcases out.',
+      2: 'Two sleeps. Tomorrow you pack for real.',
+      1: 'One sleep. Wheels up tomorrow - Japan, here you come! ✈️'
+    };
+    const MILESTONES = Object.keys(milestoneMessages).map(Number).sort((a, b) => b - a);
+
+    // A Japanese word/phrase surfaced fresh each day so daily openers pick up ~30 useful
+    // phrases before they even land. Pikachu also teaches these on tap.
+    const japanesePhrases = [
+      { jp: 'こんにちは', romaji: 'konnichiwa', meaning: 'hello' },
+      { jp: 'ありがとう', romaji: 'arigatō', meaning: 'thank you' },
+      { jp: 'すみません', romaji: 'sumimasen', meaning: 'excuse me / sorry' },
+      { jp: 'おいしい', romaji: 'oishii', meaning: 'delicious' },
+      { jp: 'かわいい', romaji: 'kawaii', meaning: 'cute' },
+      { jp: 'いくらですか', romaji: 'ikura desu ka', meaning: 'how much is it?' },
+      { jp: 'お願いします', romaji: 'onegai shimasu', meaning: 'please' },
+      { jp: '乾杯', romaji: 'kanpai', meaning: 'cheers!' },
+      { jp: 'トイレはどこですか', romaji: 'toire wa doko desu ka', meaning: 'where is the toilet?' },
+      { jp: '大丈夫', romaji: 'daijōbu', meaning: "it's OK / I'm fine" },
+      { jp: '駅', romaji: 'eki', meaning: 'station' },
+      { jp: '水', romaji: 'mizu', meaning: 'water' },
+      { jp: 'ラーメン', romaji: 'rāmen', meaning: 'ramen' },
+      { jp: '抹茶', romaji: 'matcha', meaning: 'matcha green tea' },
+      { jp: '写真', romaji: 'shashin', meaning: 'photo' },
+      { jp: 'また明日', romaji: 'mata ashita', meaning: 'see you tomorrow' },
+      { jp: '楽しい', romaji: 'tanoshii', meaning: 'fun / enjoyable' },
+      { jp: 'きれい', romaji: 'kirei', meaning: 'beautiful / clean' },
+      { jp: '英語', romaji: 'eigo', meaning: 'English (language)' },
+      { jp: 'ピカチュウ', romaji: 'pikachū', meaning: 'Pikachu ⚡' }
+    ];
+
+    // A rotating daydream that teases a real, booked highlight from the itinerary so every
+    // day dangles something concrete to look forward to.
+    const countdownTeasers = [
+      'bowing deer in Nara Park 🦌',
+      '10,000 vermilion torii at Fushimi Inari ⛩️',
+      'barefoot through teamLab Planets 🎨',
+      'Dior Café in Ginza ☕',
+      'Shibuya Sky at golden hour 🌇',
+      'the Arashiyama bamboo grove before 8am 🎋',
+      'Mario Kart through Tokyo streets 🏎️',
+      'Super Nintendo World at USJ 🍄',
+      'a takoyaki crawl down Dotonbori 🐙',
+      'Mt Fuji mirrored in the Five Lakes 🗻',
+      'a Ninja Restaurant dinner in Akasaka 🥷',
+      'a kimono fitting in Kyoto 👘',
+      'the Great Buddha at Tōdai-ji 🙏',
+      'the Okunoin cedar forest on Koyasan 🌲',
+      'a midnight Lawson egg-sando run 🍙',
+      'the Huaqiangbei electronics maze in Shenzhen 🔌',
+      'swan boats at Inokashira Park 🦢',
+      'Pokémon Café walk-in luck in Nihonbashi 🎴'
+    ];
+
+    // Pikachu's pre-trip "outfit of the day": a small accessory badge on the sprite plus a
+    // line of dialogue. data-costume has no art of its own, so the emoji badge is what makes
+    // the daily mood visible.
+    const preTripMoods = [
+      { accessory: '🎒', speech: 'Packing my little backpack!' },
+      { accessory: '🗺️', speech: 'Studying the Japan map!' },
+      { accessory: '🍜', speech: 'Dreaming of ramen…' },
+      { accessory: '✈️', speech: 'Counting the sleeps with you!' },
+      { accessory: '📸', speech: 'Charging the camera!' },
+      { accessory: '💴', speech: 'Saving up my yen!' },
+      { accessory: '🗼', speech: 'Tokyo, almost time!' },
+      { accessory: '🍡', speech: 'Snack research in progress.' },
+      { accessory: '⛩️', speech: 'Practising my bows.' },
+      { accessory: '🌸', speech: 'So excited I could sparkle!' }
+    ];
+
+    // A shared prep list the two of them tick off together; progress persists per-device.
+    // The first two mirror the "Still to book" banner so bookings live in one place.
+    const preTripTasks = [
+      { id: 'book-shibuya', label: 'Book Shibuya Sky timed entry' },
+      { id: 'book-usj', label: 'Book USJ Express Pass + Nintendo World' },
+      { id: 'passports', label: 'Passports valid 6+ months' },
+      { id: 'money', label: 'Set up Suica, WeChat Pay & Alipay' },
+      { id: 'esim', label: 'Buy a Japan eSIM / pocket wifi' },
+      { id: 'idp', label: 'International Driving Permit (for Mario Kart)' },
+      { id: 'insurance', label: 'Travel insurance sorted' },
+      { id: 'pack', label: 'Start the packing list' }
+    ];
+
+    // Hand-written notes that unlock on specific pre-trip dates - the two-user superpower.
+    const datedNotes = {
+      '2026-07-13': 'The route is locked and the countdown is on. Open me every day. 💛',
+      '2026-07-18': 'Two weeks out. Close enough to start dreaming in ramen. 🍜',
+      '2026-07-25': 'One week, Jake & Helena. Confirm every booking this week. 🎌',
+      '2026-07-29': 'Three sleeps. Suitcases out tonight?',
+      '2026-07-31': 'One more sleep. Pack tonight, charge everything, dream big. ✈️'
+    };
+
+    // Storage keys for the once-a-day milestone celebration and the shared checklist.
+    const MILESTONE_KEY = 'jalena-trip-milestones-v1';
+    const CHECKLIST_KEY = 'jalena-trip-checklist-v1';
+
+    // Positive-modulo helper so day seeds map cleanly onto content arrays.
+    const mod = (value, length) => ((value % length) + length) % length;
+    // A stable day counter (days since 2026-01-01) so daily picks change at local midnight
+    // but stay identical on every open within the same day.
+    const daySeed = (dateKey) => dayDistance('2026-01-01', dateKey);
+    // Deterministic "content of the day" from any list.
+    const pickForDay = (list, dateKey, offset = 0) => list[mod(daySeed(dateKey) + offset, list.length)];
+
+    // "N sleeps" reads warmer than "N days" and is exactly how people count down a holiday.
+    const sleepsLabel = (days) => `${days} ${days === 1 ? 'sleep' : 'sleeps'}`;
+
+    // Look up a hand-written note for a given calendar day, or null if there isn't one.
+    const noteForDate = (dateKey) => datedNotes[dateKey] || null;
+
+    // Pikachu's daily pre-trip mood + the phrases it teaches on tap. Returns null once the
+    // trip has started so the region-costume logic takes over untouched.
+    function preTripMood() {
+      const clock = tripClock(previewableNow());
+      if (clock.currentDate >= startDate) return null;
+      const mood = pickForDay(preTripMoods, clock.currentDate);
+      const phrase = pickForDay(japanesePhrases, clock.currentDate);
+      const daysUntil = dayDistance(clock.currentDate, startDate);
+      return {
+        accessory: mood.accessory,
+        speech: mood.speech,
+        tips: [
+          `${phrase.jp} (${phrase.romaji}) - ${phrase.meaning}`,
+          `Only ${sleepsLabel(daysUntil)} until Japan!`,
+          mood.speech
+        ]
+      };
+    }
+
+    // Read the set of milestone days already celebrated on this device (dedupes so the
+    // Thunderbolt fires once per milestone, not on every 60-second refresh or reopen).
+    function celebratedMilestones() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(MILESTONE_KEY) || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch { return []; }
+    }
+    // The milestone to celebrate right now, or null if today isn't one / already done.
+    function pendingMilestone(daysUntil) {
+      if (!MILESTONES.includes(daysUntil)) return null;
+      return celebratedMilestones().includes(daysUntil) ? null : daysUntil;
+    }
+    function recordMilestone(daysUntil) {
+      const done = celebratedMilestones();
+      if (!done.includes(daysUntil)) done.push(daysUntil);
+      try { localStorage.setItem(MILESTONE_KEY, JSON.stringify(done)); } catch {}
+    }
+
+    // Shared prep-checklist state ({ taskId: true }). Reads defensively so corrupt or
+    // missing storage never throws.
+    function readChecklist() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(CHECKLIST_KEY) || '{}');
+        return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+      } catch { return {}; }
+    }
+    function writeChecklist(state) {
+      try { localStorage.setItem(CHECKLIST_KEY, JSON.stringify(state)); } catch {}
+    }
 
     const mapsUrl = (query) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
     // Direct AccuWeather forecast pages per destination, keyed by the exact weatherCity
@@ -1866,6 +2172,16 @@
         osaka: { costume: 'osaka', speech: 'Takoyaki mission.', tips: ['Keep room for one more street-food stop.', 'Narita transfer day needs an early start.', 'Photograph the hotel luggage tags.'] },
         travel: { costume: 'travel', speech: 'Ready for adventure!', tips: ['Passport, phone, wallet, charger.', 'Screenshot anything you may need offline.', 'Leave a little space for the unexpected.'] }
       };
+      // Pre-trip, the ambient mascot greets by "mood of the day" and teaches the phrase of
+      // the day on tap. Guarded with typeof so the isolated companion unit test (which has no
+      // trip clock in scope) skips this and keeps its single-observer contract intact.
+      if (typeof preTripMood === 'function') {
+        const mood = preTripMood();
+        if (mood) {
+          moments.travel = { costume: 'travel', speech: mood.speech, tips: mood.tips };
+          speech.textContent = mood.speech;
+        }
+      }
       let currentRegion = 'travel';
       let tipIndex = 0;
       let lastTipAt = 0;
@@ -1890,6 +2206,211 @@
       regions.forEach((region) => observer.observe(region));
     }
 
+    // Show the pre-trip word of the day, hype meter, warm glow, live weather link and any
+    // hand-written note for today. daysUntil is already computed by the caller.
+    function renderCountdownDelight(clock, daysUntil) {
+      const delight = document.querySelector('#countdownDelight');
+      if (!delight) return;
+      delight.hidden = false;
+
+      const phrase = pickForDay(japanesePhrases, clock.currentDate);
+      document.querySelector('#phraseJp').textContent = `${phrase.jp} · ${phrase.romaji}`;
+      document.querySelector('#phraseMeaning').textContent = phrase.meaning;
+
+      // Anticipation fills from a 120-day horizon and never sits fully empty, so there is
+      // always a little motion for daily openers.
+      const hypePct = Math.round(Math.min(Math.max(1 - daysUntil / 120, 0.04), 1) * 100);
+      document.querySelector('#hypeFill').style.width = `${hypePct}%`;
+      document.querySelector('#hypeCaption').textContent = `Anticipation ${hypePct}% · 01–15 August 2026`;
+
+      // The whole dashboard warms through the final month toward departure.
+      const warm = Math.min(Math.max(1 - daysUntil / 30, 0), 1).toFixed(2);
+      document.querySelector('.trip-dashboard').style.setProperty('--hype', warm);
+
+      const note = noteForDate(clock.currentDate);
+      const noteEl = document.querySelector('#dailyNote');
+      noteEl.hidden = !note;
+      if (note) noteEl.textContent = note;
+
+      document.querySelector('#weatherCard').href = weatherUrl('Hong Kong');
+    }
+
+    function hideCountdownDelight() {
+      const delight = document.querySelector('#countdownDelight');
+      if (delight) delight.hidden = true;
+      const dash = document.querySelector('.trip-dashboard');
+      if (dash) dash.style.setProperty('--hype', '0');
+    }
+
+    // Pikachu's daily pre-trip accessory badge + idle bob. Cleared once the trip starts so
+    // the region-costume behaviour is untouched during and after the journey.
+    function applyPreTripCompanionMood() {
+      const companion = document.querySelector('#pikachuCompanion');
+      const accessory = document.querySelector('#pikachuAccessory');
+      if (!companion || !accessory) return;
+      const mood = preTripMood();
+      if (!mood) {
+        delete companion.dataset.mood;
+        accessory.textContent = '';
+        accessory.classList.remove('is-on');
+        return;
+      }
+      companion.dataset.mood = 'pretrip';
+      accessory.textContent = mood.accessory;
+      accessory.classList.add('is-on');
+    }
+
+    function updatePrepProgress() {
+      const boxes = [...document.querySelectorAll('#prepList input[data-task]')];
+      const done = boxes.filter((box) => box.checked).length;
+      const progress = document.querySelector('#prepProgress');
+      if (progress) progress.textContent = `${done} / ${boxes.length} done`;
+    }
+
+    // Build (once) and sync the shared prep checklist. Pre-trip it replaces the static
+    // "Still to book" banner; during and after the trip both are hidden.
+    function renderPrepChecklist(clock) {
+      const section = document.querySelector('#prepChecklist');
+      const urgent = document.querySelector('.urgent');
+      if (!section) return;
+      const preTrip = clock.currentDate < startDate;
+      section.hidden = !preTrip;
+      if (urgent) urgent.hidden = preTrip;
+      if (!preTrip) return;
+
+      const list = document.querySelector('#prepList');
+      if (!list.children.length) {
+        list.replaceChildren(...preTripTasks.map((task) => {
+          const li = document.createElement('li');
+          li.className = 'prep-item';
+          const label = document.createElement('label');
+          label.className = 'prep-check';
+          label.innerHTML = `<input type="checkbox" data-task="${task.id}"><span class="prep-box"></span><span class="prep-label">${task.label}</span>`;
+          li.append(label);
+          return li;
+        }));
+        list.addEventListener('change', (event) => {
+          const box = event.target.closest('input[data-task]');
+          if (!box) return;
+          const state = readChecklist();
+          state[box.dataset.task] = box.checked;
+          writeChecklist(state);
+          updatePrepProgress();
+          if (box.checked) playChime([784, 988]);
+        });
+      }
+      const state = readChecklist();
+      list.querySelectorAll('input[data-task]').forEach((box) => { box.checked = !!state[box.dataset.task]; });
+      updatePrepProgress();
+    }
+
+    // A brief drift of falling sakura across the screen for milestone celebrations.
+    function triggerPetals() {
+      const drift = document.querySelector('#petalDrift');
+      if (!drift) return;
+      const glyphs = ['🌸', '🌸', '💮', '🌸', '⚡', '🌸', '🌸', '🌼'];
+      const petals = Array.from({ length: 18 }, (unused, index) => {
+        const petal = document.createElement('span');
+        petal.className = 'petal';
+        petal.textContent = glyphs[index % glyphs.length];
+        petal.style.left = `${Math.random() * 100}%`;
+        petal.style.animationDuration = `${4 + Math.random() * 3}s`;
+        petal.style.animationDelay = `${Math.random() * 1.2}s`;
+        petal.style.fontSize = `${(0.9 + Math.random() * 0.9).toFixed(2)}rem`;
+        petal.style.setProperty('--drift', `${(Math.random() * 120 - 60).toFixed(0)}px`);
+        drift.append(petal);
+        return petal;
+      });
+      window.setTimeout(() => petals.forEach((petal) => petal.remove()), 8500);
+    }
+
+    // Sparkles bursting out from the countdown number when it is tapped.
+    function sprinkleSparks(origin) {
+      const burst = document.querySelector('#sparkBurst');
+      if (!burst) return;
+      const rect = origin.getBoundingClientRect();
+      const centreX = rect.left + rect.width / 2;
+      const centreY = rect.top + rect.height / 2;
+      const glyphs = ['✨', '⚡', '⭐', '💛'];
+      const sparks = Array.from({ length: 10 }, (unused, index) => {
+        const spark = document.createElement('span');
+        spark.className = 'spark';
+        spark.textContent = glyphs[index % glyphs.length];
+        spark.style.left = `${centreX}px`;
+        spark.style.top = `${centreY}px`;
+        const angle = (Math.PI * 2 * index) / 10 + Math.random() * 0.4;
+        const distance = 60 + Math.random() * 50;
+        spark.style.setProperty('--sx', `${(Math.cos(angle) * distance).toFixed(0)}px`);
+        spark.style.setProperty('--sy', `${(Math.sin(angle) * distance).toFixed(0)}px`);
+        burst.append(spark);
+        return spark;
+      });
+      playChime([1047, 1319]);
+      window.setTimeout(() => sparks.forEach((spark) => spark.remove()), 900);
+    }
+
+    // Full milestone party: Thunderbolt, Poké Balls, sakura and the milestone message.
+    function celebrateMilestone(daysUntil) {
+      triggerLightning();
+      triggerPokeballs();
+      triggerPetals();
+      // showToast runs last so the milestone line wins over the effects' own toasts.
+      showToast(milestoneMessages[daysUntil] || `${sleepsLabel(daysUntil)} until Japan!`);
+    }
+
+    // Fire the celebration the first time the app opens on a milestone day, once per device.
+    function runMilestoneCheck() {
+      const clock = tripClock(previewableNow());
+      if (clock.currentDate >= startDate) return;
+      const daysUntil = dayDistance(clock.currentDate, startDate);
+      const due = pendingMilestone(daysUntil);
+      if (due == null) return;
+      recordMilestone(due);
+      window.setTimeout(() => celebrateMilestone(due), 700);
+    }
+
+    // Map WMO weather codes to a friendly emoji + label for the first-stop forecast chip.
+    function weatherCodeInfo(code) {
+      if (code === 0) return { emoji: '☀️', label: 'clear' };
+      if (code <= 2) return { emoji: '🌤️', label: 'mostly sunny' };
+      if (code === 3) return { emoji: '☁️', label: 'cloudy' };
+      if (code <= 48) return { emoji: '🌫️', label: 'foggy' };
+      if (code <= 67) return { emoji: '🌧️', label: 'rain' };
+      if (code <= 77) return { emoji: '🌨️', label: 'snow' };
+      if (code <= 82) return { emoji: '🌦️', label: 'showers' };
+      if (code <= 99) return { emoji: '⛈️', label: 'storms' };
+      return { emoji: '🌏', label: 'mixed' };
+    }
+
+    // Live current conditions in Hong Kong (day-one arrival) via Open-Meteo (no API key,
+    // CORS-friendly). Falls back to a seasonal note offline or if the request fails.
+    async function fetchFirstStopWeather() {
+      const nowEl = document.querySelector('#weatherNow');
+      const subEl = document.querySelector('#weatherSub');
+      if (!nowEl || !subEl) return;
+      const fallback = () => { nowEl.textContent = '🌥️ Hot & humid, ~31°'; subEl.textContent = 'Typical early August · tap for live'; };
+      try {
+        const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=22.3193&longitude=114.1694&current=temperature_2m,weather_code&timezone=Asia%2FHong_Kong');
+        if (!response.ok) throw new Error('weather request failed');
+        const data = await response.json();
+        const temperature = Math.round(data.current.temperature_2m);
+        const { emoji, label } = weatherCodeInfo(data.current.weather_code);
+        nowEl.textContent = `${emoji} ${temperature}° · ${label}`;
+        subEl.textContent = 'Live in Hong Kong · tap for forecast';
+      } catch { fallback(); }
+    }
+
+    // One-time wiring for the countdown extras: tap-the-number sparkles, the first-stop
+    // weather fetch, and the milestone celebration check.
+    function initialiseCountdownExtras() {
+      const status = document.querySelector('#tripStatus');
+      if (status) status.addEventListener('click', (event) => {
+        if (tripClock(previewableNow()).currentDate < startDate) sprinkleSparks(event.currentTarget);
+      });
+      if (tripClock(previewableNow()).currentDate < startDate) fetchFirstStopWeather();
+      runMilestoneCheck();
+    }
+
     function updateTripState() {
       const clock = tripClock(previewableNow());
       const status = document.querySelector('#tripStatus');
@@ -1910,20 +2431,25 @@
       });
       if (clock.currentDate < startDate) {
         const daysUntil = dayDistance(clock.currentDate, startDate);
-        kicker.textContent = 'Trip countdown'; status.textContent = `${daysUntil} ${daysUntil === 1 ? 'day' : 'days'} until Jalena’s Japan adventure`; detail.textContent = 'The route is ready · 01–15 August 2026'; greeting.textContent = 'The adventure begins soon'; jumpButton.textContent = 'Preview day one';
+        const teaser = pickForDay(countdownTeasers, clock.currentDate);
+        kicker.textContent = 'Trip countdown'; status.textContent = `${sleepsLabel(daysUntil)} until Japan 🇯🇵`; detail.textContent = `Today’s daydream: ${teaser}`; greeting.textContent = `Hi ${travellers} · the adventure is coming`; jumpButton.textContent = 'Preview day one';
+        renderCountdownDelight(clock, daysUntil);
       } else if (clock.currentDate > endDate) {
-        kicker.textContent = 'Adventure complete'; status.textContent = 'Trip completed · 15 unforgettable days'; detail.textContent = 'Hong Kong, Shenzhen and Japan · August 2026'; greeting.textContent = 'Welcome home, travellers'; jumpButton.textContent = 'Revisit the final day'; targetDay = tripDays.at(-1);
+        kicker.textContent = 'Adventure complete'; status.textContent = 'Trip completed · 15 unforgettable days'; detail.textContent = 'Hong Kong, Shenzhen and Japan · August 2026'; greeting.textContent = `Welcome home, ${travellers}`; jumpButton.textContent = 'Revisit the final day'; targetDay = tripDays.at(-1);
+        hideCountdownDelight();
       } else {
         const location = locationForDay(clock.dayNumber);
         const hour = localHour(clock.now, clock.timeZone);
         const salutation = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
         kicker.textContent = `Day ${clock.dayNumber} of 15 · ${location}`; status.textContent = targetDay.querySelector('h3').textContent; detail.textContent = `${Math.round((clock.dayNumber / 15) * 100)}% of the adventure · local trip time`; greeting.textContent = `${salutation} from ${location}`; jumpButton.textContent = 'Jump to today';
+        hideCountdownDelight();
       }
       const jumpToTarget = () => { showFullRoute(); targetDay.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
       jumpButton.onclick = jumpToTarget;
       todayShortcut.hidden = !clock.inTrip;
       todayShortcut.onclick = jumpToTarget;
       window.tripState = clock;
+      applyPreTripCompanionMood(); renderPrepChecklist(clock);
       updateProgress(clock); updateNextBooking(clock); updateHotel(clock); updateTimeGrid(clock); updateActivityMoments(clock); updateStamps(clock); renderWallets(clock);
     }
 
@@ -1968,7 +2494,7 @@
       window.__tripAppInitialised = true;
       tripDays.forEach((day, index) => { day.dataset.date = `2026-08-${String(index + 1).padStart(2, '0')}`; });
       Object.entries({ 6: 'teamlab', 8: 'ninja', 11: 'sakura' }).forEach(([dayNumber, effect]) => tripDays[dayNumber - 1].classList.add(`effect-${effect}`));
-      renderDayEnhancements(); initialiseFilters(); initialiseDialogs(); initialiseCompanion(); initialiseSound(); initialiseEasterEggs(); initialiseOffline(); updateTripState();
+      renderDayEnhancements(); initialiseFilters(); initialiseDialogs(); initialiseCompanion(); initialiseSound(); initialiseEasterEggs(); initialiseOffline(); updateTripState(); initialiseCountdownExtras();
       window.setInterval(updateTripState, 60000);
     }
 
