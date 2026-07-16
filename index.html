@@ -194,11 +194,6 @@
     .confirmed::before { content: "CONFIRMED · "; font-size: .66rem; letter-spacing: .1em; }
 
     .flight { color: var(--green); font-weight: 500; }
-    .revision { outline: 1px solid var(--gold); outline-offset: 12px; }
-    .revision .card::before {
-      content: "REVISED ROUTE"; display: inline-block; color: var(--white); background: var(--gold);
-      font-size: .62rem; letter-spacing: .14em; padding: .35rem .55rem; margin-bottom: .85rem;
-    }
 
     footer { background: var(--green); color: var(--white); padding: 5rem max(1rem, calc((100vw - 1180px)/2)); }
     footer p { max-width: 760px; font: 400 clamp(2rem, 4vw, 4rem)/1.05 "Newsreader", serif; margin: 0; }
@@ -511,21 +506,6 @@
       font-weight: 800;
     }
     .confirmed::before { content: "✓\0000a0\0000a0Confirmed · "; font-size: inherit; letter-spacing: 0; }
-    .revision { outline: 0; }
-    .revision .card::before {
-      content: "Revised route";
-      display: inline-block;
-      margin: 0 0 .55rem;
-      padding: .25rem .55rem;
-      border-radius: 999px;
-      background: var(--accent);
-      color: white;
-      font-size: .62rem;
-      font-weight: 800;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-
     footer {
       /* 100% (not 100vw) excludes the scrollbar so footer text lines up with the main column */
       padding: 3rem max(1rem, calc((100% - var(--content-width))/2));
@@ -1472,16 +1452,16 @@
     <section class="region" data-region="fuji">
       <header class="region-head"><span class="region-index">03 / FUJI</span><h2>Fuji</h2><span class="region-dates">09 AUG ONLY</span></header>
       <div class="days">
-        <article class="day revision"><div class="date"><strong>09</strong><span class="day-label">SUN · AUG</span></div><div class="card"><h3>Mt Fuji views → overnight</h3><ul><li>Mt Fuji views around the Five Lakes area</li><li>Choose a Fuji-area stay with an onsen for the night</li><li>Prepare for an early departure toward Kyoto</li></ul></div></article>
+        <article class="day"><div class="date"><strong>09</strong><span class="day-label">SUN · AUG</span></div><div class="card"><h3>Mt Fuji views → overnight</h3><ul><li>Mt Fuji views around the Five Lakes area</li><li>Choose a Fuji-area stay with an onsen for the night</li><li>Prepare for an early departure toward Kyoto</li></ul></div></article>
       </div>
     </section>
 
     <section class="region" data-region="kyoto">
       <header class="region-head"><span class="region-index">04 / KANSAI</span><h2>Kyoto & Nara</h2><span class="region-dates">10–13 AUG</span></header>
       <div class="days">
-        <article class="day revision"><div class="date"><strong>10</strong><span class="day-label">MON · AUG</span></div><div class="card"><h3>Start Kyoto: Shinkansen & Gion</h3><ul><li>Travel to Kyoto by Shinkansen from the Fuji area</li><li>Reserve a Fuji-facing seat where the route allows</li><li>Check in and wander Nishiki Market</li><li>Explore Gion at dusk and the stone-paved lanes</li></ul><p class="note">Revised: 10 August now begins the Kyoto and Nara section. There is no Hakone or Fuji sightseeing today.</p></div></article>
-        <article class="day revision"><div class="date"><strong>11</strong><span class="day-label">TUE · AUG</span></div><div class="card"><h3>Kyoto: kimono, bamboo & torii gates</h3><ul><li>Reach Arashiyama Bamboo Grove before 8:00AM</li><li>Explore Tenryu-ji and the Arashiyama riverside</li><li>Kimono and yukata rental at Kimono Miyabi Kyoto at 10:00AM</li><li>Cross Kyoto to Fushimi Inari</li><li>Walk through the torii gates, allowing about two hours</li></ul><p class="note confirmed">Kimono Miyabi Kyoto · Tuesday 11 August 2026 · 10:00AM</p><p class="note">Arashiyama is in northwest Kyoto and Fushimi Inari is southeast. An early start keeps the route comfortable.</p></div></article>
-        <article class="day revision"><div class="date"><strong>12</strong><span class="day-label">WED · AUG</span></div><div class="card"><h3>Nara: deer, temples & giant Buddha</h3><ul><li>Take the morning train from Kyoto to Nara, about 40–50 minutes</li><li>Feed the bowing deer in Nara Park</li><li>Visit Tōdai-ji and the Great Buddha Hall</li><li>Return to Kyoto or continue toward Osaka in the evening</li></ul><p class="note">Splitting Nara into its own day removes the original three-city rush and gives each place proper time.</p></div></article>
+        <article class="day"><div class="date"><strong>10</strong><span class="day-label">MON · AUG</span></div><div class="card"><h3>Start Kyoto: Shinkansen & Gion</h3><ul><li>Travel to Kyoto by Shinkansen from the Fuji area</li><li>Reserve a Fuji-facing seat where the route allows</li><li>Check in and wander Nishiki Market</li><li>Explore Gion at dusk and the stone-paved lanes</li></ul></div></article>
+        <article class="day"><div class="date"><strong>11</strong><span class="day-label">TUE · AUG</span></div><div class="card"><h3>Kyoto: kimono, bamboo & torii gates</h3><ul><li>Reach Arashiyama Bamboo Grove before 8:00AM</li><li>Explore Tenryu-ji and the Arashiyama riverside</li><li>Kimono and yukata rental at Kimono Miyabi Kyoto at 10:00AM</li><li>Cross Kyoto to Fushimi Inari</li><li>Walk through the torii gates, allowing about two hours</li></ul><p class="note confirmed">Kimono Miyabi Kyoto · Tuesday 11 August 2026 · 10:00AM</p><p class="note">Arashiyama is in northwest Kyoto and Fushimi Inari is southeast. An early start keeps the route comfortable.</p></div></article>
+        <article class="day"><div class="date"><strong>12</strong><span class="day-label">WED · AUG</span></div><div class="card"><h3>Nara: deer, temples & giant Buddha</h3><ul><li>Take the morning train from Kyoto to Nara, about 40–50 minutes</li><li>Feed the bowing deer in Nara Park</li><li>Visit Tōdai-ji and the Great Buddha Hall</li><li>Return to Kyoto or continue toward Osaka in the evening</li></ul></div></article>
       </div>
     </section>
 
@@ -1527,7 +1507,7 @@
     </div>
   </dialog>
 
-  <footer><p>Pack light. Book early. Leave room for the unexpected.</p><small>Route revision · 10 August starts in Kyoto · August 2026</small></footer>
+  <footer><p>Pack light. Book early. Leave room for the unexpected.</p><small>01–15 August 2026</small></footer>
 
   <script>
     const AUTH_KEY = 'jalena-trip-auth-until';
