@@ -38,7 +38,7 @@ function createHarness() {
   };
   vm.createContext(context);
   vm.runInContext(
-    `${extractDeclaration('bookings', 'hotels')}${extractDeclaration('hotels', 'dayPlans')}
+    `${extractDeclaration('tripData', 'bookings')}${extractDeclaration('bookings', 'hotels')}${extractDeclaration('hotels', 'travellers')}
     ${extractFunction('bookingHasElapsed')}
     ${extractFunction('orderedBookings')}
     ${extractFunction('renderWallets')}`,

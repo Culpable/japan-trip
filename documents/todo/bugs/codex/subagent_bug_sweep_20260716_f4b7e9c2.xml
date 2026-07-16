@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bug_sweep>
+<bug_1>
+<summary>
+<title>[P1 Today] Primary run-sheet button renders as white text on a transparent card</title>
+<one_line_description>The main Open full run sheet action is visually blank because its colour variables are only defined inside itinerary regions.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - Today action styles and markup, Lines 1097-1099 and 1597-1599
+</file_locations>
+
+<issue_description>
+<description>The Today card reuses the region-scoped day-action primary style, but the Today section has no --accent or --text custom properties. Chromium therefore discards the unresolved background and border declarations while retaining color: #fff. At 390x844 on Day 6 noon, the button computed to a transparent background with white text and a white border over a nearly white card, making the primary route into the live run sheet effectively invisible. Define Today-specific action colours or provide safe fallbacks for the custom properties.</description>
+
+<code_example><![CDATA[
+```css
+/* File: /Users/sacino/japan-trip/index.html, Lines 1097-1099 */
+.day-action { color: var(--text); border-color: color-mix(in srgb, var(--accent) 24%, transparent); }
+.day-action.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+```
+
+```html
+<!-- File: /Users/sacino/japan-trip/index.html, Line 1598 -->
+<button class="day-action primary" id="todayOpenRunSheet" type="button">
+  <span>Open full run sheet</span>
+</button>
+```
+]]></code_example>
+
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Behaviour** | The primary Today action has a clear filled treatment and readable label. | Computed styles were transparent background, white text and white border on a white card, so the label was not visible. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_1>
+
+<bug_2>
+<summary>
+<title>[P1 Run sheet] Deadline-only and ordered flexible stops never advance</title>
+<one_line_description>The live state engine treats every item without an instant as permanently flexible, causing missed departure deadlines and stale next guidance.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - `tripData` Day 14 deadline data, Lines 1879-1885
+- /Users/sacino/japan-trip/index.html - `activityTimeline`, Lines 2179-2199
+- /Users/sacino/japan-trip/index.html - `renderTodayView`, Lines 2619-2657
+</file_locations>
+
+<issue_description>
+<description>The state engine only considers activities with an instant. Any item carrying a visible time or leaveBy value without an instant is always returned as flexible, and ordered flexible items are never inferred complete after a later timed activity finishes. Reproduction at Day 14 1:00PM showed Visit the sacred Buddhist mountain town as the Today focus with No fixed departure yet, while the model contains a critical 2:00PM Koyasan departure. Reproduction at Day 6 6:30PM showed Ginza to Toyosu as Up next after teamLab had already ended, even though that transfer is ordered before teamLab. Add machine-readable instants or deadline fields for time-critical entries and advance ordered flexible steps when later milestones prove they have elapsed.</description>
+
+<code_example><![CDATA[
+```javascript
+// File: /Users/sacino/japan-trip/index.html, Lines 1880-1885
+transit: {
+  id: 'koyasan-narita-transfer',
+  time: '2:00PM',
+  leaveBy: '2:00PM'
+},
+activities: [
+  { id: 'leave-koyasan', order: 3.5, title: 'Leave by 2:00PM and travel back to Tokyo to pack', time: '2:00PM' }
+]
+
+// File: /Users/sacino/japan-trip/index.html, Line 2193
+if (!activity.instant) return { ...activity, state: 'flexible' };
+```
+]]></code_example>
+
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Day 14 at 1:00PM** | Today prioritises the 2:00PM departure and shows the leave-by deadline. | Today prioritised the first flexible sightseeing stop and displayed No fixed departure yet. |
+| **Day 6 at 6:30PM** | Transfers ordered before the completed teamLab booking no longer appear as the next task. | Ginza to Toyosu remained flexible and became the Today focus after teamLab finished. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_2>
+
+<bug_3>
+<summary>
+<title>[P1 Run sheet] Activity map fallback sends the Toyosu transfer to Dior Café</title>
+<one_line_description>An activity without its own address inherits the day-level map query even when that destination contradicts the activity title.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - Day 6 `toyosu-transfer` activity, Lines 1793-1799
+- /Users/sacino/japan-trip/index.html - `renderRunSheet`, Lines 2383-2396
+</file_locations>
+
+<issue_description>
+<description>The run sheet labels every generated link Open map, but activities without an address fall back to day.mapQuery. On Day 6, Travel across Tokyo to Toyosu after lunch has no address, so its link resolves to the day query Dior Café Ginza. Browser reproduction confirmed the row URL was https://www.google.com/maps/search/?api=1&amp;query=Dior%20Caf%C3%A9%20Ginza. Give each actionable row a destination-specific map query or omit the row action and expose a separately labelled day map.</description>
+
+<code_example><![CDATA[
+```javascript
+// File: /Users/sacino/japan-trip/index.html, Lines 2393-2395
+const mapQuery = activity.address || day.mapQuery;
+const mapAction = `<a class="mini-action" href="${mapsUrl(mapQuery)}">
+  <span>Open map</span>
+</a>`;
+```
+]]></code_example>
+
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Behaviour** | Open map for the Toyosu transfer opens Toyosu or the relevant route. | The link opened a Google Maps search for Dior Café Ginza. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_3>
+
+<bug_4>
+<summary>
+<title>[P1 Pikachu] Manual visibility toggle bypasses control speech suppression</title>
+<one_line_description>Pointer interaction with the non-Pikachu visibility control is explicitly exempted from the temporary speech mute.</one_line_description>
+</summary>
+
+<file_locations>
+- /Users/sacino/japan-trip/index.html - `initialiseCompanionControls`, Lines 2567-2579
+- /Users/sacino/japan-trip/tests/pikachu-visibility-controls.test.js - static suppression coverage
+</file_locations>
+
+<issue_description>
+<description>The pointerdown handler suppresses speech for non-Pikachu controls but returns early when the control is pikachuToggle. On desktop, clicking Show Pikachu restored the fixed companion with its speech bubble immediately visible while the toggle remained the active control. This contradicts the interaction contract that non-Pikachu controls temporarily suppress the bubble and creates different behaviour between pointer and keyboard activation of the same toggle. Treat the visibility toggle like other controls for speech suppression while still exempting the Pikachu companion itself.</description>
+
+<code_example><![CDATA[
+```javascript
+// File: /Users/sacino/japan-trip/index.html, Lines 2572-2576
+document.addEventListener('pointerdown', (event) => {
+  const control = event.target.closest('button, a, input, textarea, select, [role="button"]');
+  if (!control || control === companion || control === toggle) return;
+  companionSpeechMutedUntil = Date.now() + 1200;
+  setCompanionSpeechMuted(true);
+}, true);
+```
+]]></code_example>
+
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Pointer activation** | Show or Hide Pikachu temporarily suppresses the speech bubble like every other non-Pikachu control. | The toggle was excluded, and showing Pikachu made the desktop bubble visible immediately. |
+| **Input consistency** | Pointer and keyboard activation follow the same speech-suppression rule. | Keyboard activation mutes through the keydown/focus path, while pointer activation does not. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_4>
+</bug_sweep>

@@ -707,7 +707,10 @@
       right: calc(clamp(1rem, 2.5vw, 1.5rem) + env(safe-area-inset-right, 0px));
       bottom: calc(clamp(1rem, 2.5vw, 1.5rem) + 8px + env(safe-area-inset-bottom, 0px));
       z-index: 30;
+      top: auto;
+      left: auto;
       width: 104px;
+      margin: 0;
       padding: .55rem;
       border: 2px solid #242522;
       border-radius: 28px;
@@ -737,6 +740,26 @@
     .pikachu-stage img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
     .pikachu-companion.is-dancing { animation: companion-dance .26s ease-in-out 6 alternate; }
     .pikachu-companion { transition: opacity .2s ease, visibility .2s ease, transform .2s ease; }
+    /* Compact screens cannot safely support a fixed mascot over full-width cards. The same
+       companion moves into reserved page or dialog space instead, remaining prominent without
+       obscuring text or intercepting an action underneath it. */
+    .pikachu-page-dock { display: none; }
+    .pikachu-companion.is-inline {
+      position: static;
+      inset: auto;
+      z-index: auto;
+      display: block;
+      width: 70px;
+      margin: 0;
+      padding: .4rem;
+      overflow: visible;
+      border-radius: 20px;
+      box-shadow: 0 5px 0 #242522, 0 10px 20px rgba(36, 37, 34, .16);
+      transform: none;
+    }
+    .pikachu-companion.is-inline:hover { transform: rotate(-2deg); }
+    .pikachu-companion.is-inline .pikachu-stage { width: 52px; height: 46px; }
+    .pikachu-companion.is-inline .pikachu-speech { display: none; }
     @keyframes companion-dance { from { transform: rotate(-10deg) scale(1.03); } to { transform: rotate(10deg) translateY(-8px) scale(1.08); } }
     .sound-toggle { margin-left: auto; display: inline-flex; align-items: center; gap: .42rem; }
     .print-action { margin-left: 0; }
@@ -925,8 +948,9 @@
       position: fixed;
       inset: 0;
       z-index: 200;
-      display: grid;
-      place-items: center;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
       overflow: auto;
       /* Keep the password card off the notch and home indicator in the installed app. */
       padding:
@@ -943,7 +967,9 @@
     }
     .auth-card {
       position: relative;
+      flex: 0 0 auto;
       width: min(460px, 100%);
+      margin-block: auto;
       padding: clamp(1.5rem, 5vw, 2.5rem);
       overflow: hidden;
       border: 1px solid #d9d6ce;
@@ -1009,6 +1035,7 @@
     }
     .utility-chip:hover { border-color: #194f45; color: #194f45; }
     .utility-chip[hidden] { display: none; }
+    .utility-chip.is-active { border-color: #194f45; background: #194f45; color: #fff; }
     .chip[data-filter="all"] { order: -4; }
     #todayShortcut { order: -3; }
     #bookingsShortcut { order: -2; display: inline-flex; align-items: center; gap: .45rem; padding: .4rem .8rem .4rem .45rem; }
@@ -1024,6 +1051,7 @@
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18), 0 2px 5px rgba(25, 79, 69, .18);
     }
     .booking-icon svg { width: 16px; height: 16px; }
+    #pikachuToggle { order: -1; }
     #installApp { order: -1; }
 
     .travel-utilities {
@@ -1043,7 +1071,7 @@
     .hotel-now h3 { margin: 0; color: #172f48; font: 800 1rem/1.25 "Nunito Sans", sans-serif; }
     .hotel-now p:not(.utility-label) { margin: .22rem 0 0; color: #66717b; font-size: .75rem; font-weight: 700; line-height: 1.4; }
     .utility-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .65rem; }
-    .mini-action, .day-action {
+    .mini-action, .day-action, .booking-status {
       min-height: 40px;
       display: inline-flex;
       align-items: center;
@@ -1059,6 +1087,7 @@
       cursor: pointer;
       transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease, background-color .14s ease;
     }
+    .booking-status { cursor: default; border-color: #a8ceb1; background: #d8eadb; color: #24613b; }
     .action-ico { width: 14px; height: 14px; flex-shrink: 0; }
     /* Optically centre the label beside the icon. Box centres already line up, but with
        line-height 1 the glyph ink sits ~1px high in its line box, so the text reads high
@@ -1094,9 +1123,13 @@
     .day-action.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
     .card li.is-next-moment { position: relative; padding-left: 5.4rem; box-shadow: inset 0 0 0 2px var(--accent); }
     .card li.is-next-moment::after { content: "Up next"; position: absolute; left: .7rem; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: .58rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+    .card li.is-current-moment { position: relative; padding-left: 6.4rem; box-shadow: inset 0 0 0 2px var(--accent); }
+    .card li.is-current-moment::after { content: "Now"; position: absolute; left: .7rem; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: .58rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
     .card li.is-moment-complete { opacity: .55; }
     .transit-card.is-next-moment { box-shadow: inset 0 0 0 2px var(--accent), var(--shadow-border); }
     .transit-card.is-next-moment::after { content: "Up next"; color: var(--accent); font-size: .58rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+    .transit-card.is-current-moment { box-shadow: inset 0 0 0 2px var(--accent), var(--shadow-border); }
+    .transit-card.is-current-moment::after { content: "Now"; color: var(--accent); font-size: .58rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
     .transit-card.is-moment-complete { opacity: .55; }
     .passport-stamp {
       position: absolute;
@@ -1127,6 +1160,10 @@
       color: #242522;
       box-shadow: 0 28px 90px rgba(36, 37, 34, .28);
     }
+    .trip-dialog[open] {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+    }
     .trip-dialog::backdrop { background: rgba(23, 30, 27, .64); backdrop-filter: blur(5px); }
     .dialog-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 1.1rem 1.2rem; border-bottom: 1px solid #d9d6ce; background: #fff; }
     .dialog-head p { margin: 0; color: #898984; font-size: .64rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
@@ -1134,7 +1171,8 @@
     .dialog-close { flex: 0 0 auto; width: 44px; height: 44px; border: 1px solid #d9d6ce; border-radius: 50%; background: #f3f1ed; color: #242522; font-size: 1.2rem; cursor: pointer; transition: background-color .15s ease, transform .15s ease; }
     .dialog-close:hover { background: #e9e6df; }
     .dialog-close:active { transform: scale(.96); }
-    .dialog-body { max-height: calc(min(82vh, 760px) - 76px); overflow: auto; overscroll-behavior: contain; padding: 1.15rem; }
+    .dialog-body { min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 1.15rem; }
+    .dialog-companion-dock { display: none; }
     .dialog-section + .dialog-section { margin-top: 1.35rem; }
     .dialog-section-title { margin: 0 0 .7rem; color: #686963; font-size: .67rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
     /* Footer row for the wallet's device-lock action. A top rule and helper note give the lone
@@ -1161,13 +1199,221 @@
     .offline-badge { display: none; position: fixed; left: calc(.75rem + env(safe-area-inset-left, 0px)); bottom: calc(.75rem + env(safe-area-inset-bottom, 0px)); z-index: 40; padding: .55rem .7rem; border-radius: 999px; background: #242522; color: #fff; font-size: .68rem; font-weight: 900; box-shadow: 0 5px 18px rgba(36,37,34,.2); }
     body.is-offline .offline-badge { display: block; }
 
+    /* In-trip home: compact the opener and put the next decision before the long route. */
+    body.is-in-trip .hero {
+      margin-top: .75rem;
+      padding: 1rem 1.25rem;
+    }
+    body.is-in-trip .hero h1 { font-size: clamp(1.7rem, 4vw, 2.5rem); }
+    body.is-in-trip .hero-bottom { display: none; }
+    body.is-in-trip main { padding-top: .85rem; }
+    body.is-today-mode main { min-height: calc(100vh - 12rem); }
+    body.is-today-mode .trip-progress,
+    body.is-today-mode .travel-utilities { display: none; }
+    body.is-today-mode .trip-dashboard { display: none; }
+    body.is-today-mode .trip-detail { margin-top: .25rem; }
+
+    .today-view {
+      --accent: #176bb4;
+      --text: #073b6b;
+      margin: 0 0 2rem;
+      padding: clamp(1rem, 3vw, 1.5rem);
+      border: 1px solid #cbd7e2;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 90% 0, rgba(255, 219, 67, .34), transparent 30%),
+        linear-gradient(145deg, #f8fbff, #edf5fc);
+      box-shadow: 0 16px 38px rgba(23, 107, 180, .1);
+    }
+    .today-view-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: start;
+      margin-bottom: 1rem;
+    }
+    .today-view-kicker, .today-card-label {
+      margin: 0 0 .25rem;
+      color: #176bb4;
+      font-size: .65rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .today-view h2 {
+      margin: 0;
+      color: #172f48;
+      font: 800 clamp(1.45rem, 3vw, 2rem)/1.1 "Nunito Sans", sans-serif;
+      letter-spacing: -.03em;
+    }
+    .today-view-summary { margin: .4rem 0 0; color: #607080; font-size: .86rem; font-weight: 700; }
+    .today-full-route { background: rgba(255, 255, 255, .74); }
+    .today-command-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
+      gap: .8rem;
+    }
+    .today-next, .today-essential {
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .82);
+      box-shadow: var(--shadow-border);
+    }
+    .today-next { padding: 1.1rem; }
+    .today-next-time {
+      display: inline-flex;
+      margin: .2rem 0 .55rem;
+      padding: .4rem .6rem;
+      border-radius: 999px;
+      background: #172f48;
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 900;
+    }
+    .today-next h3 { margin: 0; color: #172f48; font: 800 1.25rem/1.2 "Nunito Sans", sans-serif; }
+    .today-leave-by { margin: .45rem 0 0; color: #a44324; font-size: .86rem; font-weight: 900; }
+    .today-actions { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .9rem; }
+    .today-essentials { display: grid; gap: .6rem; }
+    .today-essential { display: block; padding: .8rem .9rem; color: #242522; text-decoration: none; }
+    .today-essential h3 { margin: 0; font: 800 .92rem/1.25 "Nunito Sans", sans-serif; }
+    .today-essential p:last-child { margin: .22rem 0 0; color: #6c7580; font-size: .76rem; font-weight: 700; }
+    .today-essential-link { transition: transform .16s ease, box-shadow .16s ease; }
+    .today-essential-link:hover { transform: translateY(-2px); box-shadow: var(--shadow-border-hover), 0 8px 20px rgba(23, 107, 180, .1); }
+    .today-run-sheet {
+      display: grid;
+      gap: .45rem;
+      margin-top: .8rem;
+      padding-top: .8rem;
+      border-top: 1px solid rgba(23, 47, 72, .12);
+    }
+    .today-run-row {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) auto;
+      gap: .65rem;
+      align-items: center;
+      padding: .6rem .7rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .62);
+    }
+    .today-run-row[data-state="complete"] { opacity: .5; }
+    .today-run-row[data-state="next"] { box-shadow: inset 3px 0 #ffcc28; background: #fff; }
+    .today-run-time, .today-run-state { color: #647383; font-size: .68rem; font-weight: 900; text-transform: uppercase; }
+    .today-run-title { min-width: 0; font-size: .82rem; font-weight: 800; }
+
+    .run-sheet { display: grid; gap: .65rem; }
+    .run-sheet-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 86px minmax(0, 1fr);
+      gap: .85rem;
+      padding: .9rem;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--shadow-border);
+    }
+    .run-sheet-item::before {
+      content: "";
+      position: absolute;
+      left: 75px;
+      top: 1.15rem;
+      width: 9px;
+      height: 9px;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      background: #aeb8c2;
+      box-shadow: 0 0 0 1px #d9d6ce;
+    }
+    .run-sheet-item[data-state="complete"] { opacity: .55; }
+    .run-sheet-item[data-state="complete"]::before { background: #194f45; }
+    .run-sheet-item[data-state="current"] { box-shadow: inset 4px 0 #176bb4, var(--shadow-border); }
+    .run-sheet-item[data-state="current"]::before { background: #176bb4; }
+    .run-sheet-item[data-state="next"] { box-shadow: inset 4px 0 #ffcc28, var(--shadow-border); }
+    .run-sheet-item[data-state="next"]::before { background: #ffcc28; }
+    .run-sheet-item[data-expanded="true"] { padding: 1rem; }
+    .run-sheet-item[data-expanded="true"] .run-sheet-content h3 { font-size: 1.02rem; }
+    .run-sheet-item[data-expanded="false"] { padding: .68rem .9rem; }
+    .run-sheet-item[data-expanded="false"] .run-sheet-meta { margin-top: .2rem; }
+    .run-sheet-item[data-expanded="false"] .run-sheet-status { margin-top: .3rem; }
+    .run-sheet-item[data-expanded="false"] .run-sheet-actions { margin-top: .35rem; }
+    .run-sheet-time { color: #606c78; font-size: .72rem; font-weight: 900; }
+    .run-sheet-content h3 { margin: 0; font: 800 .95rem/1.25 "Nunito Sans", sans-serif; }
+    .run-sheet-meta { margin: .3rem 0 0; color: #727873; font-size: .74rem; font-weight: 700; line-height: 1.4; }
+    .run-sheet-status {
+      display: inline-flex;
+      margin-top: .45rem;
+      padding: .25rem .45rem;
+      border-radius: 999px;
+      background: #eceae5;
+      color: #5d5e59;
+      font-size: .58rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .run-sheet-actions { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .65rem; }
+
+    /* Pikachu stays present unless the travellers explicitly hide him. Only his bubble yields
+       while a dialog, text field or another control interaction needs the visual space. */
+    body.companion-speech-muted .pikachu-speech {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none;
+      transform: translateY(8px) !important;
+    }
+
     @media (max-width: 820px) {
       .travel-utilities { grid-template-columns: 1fr; }
-      .utility-chip, .mini-action, .day-action, .copy-transit { min-height: 44px; }
+      .utility-chip, .mini-action, .day-action, .booking-status, .copy-transit { min-height: 44px; }
       .passport-stamp { width: 42px; height: 42px; right: .75rem; top: .75rem; }
+      .today-command-grid { grid-template-columns: 1fr; }
       /* Stack the footer so the lock button spans full width instead of wrapping bottom-left. */
       .dialog-footer { flex-direction: column; align-items: stretch; }
       .dialog-footer-note { max-width: none; }
+    }
+    @media (max-width: 900px), (max-height: 620px) {
+      .controls-dock {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: .4rem;
+        padding-inline: .5rem;
+      }
+      .controls-dock .controls {
+        width: 100%;
+        min-width: 0;
+        margin-inline: 0;
+      }
+      .pikachu-page-dock.has-companion {
+        display: flex;
+        width: 66px;
+        min-height: 62px;
+        align-items: center;
+        justify-content: center;
+        margin: .45rem 0;
+        padding: .25rem;
+        border: 1px solid #d9d6ce;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, .86);
+        box-shadow: 0 8px 22px rgba(36, 37, 34, .06);
+      }
+      .dialog-companion-dock.has-companion {
+        display: flex;
+        min-height: 62px;
+        align-items: center;
+        justify-content: flex-end;
+        padding: .35rem .75rem .6rem;
+        border-top: 1px solid #d9d6ce;
+        background: #fff;
+      }
+      .pikachu-page-dock .pikachu-companion.is-inline,
+      .dialog-companion-dock .pikachu-companion.is-inline {
+        width: 58px;
+        padding: .3rem;
+        border-radius: 17px;
+        box-shadow: 0 4px 0 #242522, 0 7px 14px rgba(36, 37, 34, .14);
+      }
+      .pikachu-page-dock .pikachu-companion.is-inline .pikachu-stage,
+      .dialog-companion-dock .pikachu-companion.is-inline .pikachu-stage { width: 42px; height: 37px; }
     }
     @media (min-width: 1280px) {
       .controls { width: min(1280px, calc(100% - 2rem)); }
@@ -1181,10 +1427,20 @@
       .card li.is-next-moment { padding-left: .78rem; padding-top: 2rem; }
       .card li.is-next-moment::after { top: .72rem; transform: none; }
       .trip-dialog { max-height: calc(100dvh - 1rem); border-radius: 20px; }
-      .dialog-body { max-height: calc(100dvh - 86px); }
       .wallet-item { grid-template-columns: 1fr; }
       .wallet-actions { justify-content: flex-start; }
       .wallet-badge { width: fit-content; }
+      body.is-in-trip .hero { width: calc(100% - 1rem); }
+      body.is-in-trip .hero .eyebrow { display: none; }
+      body.is-in-trip .live-greeting { margin-top: .35rem; }
+      .today-view { border-radius: 18px; }
+      .today-view-head { align-items: center; }
+      .today-essentials { grid-template-columns: 1fr 1fr; }
+      .today-essentials .today-essential:first-child { grid-column: 1 / -1; }
+      .today-run-row { grid-template-columns: 60px minmax(0, 1fr); }
+      .today-run-state { grid-column: 2; }
+      .run-sheet-item { grid-template-columns: 68px minmax(0, 1fr); gap: .65rem; }
+      .run-sheet-item::before { left: 59px; }
     }
     /* ---- Pre-trip countdown delight -------------------------------------------- */
     /* Scene warming: the dashboard glows warmer as the trip nears. --hype (0..1) is set
@@ -1299,7 +1555,7 @@
     .trip-dashboard { animation-delay: .32s; }
 
     @media print {
-      .auth-gate, .utility-chip, .travel-utilities, .day-actions, .passport-stamp, .trip-dialog, .offline-badge { display: none !important; }
+      .auth-gate, .utility-chip, .travel-utilities, .day-actions, .passport-stamp, .trip-dialog, .offline-badge, .today-view { display: none !important; }
       .petal-drift, .spark-burst, .prep-checklist { display: none !important; }
       body.is-locked > :not(.auth-gate):not(script) { visibility: visible; }
     }
@@ -1342,10 +1598,12 @@
     <button class="chip" data-filter="osaka">Osaka / Koyasan</button>
     <button class="utility-chip" id="todayShortcut" type="button" hidden>Today</button>
     <button class="utility-chip" id="bookingsShortcut" type="button"><span class="booking-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M8 3.5v3M16 3.5v3M3.5 9.5h17M8 15l2.2 2.2L16 12"/></svg></span><span>Bookings</span></button>
+    <button class="utility-chip" id="pikachuToggle" type="button" aria-pressed="true">Hide Pikachu</button>
     <button class="utility-chip" id="installApp" type="button" hidden>Install</button>
     <button class="action sound-toggle" id="soundToggle" type="button" aria-pressed="false"><svg class="action-ico sound-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="m22 9-6 6M16 9l6 6"/></svg><span class="sound-label">Sound: off</span></button>
     <button class="action print-action" onclick="window.print()">Print / save PDF</button>
   </nav>
+  <div class="pikachu-page-dock" id="pikachuPageDock" aria-label="Pikachu travel companion"></div>
   </div>
 
   <main>
@@ -1403,6 +1661,49 @@
       </div>
     </section>
 
+    <section class="today-view" id="todayView" hidden aria-labelledby="todayViewTitle">
+      <div class="today-view-head">
+        <div>
+          <p class="today-view-kicker" id="todayViewKicker">Today · Day 1</p>
+          <h2 id="todayViewTitle">Today’s adventure</h2>
+          <p class="today-view-summary" id="todayViewSummary"></p>
+        </div>
+        <button class="utility-chip today-full-route" id="todayFullRoute" type="button">Full route</button>
+      </div>
+      <div class="today-command-grid">
+        <article class="today-next">
+          <p class="today-card-label">Up next</p>
+          <div class="today-next-time" id="todayNextTime">Flexible</div>
+          <h3 id="todayNextTitle">Checking today’s plan…</h3>
+          <p class="today-leave-by" id="todayLeaveBy">No fixed departure yet</p>
+          <div class="today-actions">
+            <button class="day-action primary" id="todayOpenRunSheet" type="button"><span>Open full run sheet</span></button>
+            <a class="day-action" id="todayNextMap" href="#" target="_blank" rel="noopener noreferrer"><span>Open map</span></a>
+            <a class="day-action" id="todayReservation" href="#" target="_blank" rel="noopener noreferrer" hidden><span>Reservation</span></a>
+            <span class="booking-status" id="todayBookingStatus" hidden><span>Booking confirmed</span></span>
+          </div>
+        </article>
+        <div class="today-essentials">
+          <article class="today-essential">
+            <p class="today-card-label">Getting around</p>
+            <h3 id="todayTransit">Checking today’s transit…</h3>
+            <p id="todayTransitDetail"></p>
+          </article>
+          <a class="today-essential today-essential-link" id="todayWeather" href="#" target="_blank" rel="noopener noreferrer">
+            <p class="today-card-label">Weather</p>
+            <h3 id="todayWeatherCity">Today’s destination</h3>
+            <p>Open live conditions</p>
+          </a>
+          <a class="today-essential today-essential-link" id="todayHotel" href="#" target="_blank" rel="noopener noreferrer">
+            <p class="today-card-label" id="todayHotelLabel">Tonight’s hotel</p>
+            <h3 id="todayHotelName">Checking your stay…</h3>
+            <p id="todayHotelDetail"></p>
+          </a>
+        </div>
+      </div>
+      <div class="today-run-sheet" id="todayRunSheet"></div>
+    </section>
+
     <section class="next-booking" id="nextBooking" aria-live="polite">
       <span class="next-booking-tag" aria-hidden="true">NEXT</span>
       <div>
@@ -1431,51 +1732,32 @@
 
     <section class="region" data-region="china">
       <header class="region-head"><span class="region-index">01 / CHINA</span><h2>Hong Kong & Shenzhen</h2><span class="region-dates">01–05 AUG</span></header>
-      <div class="days">
-        <article class="day"><div class="date"><strong>01</strong><span class="day-label">SAT · AUG</span></div><div class="card"><h3>Arrive Hong Kong → cross to Shenzhen</h3><ul><li class="flight">CX 184 · Perth T1 → Hong Kong · 8:20AM–4:20PM</li><li>Cross Lo Wu or Shenzhen Bay border into China</li><li>Set up DiDi, WeChat Pay, Alipay and Meituan</li><li>Check in and explore the local neighbourhood</li></ul></div></article>
-        <article class="day"><div class="date"><strong>02</strong><span class="day-label">SUN · AUG</span></div><div class="card"><h3>Huaqiangbei & Shenzhen city life</h3><ul><li>Explore the Huaqiangbei electronics markets</li><li>Try Meituan drone food delivery</li><li>Visit Futian CBD and the Nanshan tech area</li><li>Browse wet markets and local food halls</li></ul></div></article>
-        <article class="day"><div class="date"><strong>03</strong><span class="day-label">MON · AUG</span></div><div class="card"><h3>Day trip to Guangzhou Circle</h3><ul><li>High-speed rail from Shenzhen to Guangzhou, about 55 minutes</li><li>See the 138-metre coin-shaped tower on the Pearl River</li><li>Stay for dusk photography and the figure-eight reflection</li><li>Return to Shenzhen in the evening</li></ul><p class="note">The Guangzhou Circle is in Guangzhou, not Shenzhen. The high-speed rail is the practical route.</p></div></article>
-        <article class="day"><div class="date"><strong>04</strong><span class="day-label">TUE · AUG</span></div><div class="card"><h3>Final Shenzhen day → Hong Kong</h3><ul><li>Final Shenzhen shopping and street food</li><li>Cross back into Hong Kong</li><li>Stay near the airport for the early departure</li></ul><p class="note">CX 450 departs at 9:55AM tomorrow. Aim to reach the airport by 7:30AM.</p></div></article>
-      </div>
+      <div class="days"></div>
     </section>
 
     <section class="region" data-region="tokyo">
       <header class="region-head"><span class="region-index">02 / JAPAN</span><h2>Tokyo</h2><span class="region-dates">05–09 AUG</span></header>
-      <div class="days">
-        <article class="day"><div class="date"><strong>05</strong><span class="day-label">WED · AUG</span></div><div class="card"><h3>Fly to Tokyo & first night in Ginza</h3><ul><li class="flight">CX 450 · Hong Kong T1 → Narita T2 · 9:55AM–5:15PM</li><li>Check in and pick up a Suica card at Narita</li><li>Explore Ginza and the Dior Ginza boutique</li><li>Make the first Lawson or 7-Eleven run</li></ul><p class="note">You arrive at Narita T2 but depart from T1 on 15 August.</p></div></article>
-        <article class="day"><div class="date"><strong>06</strong><span class="day-label">THU · AUG</span></div><div class="card"><h3>Dior Café → teamLab Planets</h3><ul><li>Dior Café at 10:30AM</li><li>Travel across Tokyo to Toyosu after lunch</li><li>teamLab Planets admission from 4:30PM to 5:00PM</li></ul><p class="note confirmed">Dior Café · Thursday 6 August 2026 · 10:30AM · <a href="https://www.tablecheck.com/en/reservation/4LEMYV" target="_blank" rel="noopener noreferrer">Open reservation</a></p><p class="note confirmed">teamLab Planets · Thursday 6 August 2026 · admission 4:30–5:00PM</p></div></article>
-        <article class="day"><div class="date"><strong>07</strong><span class="day-label">FRI · AUG</span></div><div class="card"><h3>West Tokyo, Shibuya & Shinjuku</h3><ul><li>Rent bikes at Showa Kinen Park in Tachikawa</li><li>Ride a swan boat at Inokashira Park</li><li>Mario Kart street racing with an international driving permit</li><li>Shibuya Sky at sunset</li><li>See the 3D cat billboard and Tokyo Metropolitan Government Building</li><li>Visit a game centre and Cafe Reissue for 3D latte art</li></ul><p class="note booking">Shibuya Sky timed entry · Cafe Reissue at opening</p></div></article>
-        <article class="day"><div class="date"><strong>08</strong><span class="day-label">SAT · AUG</span></div><div class="card"><h3>Cultural Tokyo: Asakusa to Akasaka</h3><ul><li>Art Aquarium Museum in Nihonbashi</li><li>Try a walk-in at Pokémon Cafe in Nihonbashi</li><li>Ninja Restaurant dinner in Akasaka</li></ul><p class="note">Pokémon Cafe is booked out online · try a walk-in on Saturday 8 August</p><p class="note confirmed">Ninja Restaurant · Saturday 8 August 2026</p></div></article>
-      </div>
+      <div class="days"></div>
     </section>
 
     <section class="region" data-region="fuji">
       <header class="region-head"><span class="region-index">03 / FUJI</span><h2>Fuji</h2><span class="region-dates">09 AUG ONLY</span></header>
-      <div class="days">
-        <article class="day"><div class="date"><strong>09</strong><span class="day-label">SUN · AUG</span></div><div class="card"><h3>Mt Fuji views → overnight</h3><ul><li>Mt Fuji views around the Five Lakes area</li><li>Choose a Fuji-area stay with an onsen for the night</li><li>Prepare for an early departure toward Kyoto</li></ul></div></article>
-      </div>
+      <div class="days"></div>
     </section>
 
     <section class="region" data-region="kyoto">
       <header class="region-head"><span class="region-index">04 / KANSAI</span><h2>Kyoto & Nara</h2><span class="region-dates">10–13 AUG</span></header>
-      <div class="days">
-        <article class="day"><div class="date"><strong>10</strong><span class="day-label">MON · AUG</span></div><div class="card"><h3>Start Kyoto: Shinkansen & Gion</h3><ul><li>Travel to Kyoto by Shinkansen from the Fuji area</li><li>Reserve a Fuji-facing seat where the route allows</li><li>Check in and wander Nishiki Market</li><li>Explore Gion at dusk and the stone-paved lanes</li></ul></div></article>
-        <article class="day"><div class="date"><strong>11</strong><span class="day-label">TUE · AUG</span></div><div class="card"><h3>Kyoto: kimono, bamboo & torii gates</h3><ul><li>Reach Arashiyama Bamboo Grove before 8:00AM</li><li>Explore Tenryu-ji and the Arashiyama riverside</li><li>Kimono and yukata rental at Kimono Miyabi Kyoto at 10:00AM</li><li>Cross Kyoto to Fushimi Inari</li><li>Walk through the torii gates, allowing about two hours</li></ul><p class="note confirmed">Kimono Miyabi Kyoto · Tuesday 11 August 2026 · 10:00AM</p><p class="note">Arashiyama is in northwest Kyoto and Fushimi Inari is southeast. An early start keeps the route comfortable.</p></div></article>
-        <article class="day"><div class="date"><strong>12</strong><span class="day-label">WED · AUG</span></div><div class="card"><h3>Nara: deer, temples & giant Buddha</h3><ul><li>Take the morning train from Kyoto to Nara, about 40–50 minutes</li><li>Feed the bowing deer in Nara Park</li><li>Visit Tōdai-ji and the Great Buddha Hall</li><li>Return to Kyoto or continue toward Osaka in the evening</li></ul></div></article>
-      </div>
+      <div class="days"></div>
     </section>
 
     <section class="region" data-region="osaka">
       <header class="region-head"><span class="region-index">05 / KANSAI</span><h2>Osaka & Koyasan</h2><span class="region-dates">13–15 AUG</span></header>
-      <div class="days">
-        <article class="day"><div class="date"><strong>13</strong><span class="day-label">THU · AUG</span></div><div class="card"><h3>Universal Studios & Osaka night</h3><ul><li>Universal Studios Japan and Super Nintendo World</li><li>Umeda Sky Building at night if energy allows</li><li>Ride the Don Quijote Ferris wheel</li><li>Dotonbori street food and takoyaki crawl</li></ul><p class="note booking">USJ Express Pass and Super Nintendo World entry sell out months ahead</p></div></article>
-        <article class="day"><div class="date"><strong>14</strong><span class="day-label">FRI · AUG</span></div><div class="card"><h3>Koyasan day trip → return to Tokyo</h3><ul><li>Visit the sacred Buddhist mountain town</li><li>Walk Okunoin Cemetery beneath the cedar forest</li><li>See Kongobuji Temple and Konpon Daito pagoda</li><li>Leave by 2:00PM and travel back to Tokyo to pack</li></ul><p class="note">Nankai Koya Line from Osaka Namba plus cable car takes about 1.5 hours each way.</p></div></article>
-        <article class="day"><div class="date"><strong>15</strong><span class="day-label">SAT · AUG</span></div><div class="card"><h3>Tokyo → Perth via Ho Chi Minh City</h3><ul><li class="flight">VN 307/791 · Narita T1 → Ho Chi Minh City → Perth · 9:30AM–10:30PM</li><li>Leave the hotel by about 5:30AM</li><li>Check in at Narita Terminal 1</li><li>Allow for the six-hour and six-hour-ten-minute flight sectors</li></ul><p class="note">The free T1–T2 shuttle takes about 15 minutes. Check-in opens roughly three hours before departure.</p></div></article>
-      </div>
+      <div class="days"></div>
     </section>
   </main>
 
-  <button class="pikachu-companion" id="pikachuCompanion" type="button" data-costume="travel" aria-label="Make Pikachu dance and show a travel tip">
+  <span id="pikachuCompanionHome" hidden></span>
+  <button class="pikachu-companion" id="pikachuCompanion" type="button" popover="manual" data-costume="travel" aria-label="Make Pikachu dance and show a travel tip">
     <span class="pikachu-speech" id="pikachuSpeech">Ready for adventure!</span>
     <span class="pikachu-stage">
       <img src="./assets/pikachu-animated.gif" alt="Pikachu">
@@ -1493,6 +1775,7 @@
   <dialog class="trip-dialog" id="dayDialog">
     <div class="dialog-head"><div><p>Daily quick view</p><h2 id="dayDialogTitle">Today’s plan</h2></div><button class="dialog-close" type="button" data-close-dialog="dayDialog" aria-label="Close daily view">×</button></div>
     <div class="dialog-body" id="dayDialogBody"></div>
+    <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
   </dialog>
 
   <dialog class="trip-dialog" id="bookingDialog">
@@ -1505,6 +1788,7 @@
         <button class="mini-action lock-action" id="lockSite" type="button"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg><span>Lock this device</span></button>
       </section>
     </div>
+    <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
   </dialog>
 
   <footer><p>Pack light. Book early. Leave room for the unexpected.</p><small>01–15 August 2026</small></footer>
@@ -1513,50 +1797,207 @@
     const AUTH_KEY = 'jalena-trip-auth-until';
     const AUTH_HASH = '00f5ae8a4055e89595fce9e697bee3f33556b266efd40fcceaa63bd88a10258a';
     const STAMP_KEY = 'jalena-trip-stamps-v1';
+    const PIKACHU_VISIBILITY_KEY = 'jalena-trip-pikachu-visible-v1';
     const FORTY_FIVE_DAYS = 45 * 24 * 60 * 60 * 1000;
     const chips = document.querySelectorAll('.chip');
     const regions = document.querySelectorAll('[data-region]');
-    const tripDays = [...document.querySelectorAll('.day')];
+    let tripDays = [];
     const startDate = '2026-08-01';
     const endDate = '2026-08-15';
-    const bookings = [
-      { emoji: '☕', name: 'Dior Café', shortName: 'Dior Café', date: '2026-08-06', instant: '2026-08-06T10:30:00+09:00', time: '10:30AM', displayDate: 'Thursday 6 August', link: 'https://www.tablecheck.com/en/reservation/4LEMYV', address: 'Café Dior by Anne-Sophie Pic, House of Dior Ginza 4F, 6-10-1 Ginza, Chuo City, Tokyo 104-0061, Japan' },
-      { emoji: '🎨', name: 'teamLab Planets', shortName: 'teamLab', date: '2026-08-06', instant: '2026-08-06T16:30:00+09:00', time: '4:30PM', displayDate: 'Thursday 6 August', address: 'teamLab Planets TOKYO, 6-1-16 Toyosu, Koto City, Tokyo 135-0061, Japan' },
-      { emoji: '🥷🏻', name: 'Ninja Restaurant', shortName: 'Ninja dinner', date: '2026-08-08', time: null, displayDate: 'Saturday 8 August', address: 'Ninja Akasaka, Akasaka Tokyu Plaza 1F, 2-14-3 Nagatacho, Chiyoda City, Tokyo 100-0014, Japan' },
-      { emoji: '👘', name: 'Kimono Miyabi Kyoto', shortName: 'Kimono rental', date: '2026-08-11', instant: '2026-08-11T10:00:00+09:00', time: '10:00AM', displayDate: 'Tuesday 11 August', address: 'Kimono Miyabi Kyoto (Kiyomizu Temple Branch), 2F 10-2 Tsukimicho, Higashiyama Ward, Kyoto 605-0829, Japan' }
-    ];
-    const hotels = [
-      { emoji: '🏙️', location: 'Shenzhen', name: 'The Langham, Shenzhen', address: '7888 Shennan Boulevard, Futian District, Shenzhen 518040, China', checkIn: '2026-08-01', checkOut: '2026-08-04', dates: '1–4 August · 3 nights' },
-      { emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night' },
-      { emoji: '🗼', location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
-      { emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night' },
-      { emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0847, Japan', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights' },
-      { emoji: '🏯', location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', checkIn: '2026-08-13', checkOut: '2026-08-14', dates: '13–14 August · 1 night' },
-      { emoji: '✈️', location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', checkIn: '2026-08-14', checkOut: '2026-08-15', dates: '14–15 August · 1 night' }
-    ];
-    const dayPlans = [
-      ['The Langham Shenzhen', 'Shenzhen'], ['Huaqiangbei Shenzhen', 'Shenzhen'], ['Guangzhou Circle', 'Guangzhou'], ['The Silveri Hong Kong', 'Hong Kong'],
-      ['YOTEL Japan Ginza', 'Tokyo'], ['Dior Café Ginza', 'Tokyo'], ['Shibuya Sky', 'Tokyo'], ['Art Aquarium Museum Ginza', 'Tokyo'],
-      ['Shoji Lake Hotel', 'Fujikawaguchiko'], ['NOHGA Hotel Kiyomizu Kyoto', 'Kyoto'], ['Kimono Miyabi Kyoto', 'Kyoto'], ['Nara Park', 'Nara'],
-      ['DoubleTree by Hilton Osaka Castle', 'Osaka'], ['Narita Tobu Hotel Airport', 'Narita'], ['Narita Airport Terminal 1', 'Narita']
-    ].map(([mapQuery, weatherCity]) => ({ mapQuery, weatherCity }));
-    const transitByDay = {
-      1: { mode: 'Flight', route: 'Perth T1 → Hong Kong', detail: 'CX 184 · 8:20AM–4:20PM', local: '香港國際機場' },
-      3: { mode: 'Rail', route: 'Shenzhen North → Guangzhou South', detail: 'High-speed rail · about 55 minutes', local: '深圳北站 → 广州南站' },
-      5: { mode: 'Flight', route: 'Hong Kong T1 → Narita T2', detail: 'CX 450 · 9:55AM–5:15PM', local: '香港國際機場 → 成田空港第2ターミナル' },
-      10: { mode: 'Transfer', route: 'Shoji Lake → Kyoto', detail: 'Bus and Shinkansen · allow a half day', local: '精進湖 → 京都駅' },
-      12: { mode: 'Rail', route: 'Kyoto → Nara', detail: 'JR or Kintetsu · about 40–50 minutes', local: '京都駅 → 奈良駅' },
-      14: { mode: 'Transfer', route: 'Koyasan → Narita', detail: 'Nankai, Shinkansen and airport transfer', local: '高野山駅 → 成田駅' },
-      15: { mode: 'Flight', route: 'Narita T1 → Perth via Ho Chi Minh City', detail: 'VN 307/791 · 9:30AM–10:30PM', local: '成田空港第1ターミナル' }
-    };
-    const activityMoments = [
-      { day: 1, instant: '2026-08-01T08:20:00+08:00', match: 'CX 184' },
-      { day: 5, instant: '2026-08-05T09:55:00+08:00', match: 'CX 450' },
-      { day: 6, instant: '2026-08-06T10:30:00+09:00', match: 'Dior Café at' },
-      { day: 6, instant: '2026-08-06T16:30:00+09:00', match: 'teamLab Planets admission' },
-      { day: 11, instant: '2026-08-11T10:00:00+09:00', match: 'Kimono and yukata rental' },
-      { day: 15, instant: '2026-08-15T09:30:00+09:00', match: 'VN 307/791' }
-    ];
+    const tripData = (() => {
+      const stays = {
+        shenzhen: { id: 'shenzhen', emoji: '🏙️', location: 'Shenzhen', name: 'The Langham, Shenzhen', address: '7888 Shennan Boulevard, Futian District, Shenzhen 518040, China', checkIn: '2026-08-01', checkOut: '2026-08-04', dates: '1–4 August · 3 nights' },
+        hongKong: { id: 'hong-kong-airport', emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night' },
+        tokyo: { id: 'tokyo-ginza', emoji: '🗼', location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
+        fuji: { id: 'fuji', emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night' },
+        kyoto: { id: 'kyoto', emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0847, Japan', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights' },
+        osaka: { id: 'osaka', emoji: '🏯', location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', checkIn: '2026-08-13', checkOut: '2026-08-14', dates: '13–14 August · 1 night' },
+        narita: { id: 'narita', emoji: '✈️', location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', checkIn: '2026-08-14', checkOut: '2026-08-15', dates: '14–15 August · 1 night' }
+      };
+      return [
+        {
+          day: 1, date: '2026-08-01', weekday: 'SAT', region: 'china', location: 'Hong Kong & Shenzhen', title: 'Arrive Hong Kong → cross to Shenzhen', mapQuery: 'The Langham Shenzhen', weatherCity: 'Shenzhen', hotel: stays.shenzhen,
+          transit: { id: 'cx184-flight', order: 0, mode: 'Flight', route: 'Perth T1 → Hong Kong', detail: 'CX 184 · 8:20AM–4:20PM', local: '香港國際機場', time: '8:20AM', instant: '2026-08-01T08:20:00+08:00', durationMinutes: 480, address: 'Hong Kong International Airport' },
+          activities: [
+            { id: 'cross-shenzhen-border', order: 1, title: 'Cross Lo Wu or Shenzhen Bay border into China' },
+            { id: 'set-up-china-apps', order: 2, title: 'Set up DiDi, WeChat Pay, Alipay and Meituan' },
+            { id: 'shenzhen-neighbourhood', order: 3, title: 'Check in and explore the local neighbourhood', address: stays.shenzhen.address }
+          ],
+          notes: []
+        },
+        {
+          day: 2, date: '2026-08-02', weekday: 'SUN', region: 'china', location: 'Shenzhen', title: 'Huaqiangbei & Shenzhen city life', mapQuery: 'Huaqiangbei Shenzhen', weatherCity: 'Shenzhen', hotel: stays.shenzhen,
+          transit: { id: 'shenzhen-local-transit', order: 1.5, mode: 'Local', route: 'Huaqiangbei → Futian → Nanshan', detail: 'Metro and DiDi · check live route', local: '华强北 → 福田 → 南山' },
+          activities: [
+            { id: 'huaqiangbei-markets', order: 1, title: 'Explore the Huaqiangbei electronics markets', address: 'Huaqiangbei, Futian District, Shenzhen, China' },
+            { id: 'meituan-drone', order: 2, title: 'Try Meituan drone food delivery' },
+            { id: 'futian-nanshan', order: 3, title: 'Visit Futian CBD and the Nanshan tech area' },
+            { id: 'shenzhen-food-halls', order: 4, title: 'Browse wet markets and local food halls' }
+          ],
+          notes: []
+        },
+        {
+          day: 3, date: '2026-08-03', weekday: 'MON', region: 'china', location: 'Guangzhou', title: 'Day trip to Guangzhou Circle', mapQuery: 'Guangzhou Circle', weatherCity: 'Guangzhou', hotel: stays.shenzhen,
+          transit: { id: 'guangzhou-rail', order: 0, mode: 'Rail', route: 'Shenzhen North → Guangzhou South', detail: 'High-speed rail · about 55 minutes', local: '深圳北站 → 广州南站', durationMinutes: 55, address: 'Guangzhou South Railway Station' },
+          activities: [
+            { id: 'guangzhou-circle', order: 1, title: 'See the 138-metre coin-shaped tower on the Pearl River', address: 'Guangzhou Circle, Liwan District, Guangzhou, China' },
+            { id: 'guangzhou-dusk', order: 2, title: 'Stay for dusk photography and the figure-eight reflection' },
+            { id: 'return-shenzhen', order: 3, title: 'Return to Shenzhen in the evening' }
+          ],
+          notes: [{ kind: 'note', text: 'The Guangzhou Circle is in Guangzhou, not Shenzhen. The high-speed rail is the practical route.' }]
+        },
+        {
+          day: 4, date: '2026-08-04', weekday: 'TUE', region: 'china', location: 'Hong Kong', title: 'Final Shenzhen day → Hong Kong', mapQuery: 'The Silveri Hong Kong', weatherCity: 'Hong Kong', hotel: stays.hongKong,
+          transit: { id: 'shenzhen-hong-kong', order: 2, mode: 'Border', route: 'Shenzhen → Hong Kong airport', detail: 'Border crossing and airport transfer · check live route', local: '深圳 → 香港國際機場', address: stays.hongKong.address },
+          activities: [
+            { id: 'final-shenzhen', order: 1, title: 'Final Shenzhen shopping and street food' },
+            { id: 'cross-hong-kong', order: 2.5, title: 'Cross back into Hong Kong' },
+            { id: 'airport-hotel', order: 3, title: 'Stay near the airport for the early departure', address: stays.hongKong.address }
+          ],
+          notes: [{ kind: 'note', text: 'CX 450 departs at 9:55AM tomorrow. Aim to reach the airport by 7:30AM.' }]
+        },
+        {
+          day: 5, date: '2026-08-05', weekday: 'WED', region: 'tokyo', location: 'Tokyo', title: 'Fly to Tokyo & first night in Ginza', mapQuery: 'YOTEL Japan Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
+          transit: { id: 'cx450-flight', order: 0, mode: 'Flight', route: 'Hong Kong T1 → Narita T2', detail: 'CX 450 · 9:55AM–5:15PM', local: '香港國際機場 → 成田空港第2ターミナル', time: '9:55AM', instant: '2026-08-05T09:55:00+08:00', durationMinutes: 380, leaveBy: '7:30AM', address: 'Narita International Airport Terminal 2' },
+          activities: [
+            { id: 'tokyo-check-in', order: 1, title: 'Check in and pick up a Suica card at Narita', address: stays.tokyo.address },
+            { id: 'ginza-dior', order: 2, title: 'Explore Ginza and the Dior Ginza boutique', address: 'House of Dior Ginza, Tokyo, Japan' },
+            { id: 'konbini-run', order: 3, title: 'Make the first Lawson or 7-Eleven run' }
+          ],
+          notes: [{ kind: 'note', text: 'You arrive at Narita T2 but depart from T1 on 15 August.' }]
+        },
+        {
+          day: 6, date: '2026-08-06', weekday: 'THU', region: 'tokyo', location: 'Tokyo', title: 'Dior Café → teamLab Planets', mapQuery: 'Dior Café Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
+          transit: { id: 'ginza-to-toyosu', order: 2, mode: 'Metro', route: 'Ginza → Toyosu', detail: 'Tokyo Metro and local connection · check live route', local: '銀座駅 → 新豊洲駅', address: 'Shin-Toyosu Station, Tokyo, Japan' },
+          activities: [
+            { id: 'dior-cafe', order: 1, title: 'Dior Café', time: '10:30AM', instant: '2026-08-06T10:30:00+09:00', durationMinutes: 90, leaveBy: '9:45AM', address: 'Café Dior by Anne-Sophie Pic, House of Dior Ginza 4F, 6-10-1 Ginza, Chuo City, Tokyo 104-0061, Japan', reservationLink: 'https://www.tablecheck.com/en/reservation/4LEMYV', booking: { emoji: '☕', name: 'Dior Café', shortName: 'Dior Café', displayDate: 'Thursday 6 August' } },
+            { id: 'toyosu-transfer', order: 2.5, title: 'Travel across Tokyo to Toyosu after lunch', address: 'Toyosu, Koto City, Tokyo, Japan' },
+            { id: 'teamlab-planets', order: 3, title: 'teamLab Planets admission', time: '4:30PM', instant: '2026-08-06T16:30:00+09:00', durationMinutes: 90, leaveBy: '3:45PM', address: 'teamLab Planets TOKYO, 6-1-16 Toyosu, Koto City, Tokyo 135-0061, Japan', booking: { emoji: '🎨', name: 'teamLab Planets', shortName: 'teamLab', displayDate: 'Thursday 6 August', statusLabel: 'Admission confirmed' } }
+          ],
+          notes: [
+            { kind: 'confirmed', text: 'Dior Café · Thursday 6 August 2026 · 10:30AM', link: 'https://www.tablecheck.com/en/reservation/4LEMYV', linkLabel: 'Open reservation' },
+            { kind: 'confirmed', text: 'teamLab Planets · Thursday 6 August 2026 · admission 4:30–5:00PM' }
+          ]
+        },
+        {
+          day: 7, date: '2026-08-07', weekday: 'FRI', region: 'tokyo', location: 'Tokyo', title: 'West Tokyo, Shibuya & Shinjuku', mapQuery: 'Shibuya Sky', weatherCity: 'Tokyo', hotel: stays.tokyo,
+          transit: { id: 'west-tokyo-transit', order: 3.5, mode: 'Rail', route: 'Tachikawa → Kichijoji → Shibuya → Shinjuku', detail: 'JR and local trains · check live route', local: '立川駅 → 吉祥寺駅 → 渋谷駅 → 新宿駅' },
+          activities: [
+            { id: 'showa-kinen-bikes', order: 1, title: 'Rent bikes at Showa Kinen Park in Tachikawa', address: 'Showa Kinen Park, Tokyo, Japan' },
+            { id: 'inokashira-swan', order: 2, title: 'Ride a swan boat at Inokashira Park', address: 'Inokashira Park, Tokyo, Japan' },
+            { id: 'mario-kart', order: 3, title: 'Mario Kart street racing with an international driving permit' },
+            { id: 'shibuya-sky', order: 4, title: 'Shibuya Sky at sunset', address: 'Shibuya Sky, Tokyo, Japan' },
+            { id: 'shinjuku-sights', order: 5, title: 'See the 3D cat billboard and Tokyo Metropolitan Government Building' },
+            { id: 'game-centre-reissue', order: 6, title: 'Visit a game centre and Cafe Reissue for 3D latte art' }
+          ],
+          notes: [{ kind: 'booking', text: 'Shibuya Sky timed entry · Cafe Reissue at opening' }]
+        },
+        {
+          day: 8, date: '2026-08-08', weekday: 'SAT', region: 'tokyo', location: 'Tokyo', title: 'Cultural Tokyo: Asakusa to Akasaka', mapQuery: 'Art Aquarium Museum Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
+          transit: { id: 'nihonbashi-akasaka', order: 2.5, mode: 'Metro', route: 'Nihonbashi → Akasaka', detail: 'Tokyo Metro · check live route', local: '日本橋駅 → 赤坂見附駅' },
+          activities: [
+            { id: 'art-aquarium', order: 1, title: 'Art Aquarium Museum in Nihonbashi', address: 'Art Aquarium Museum Ginza, Tokyo, Japan' },
+            { id: 'pokemon-cafe', order: 2, title: 'Try a walk-in at Pokémon Cafe in Nihonbashi', address: 'Pokémon Cafe Tokyo, Nihonbashi, Japan' },
+            { id: 'ninja-restaurant', order: 3, title: 'Ninja Restaurant dinner in Akasaka', address: 'Ninja Akasaka, Akasaka Tokyu Plaza 1F, 2-14-3 Nagatacho, Chiyoda City, Tokyo 100-0014, Japan', booking: { emoji: '🥷🏻', name: 'Ninja Restaurant', shortName: 'Ninja dinner', displayDate: 'Saturday 8 August' } }
+          ],
+          notes: [
+            { kind: 'note', text: 'Pokémon Cafe is booked out online · try a walk-in on Saturday 8 August' },
+            { kind: 'confirmed', text: 'Ninja Restaurant · Saturday 8 August 2026' }
+          ]
+        },
+        {
+          day: 9, date: '2026-08-09', weekday: 'SUN', region: 'fuji', location: 'Fuji', title: 'Mt Fuji views → overnight', mapQuery: 'Shoji Lake Hotel', weatherCity: 'Fujikawaguchiko', hotel: stays.fuji,
+          transit: { id: 'tokyo-fuji-transfer', order: 0, mode: 'Transfer', route: 'Tokyo → Fuji Five Lakes', detail: 'Rail and bus · check live route', local: '東京駅 → 富士五湖', address: stays.fuji.address },
+          activities: [
+            { id: 'fuji-five-lakes', order: 1, title: 'Mt Fuji views around the Five Lakes area', address: 'Fuji Five Lakes, Yamanashi, Japan' },
+            { id: 'fuji-onsen', order: 2, title: 'Choose a Fuji-area stay with an onsen for the night', address: stays.fuji.address },
+            { id: 'prepare-kyoto', order: 3, title: 'Prepare for an early departure toward Kyoto' }
+          ],
+          notes: []
+        },
+        {
+          day: 10, date: '2026-08-10', weekday: 'MON', region: 'kyoto', location: 'Kyoto', title: 'Start Kyoto: Shinkansen & Gion', mapQuery: 'NOHGA Hotel Kiyomizu Kyoto', weatherCity: 'Kyoto', hotel: stays.kyoto,
+          transit: { id: 'fuji-kyoto-transfer', order: 0, mode: 'Transfer', route: 'Shoji Lake → Kyoto', detail: 'Bus and Shinkansen · allow a half day', local: '精進湖 → 京都駅', durationMinutes: 300, address: 'Kyoto Station, Japan' },
+          activities: [
+            { id: 'fuji-facing-seat', order: 1, title: 'Reserve a Fuji-facing seat where the route allows' },
+            { id: 'nishiki-market', order: 2, title: 'Check in and wander Nishiki Market', address: 'Nishiki Market, Kyoto, Japan' },
+            { id: 'gion-dusk', order: 3, title: 'Explore Gion at dusk and the stone-paved lanes', address: 'Gion, Kyoto, Japan' }
+          ],
+          notes: []
+        },
+        {
+          day: 11, date: '2026-08-11', weekday: 'TUE', region: 'kyoto', location: 'Kyoto', title: 'Kyoto: kimono, bamboo & torii gates', mapQuery: 'Kimono Miyabi Kyoto', weatherCity: 'Kyoto', hotel: stays.kyoto,
+          transit: { id: 'kyoto-cross-city', order: 3.5, mode: 'Local', route: 'Arashiyama → Higashiyama → Fushimi', detail: 'Rail and local connection · check live route', local: '嵐山駅 → 東山 → 伏見稲荷駅' },
+          activities: [
+            { id: 'arashiyama-grove', order: 1, title: 'Reach Arashiyama Bamboo Grove before 8:00AM', time: 'Before 8:00AM', address: 'Arashiyama Bamboo Grove, Kyoto, Japan' },
+            { id: 'tenryuji-riverside', order: 2, title: 'Explore Tenryu-ji and the Arashiyama riverside' },
+            { id: 'kimono-miyabi', order: 3, title: 'Kimono and yukata rental at Kimono Miyabi Kyoto', time: '10:00AM', instant: '2026-08-11T10:00:00+09:00', durationMinutes: 120, leaveBy: '9:15AM', address: 'Kimono Miyabi Kyoto (Kiyomizu Temple Branch), 2F 10-2 Tsukimicho, Higashiyama Ward, Kyoto 605-0829, Japan', booking: { emoji: '👘', name: 'Kimono Miyabi Kyoto', shortName: 'Kimono rental', displayDate: 'Tuesday 11 August' } },
+            { id: 'fushimi-inari-transfer', order: 4, title: 'Cross Kyoto to Fushimi Inari' },
+            { id: 'fushimi-inari-walk', order: 5, title: 'Walk through the torii gates, allowing about two hours', durationMinutes: 120, address: 'Fushimi Inari Taisha, Kyoto, Japan' }
+          ],
+          notes: [
+            { kind: 'confirmed', text: 'Kimono Miyabi Kyoto · Tuesday 11 August 2026 · 10:00AM' },
+            { kind: 'note', text: 'Arashiyama is in northwest Kyoto and Fushimi Inari is southeast. An early start keeps the route comfortable.' }
+          ]
+        },
+        {
+          day: 12, date: '2026-08-12', weekday: 'WED', region: 'kyoto', location: 'Nara', title: 'Nara: deer, temples & giant Buddha', mapQuery: 'Nara Park', weatherCity: 'Nara', hotel: stays.kyoto,
+          transit: { id: 'kyoto-nara-rail', order: 0, mode: 'Rail', route: 'Kyoto → Nara', detail: 'JR or Kintetsu · about 40–50 minutes', local: '京都駅 → 奈良駅', durationMinutes: 50, address: 'Nara Station, Japan' },
+          activities: [
+            { id: 'nara-deer', order: 1, title: 'Feed the bowing deer in Nara Park', address: 'Nara Park, Japan' },
+            { id: 'todaiji', order: 2, title: 'Visit Tōdai-ji and the Great Buddha Hall', address: 'Tōdai-ji, Nara, Japan' },
+            { id: 'return-kansai', order: 3, title: 'Return to Kyoto or continue toward Osaka in the evening' }
+          ],
+          notes: []
+        },
+        {
+          day: 13, date: '2026-08-13', weekday: 'THU', region: 'osaka', location: 'Osaka', title: 'Universal Studios & Osaka night', mapQuery: 'DoubleTree by Hilton Osaka Castle', weatherCity: 'Osaka', hotel: stays.osaka,
+          transit: { id: 'osaka-usj-transit', order: 0, mode: 'Rail', route: 'Osaka → Universal City → Dotonbori', detail: 'JR and Osaka Metro · check live route', local: '大阪駅 → ユニバーサルシティ駅 → なんば駅' },
+          activities: [
+            { id: 'universal-studios', order: 1, title: 'Universal Studios Japan and Super Nintendo World', address: 'Universal Studios Japan, Osaka, Japan' },
+            { id: 'umeda-sky', order: 2, title: 'Umeda Sky Building at night if energy allows', address: 'Umeda Sky Building, Osaka, Japan' },
+            { id: 'don-quijote-wheel', order: 3, title: 'Ride the Don Quijote Ferris wheel' },
+            { id: 'dotonbori-food', order: 4, title: 'Dotonbori street food and takoyaki crawl', address: 'Dotonbori, Osaka, Japan' }
+          ],
+          notes: [{ kind: 'booking', text: 'USJ Express Pass and Super Nintendo World entry sell out months ahead' }]
+        },
+        {
+          day: 14, date: '2026-08-14', weekday: 'FRI', region: 'osaka', location: 'Osaka & Koyasan', title: 'Koyasan day trip → return to Tokyo', mapQuery: 'Narita Tobu Hotel Airport', weatherCity: 'Narita', hotel: stays.narita,
+          transit: { id: 'koyasan-narita-transfer', order: 4, mode: 'Transfer', route: 'Koyasan → Narita', detail: 'Nankai, Shinkansen and airport transfer', local: '高野山駅 → 成田駅', time: '2:00PM', leaveBy: '2:00PM', address: stays.narita.address },
+          activities: [
+            { id: 'koyasan-town', order: 1, title: 'Visit the sacred Buddhist mountain town', address: 'Koyasan, Wakayama, Japan' },
+            { id: 'okunoin', order: 2, title: 'Walk Okunoin Cemetery beneath the cedar forest', address: 'Okunoin Cemetery, Koyasan, Japan' },
+            { id: 'kongobuji-pagoda', order: 3, title: 'See Kongobuji Temple and Konpon Daito pagoda' },
+            { id: 'leave-koyasan', order: 3.5, title: 'Leave by 2:00PM and travel back to Tokyo to pack', time: '2:00PM', instant: '2026-08-14T14:00:00+09:00', leaveBy: '2:00PM' }
+          ],
+          notes: [{ kind: 'note', text: 'Nankai Koya Line from Osaka Namba plus cable car takes about 1.5 hours each way.' }]
+        },
+        {
+          day: 15, date: '2026-08-15', weekday: 'SAT', region: 'osaka', location: 'Tokyo', title: 'Tokyo → Perth via Ho Chi Minh City', mapQuery: 'Narita Airport Terminal 1', weatherCity: 'Narita', hotel: stays.narita,
+          transit: { id: 'vn307-vn791-flight', order: 2, mode: 'Flight', route: 'Narita T1 → Perth via Ho Chi Minh City', detail: 'VN 307/791 · 9:30AM–10:30PM', local: '成田空港第1ターミナル', time: '9:30AM', instant: '2026-08-15T09:30:00+09:00', durationMinutes: 840, leaveBy: '5:30AM', address: 'Narita International Airport Terminal 1' },
+          activities: [
+            { id: 'leave-narita-hotel', order: 0, title: 'Leave the hotel by about 5:30AM', time: '5:30AM', instant: '2026-08-15T05:30:00+09:00', durationMinutes: 30, address: stays.narita.address },
+            { id: 'narita-check-in', order: 1, title: 'Check in at Narita Terminal 1', address: 'Narita International Airport Terminal 1' },
+            { id: 'flight-sectors', order: 3, title: 'Allow for the six-hour and six-hour-ten-minute flight sectors' }
+          ],
+          notes: [{ kind: 'note', text: 'The free T1–T2 shuttle takes about 15 minutes. Check-in opens roughly three hours before departure.' }]
+        }
+      ];
+    })();
+    const bookings = tripData.flatMap((day) => day.activities
+      .filter((activity) => activity.booking)
+      .map((activity) => ({
+        emoji: activity.booking.emoji,
+        name: activity.booking.name || activity.title,
+        shortName: activity.booking.shortName,
+        date: day.date,
+        instant: activity.instant,
+        time: activity.time || null,
+        displayDate: activity.booking.displayDate,
+        link: activity.reservationLink,
+        address: activity.address
+      })));
+    const hotels = [...new Map(tripData.map((day) => [day.hotel.id, day.hotel])).values()];
 
     // --- Pre-trip "delight" content ---------------------------------------------------
     // The two travellers. Used to personalise every greeting so the app feels handmade
@@ -1736,7 +2177,7 @@
 
     const mapsUrl = (query) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
     // Direct AccuWeather forecast pages per destination, keyed by the exact weatherCity
-    // strings used in dayPlans. If an unmapped city ever appears we fall back to
+    // strings used in tripData. If an unmapped city ever appears we fall back to
     // AccuWeather's own location search rather than dropping back to a Google search.
     const weatherPages = {
       'Shenzhen': 'https://www.accuweather.com/en/cn/shenzhen/58194/weather-forecast/58194',
@@ -1794,18 +2235,78 @@
       return { now, currentDate, inTrip, dayNumber, timeZone };
     }
 
-    function locationForDay(dayNumber) {
-      if (dayNumber <= 4) return 'Hong Kong & Shenzhen';
-      if (dayNumber <= 8) return 'Tokyo';
-      if (dayNumber === 9) return 'Fuji';
-      if (dayNumber <= 12) return 'Kyoto & Nara';
-      if (dayNumber <= 14) return 'Osaka & Koyasan';
-      return 'Tokyo';
+    function renderItinerary() {
+      regions.forEach((region) => region.querySelector('.days').replaceChildren());
+      tripData.forEach((plan) => {
+        const day = document.createElement('article');
+        day.className = 'day';
+        day.dataset.date = plan.date;
+        day.dataset.day = String(plan.day);
+        const notes = plan.notes.map((note) => {
+          const link = note.link ? ` · <a href="${note.link}" target="_blank" rel="noopener noreferrer">${note.linkLabel || 'Open'}</a>` : '';
+          return `<p class="note ${note.kind || 'note'}">${note.text}${link}</p>`;
+        }).join('');
+        day.innerHTML = `<div class="date"><strong>${String(plan.day).padStart(2, '0')}</strong><span class="day-label">${plan.weekday} · AUG</span></div><div class="card"><h3>${plan.title}</h3><ul>${plan.activities.map((activity) => `<li data-activity-id="${activity.id}">${activity.time ? `${activity.title} · ${activity.time}` : activity.title}</li>`).join('')}</ul>${notes}</div>`;
+        document.querySelector(`[data-region="${plan.region}"] .days`).append(day);
+      });
+      tripDays = [...document.querySelectorAll('.day')];
+      Object.entries({ 6: 'teamlab', 8: 'ninja', 11: 'sakura' }).forEach(([dayNumber, effect]) => tripDays[dayNumber - 1].classList.add(`effect-${effect}`));
     }
 
+    function activityTimeline(day, clock) {
+      const activities = [day.transit, ...day.activities]
+        .filter(Boolean)
+        .sort((left, right) => (left.order ?? 999) - (right.order ?? 999));
+      if (day.date < clock.currentDate) return activities.map((activity) => ({ ...activity, state: 'complete' }));
+      if (day.date > clock.currentDate) return activities.map((activity) => ({ ...activity, state: 'upcoming' }));
+      const timed = activities.filter((activity) => activity.instant);
+      const nextTimed = timed.find((activity) => new Date(activity.instant) > clock.now);
+      const currentTimed = timed.find((activity) => {
+        const startsAt = new Date(activity.instant);
+        const endsAt = new Date(startsAt.getTime() + (activity.durationMinutes || 60) * 60000);
+        return clock.now >= startsAt && clock.now < endsAt;
+      });
+      const latestStartedOrder = timed.reduce((latestOrder, activity) => (
+        new Date(activity.instant) <= clock.now
+          ? Math.max(latestOrder, activity.order ?? Number.NEGATIVE_INFINITY)
+          : latestOrder
+      ), Number.NEGATIVE_INFINITY);
+      return activities.map((activity) => {
+        // Starting a later ordered milestone proves earlier flexible stops are already behind us.
+        if (!activity.instant) return { ...activity, state: (activity.order ?? Number.POSITIVE_INFINITY) < latestStartedOrder ? 'complete' : 'flexible' };
+        const startsAt = new Date(activity.instant);
+        const endsAt = new Date(startsAt.getTime() + (activity.durationMinutes || 60) * 60000);
+        if (activity.id === currentTimed?.id) return { ...activity, state: 'current' };
+        if (clock.now >= endsAt) return { ...activity, state: 'complete' };
+        if (activity.id === nextTimed?.id) return { ...activity, state: 'next' };
+        return { ...activity, state: 'upcoming' };
+      });
+    }
+
+    let itineraryView = 'auto';
     function showFullRoute() {
+      itineraryView = 'route';
+      document.body.classList.remove('is-today-mode');
+      document.querySelector('#todayView').hidden = true;
       regions.forEach((region) => { region.hidden = false; });
       chips.forEach((chip) => chip.classList.toggle('active', chip.dataset.filter === 'all'));
+      document.querySelector('#todayShortcut').classList.remove('is-active');
+      document.querySelector('#nextBooking').hidden = false;
+      if (window.tripState) renderPrepChecklist(window.tripState);
+    }
+
+    function showTodayMode(clock = window.tripState || tripClock(previewableNow())) {
+      if (!clock.inTrip) return;
+      itineraryView = 'today';
+      document.body.classList.add('is-today-mode');
+      document.querySelector('#todayView').hidden = false;
+      regions.forEach((region) => { region.hidden = true; });
+      chips.forEach((chip) => chip.classList.remove('active'));
+      document.querySelector('#todayShortcut').classList.add('is-active');
+      document.querySelector('#nextBooking').hidden = true;
+      document.querySelector('.urgent').hidden = true;
+      document.querySelector('#prepChecklist').hidden = true;
+      renderTodayView(clock);
     }
 
     async function copyText(text, successMessage) {
@@ -1863,17 +2364,17 @@
 
     function renderDayEnhancements() {
       tripDays.forEach((day, index) => {
-        const dayNumber = index + 1;
+        const plan = tripData[index];
+        const dayNumber = plan.day;
         const card = day.querySelector('.card');
-        const plan = dayPlans[index];
-        const transit = transitByDay[dayNumber];
+        const transit = plan.transit;
         if (transit) {
           const panel = document.createElement('div');
           panel.className = 'transit-card';
+          panel.dataset.activityId = transit.id;
           panel.innerHTML = `<span class="transit-mode">${transit.mode}</span><span class="transit-route"><strong>${transit.route}</strong><span>${transit.detail} · Check live platform</span></span><button class="copy-transit" type="button" aria-label="Copy local station names">文</button>`;
           panel.querySelector('button').addEventListener('click', () => copyText(transit.local, 'Local station names copied'));
           card.querySelector('ul').before(panel);
-          if (transit.mode === 'Flight') card.querySelector('.flight')?.remove();
         }
         const actions = document.createElement('div');
         actions.className = 'day-actions';
@@ -1883,19 +2384,14 @@
     }
 
     function updateActivityMoments(clock) {
-      document.querySelectorAll('.is-next-moment, .is-moment-complete').forEach((item) => item.classList.remove('is-next-moment', 'is-moment-complete'));
+      document.querySelectorAll('.is-next-moment, .is-current-moment, .is-moment-complete').forEach((item) => item.classList.remove('is-next-moment', 'is-current-moment', 'is-moment-complete'));
       if (!clock.inTrip) return;
-      const todayMoments = activityMoments.filter((moment) => moment.day === clock.dayNumber);
-      let nextAssigned = false;
-      todayMoments.forEach((moment) => {
-        const item = [...tripDays[moment.day - 1].querySelectorAll('li, .transit-route')].find((candidate) => candidate.textContent.includes(moment.match));
-        if (!item) return;
-        const target = item.closest('.transit-card') || item;
-        if (clock.now >= new Date(moment.instant)) target.classList.add('is-moment-complete');
-        else if (!nextAssigned) {
-          target.classList.add('is-next-moment');
-          nextAssigned = true;
-        }
+      activityTimeline(tripData[clock.dayNumber - 1], clock).forEach((activity) => {
+        const target = tripDays[clock.dayNumber - 1].querySelector(`[data-activity-id="${activity.id}"]`);
+        if (!target) return;
+        target.classList.toggle('is-moment-complete', activity.state === 'complete');
+        target.classList.toggle('is-current-moment', activity.state === 'current');
+        target.classList.toggle('is-next-moment', activity.state === 'next');
       });
     }
 
@@ -1956,17 +2452,60 @@
     function showModalDialog(dialog) {
       dialog.showModal();
       lockBodyForDialog();
+      if (typeof syncCompanionPlacement === 'function') syncCompanionPlacement(dialog);
+      if (typeof syncCompanionSpeechState === 'function') syncCompanionSpeechState();
+      if (typeof raiseCompanionAboveDialog === 'function') raiseCompanionAboveDialog();
+    }
+
+    function activityDurationLabel(activity) {
+      if (!activity.durationMinutes) return '';
+      const hours = Math.floor(activity.durationMinutes / 60);
+      const minutes = activity.durationMinutes % 60;
+      return `${hours ? `${hours}h` : ''}${hours && minutes ? ' ' : ''}${minutes ? `${minutes}m` : ''}`;
+    }
+
+    function renderRunSheet(day, clock) {
+      const labels = { complete: 'Complete', current: 'Happening now', next: 'Up next', upcoming: 'Later', flexible: 'Flexible' };
+      return `<div class="run-sheet">${activityTimeline(day, clock).map((activity) => {
+        const title = activity.route || activity.title;
+        const detail = activity.detail || '';
+        const metadata = [
+          activityDurationLabel(activity) ? `Allow ${activityDurationLabel(activity)}` : '',
+          activity.leaveBy ? `Leave by ${activity.leaveBy}` : '',
+          detail
+        ].filter(Boolean).join(' · ');
+        const mapQuery = activity.address || activity.mapQuery;
+        const reservationAction = activity.reservationLink ? `<a class="mini-action primary" href="${activity.reservationLink}" target="_blank" rel="noopener noreferrer"><span>Reservation</span></a>` : '';
+        const mapAction = mapQuery ? `<a class="mini-action${activity.reservationLink ? '' : ' primary'}" href="${mapsUrl(mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a>` : '';
+        const actions = `${reservationAction}${mapAction}`;
+        const expanded = activity.state === 'current' || activity.state === 'next';
+        return `<article class="run-sheet-item" data-state="${activity.state}" data-expanded="${expanded}"><div class="run-sheet-time">${activity.time || 'Flexible'}</div><div class="run-sheet-content"><h3>${title}</h3>${metadata ? `<p class="run-sheet-meta">${metadata}</p>` : ''}<span class="run-sheet-status">${labels[activity.state]}</span>${actions ? `<div class="run-sheet-actions">${actions}</div>` : ''}</div></article>`;
+      }).join('')}</div>`;
+    }
+
+    function renderDayDialog(dayNumber, clock) {
+      const day = tripData[dayNumber - 1];
+      const hotel = day.hotel;
+      const dialog = document.querySelector('#dayDialog');
+      const body = document.querySelector('#dayDialogBody');
+      const scrollTop = body.scrollTop;
+      dialog.dataset.day = String(dayNumber);
+      document.querySelector('#dayDialogTitle').textContent = `Day ${dayNumber} · ${day.title}`;
+      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item"><div><strong>${hotel.name}</strong><span>${hotel.address}</span></div><a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></section><div class="utility-actions"><a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      body.scrollTop = scrollTop;
+    }
+
+    function refreshOpenDayDialog(clock) {
+      const dialog = document.querySelector('#dayDialog');
+      if (!dialog.open) return;
+      const dayNumber = Number(dialog.dataset.day);
+      if (!Number.isInteger(dayNumber) || dayNumber < 1 || dayNumber > tripData.length) return;
+      renderDayDialog(dayNumber, clock);
     }
 
     function openDayView(dayNumber) {
-      const day = tripDays[dayNumber - 1];
-      const plan = dayPlans[dayNumber - 1];
-      const hotel = hotels.find((stay) => stay.checkIn <= day.dataset.date && day.dataset.date < stay.checkOut) || hotels.at(-1);
-      document.querySelector('#dayDialogTitle').textContent = `Day ${dayNumber} · ${day.querySelector('h3').textContent}`;
-      const body = document.querySelector('#dayDialogBody');
-      const transit = transitByDay[dayNumber];
-      const transitSection = transit ? `<section class="dialog-section"><p class="dialog-section-title">Transit</p><div class="wallet-item"><div><strong>${transit.route}</strong><span>${transit.detail}<br>${transit.local}</span></div><span class="wallet-badge">${transit.mode}</span></div></section>` : '';
-      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Plan</p><ul class="quick-list">${[...day.querySelectorAll('.card > ul > li')].map((item) => `<li>${item.textContent}</li>`).join('')}</ul></section>${transitSection}<section class="dialog-section"><p class="dialog-section-title">Stay</p><div class="wallet-item"><div><strong>${hotel.name}</strong><span>${hotel.address}</span></div><span class="wallet-badge">Booked</span></div></section><div class="utility-actions"><a class="mini-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      const clock = window.tripState || tripClock(previewableNow());
+      renderDayDialog(dayNumber, clock);
       showModalDialog(document.querySelector('#dayDialog'));
     }
 
@@ -2021,6 +2560,10 @@
         // Release the background scroll lock however the dialog closes: close button, backdrop
         // click, Escape, or showAuthGate closing it. The native close event covers every path.
         dialog.addEventListener('close', releaseBodyForDialog);
+        dialog.addEventListener('close', () => {
+          if (typeof syncCompanionPlacement === 'function') syncCompanionPlacement();
+          if (typeof syncCompanionSpeechState === 'function') syncCompanionSpeechState();
+        });
       });
       // Reopen the wallet from the top each time. The dialog body is a persistent scroll
       // container, so without this reset it would reopen wherever it was last left.
@@ -2074,9 +2617,118 @@
       });
     }
 
+    function readPikachuVisibility() {
+      try { return localStorage.getItem(PIKACHU_VISIBILITY_KEY) !== '0'; } catch { return true; }
+    }
+
+    function showCompanionPopover(companion) {
+      if (
+        !companion?.showPopover
+        || companion.hidden
+        || companion.classList.contains('is-inline')
+        || companion.matches(':popover-open')
+      ) return;
+      companion.showPopover();
+    }
+
+    function syncCompanionPlacement(preferredDialog = null) {
+      const companion = document.querySelector('#pikachuCompanion');
+      const home = document.querySelector('#pikachuCompanionHome');
+      const pageDock = document.querySelector('#pikachuPageDock');
+      if (!companion || !home || !pageDock) return;
+
+      const compact = window.matchMedia('(max-width: 900px), (max-height: 620px)').matches;
+      const openDialog = preferredDialog?.open ? preferredDialog : document.querySelector('dialog[open]');
+      const targetDock = compact
+        ? openDialog?.querySelector('[data-companion-dock]') || pageDock
+        : null;
+      const docks = [pageDock, ...document.querySelectorAll('[data-companion-dock]')];
+
+      if (companion.matches?.(':popover-open')) companion.hidePopover();
+      if (targetDock) {
+        if (companion.parentElement !== targetDock) targetDock.append(companion);
+        companion.classList.add('is-inline');
+      } else {
+        if (home.nextElementSibling !== companion) home.after(companion);
+        companion.classList.remove('is-inline');
+      }
+
+      docks.forEach((dock) => {
+        dock.classList.toggle('has-companion', dock === targetDock && !companion.hidden);
+      });
+      if (!targetDock && !companion.hidden) showCompanionPopover(companion);
+    }
+
+    function raiseCompanionAboveDialog() {
+      const companion = document.querySelector('#pikachuCompanion');
+      if (!companion?.showPopover || companion.hidden || companion.classList.contains('is-inline')) return;
+      if (companion.matches(':popover-open')) companion.hidePopover();
+      companion.showPopover();
+    }
+
+    function setPikachuVisibility(visible, persist = true) {
+      const companion = document.querySelector('#pikachuCompanion');
+      const toggle = document.querySelector('#pikachuToggle');
+      if (!companion || !toggle) return;
+      if (!visible && companion.matches?.(':popover-open')) companion.hidePopover();
+      companion.hidden = !visible;
+      if (typeof syncCompanionPlacement === 'function') syncCompanionPlacement();
+      if (visible) showCompanionPopover(companion);
+      companion.classList.remove('speech-visible');
+      toggle.textContent = visible ? 'Hide Pikachu' : 'Show Pikachu';
+      toggle.setAttribute('aria-pressed', String(visible));
+      if (persist) {
+        try { localStorage.setItem(PIKACHU_VISIBILITY_KEY, visible ? '1' : '0'); } catch {}
+      }
+    }
+
+    function setCompanionSpeechMuted(muted) {
+      document.body.classList.toggle('companion-speech-muted', muted);
+      if (muted) document.querySelector('#pikachuCompanion')?.classList.remove('speech-visible');
+    }
+
+    let companionSpeechMutedUntil = 0;
+    function syncCompanionSpeechState() {
+      const active = document.activeElement;
+      const dialogOpen = Boolean(document.querySelector('dialog[open]'));
+      const controlRecentlyUsed = Date.now() < companionSpeechMutedUntil;
+      const textControlActive = Boolean(active?.matches?.('input, textarea, select, [contenteditable="true"]'));
+      const keyboardControlActive = Boolean(
+        active?.matches?.('button, a, [role="button"]')
+        && active.id !== 'pikachuCompanion'
+        && active.matches?.(':focus-visible')
+      );
+      setCompanionSpeechMuted(dialogOpen || controlRecentlyUsed || textControlActive || keyboardControlActive);
+    }
+
+    function initialiseCompanionControls() {
+      const companion = document.querySelector('#pikachuCompanion');
+      const toggle = document.querySelector('#pikachuToggle');
+      setPikachuVisibility(readPikachuVisibility(), false);
+      toggle.addEventListener('click', () => setPikachuVisibility(companion.hidden));
+      document.addEventListener('pointerdown', (event) => {
+        const control = event.target.closest('button, a, input, textarea, select, [role="button"]');
+        if (!control || control === companion) return;
+        companionSpeechMutedUntil = Date.now() + 1200;
+        setCompanionSpeechMuted(true);
+        window.clearTimeout(initialiseCompanionControls.pointerTimer);
+        initialiseCompanionControls.pointerTimer = window.setTimeout(syncCompanionSpeechState, 1200);
+      }, true);
+      document.addEventListener('keydown', (event) => {
+        if (!event.target.closest?.('button, a, input, textarea, select, [role="button"]') || event.target === companion) return;
+        setCompanionSpeechMuted(true);
+      }, true);
+      document.addEventListener('focusin', syncCompanionSpeechState);
+      document.addEventListener('focusout', () => window.setTimeout(syncCompanionSpeechState, 0));
+      const compactLayout = window.matchMedia?.('(max-width: 900px), (max-height: 620px)');
+      compactLayout?.addEventListener?.('change', () => syncCompanionPlacement());
+      window.addEventListener?.('orientationchange', () => syncCompanionPlacement());
+    }
+
     function revealCompanionSpeech() {
       if (!window.matchMedia('(max-width: 900px)').matches) return;
       const companion = document.querySelector('#pikachuCompanion');
+      if (companion.hidden || document.body.classList.contains('companion-speech-muted')) return;
       companion.classList.add('speech-visible');
       window.clearTimeout(revealCompanionSpeech.timer);
       revealCompanionSpeech.timer = window.setTimeout(() => companion.classList.remove('speech-visible'), 2600);
@@ -2105,6 +2757,73 @@
       time.textContent = timing;
       link.hidden = !next.link;
       if (next.link) link.href = next.link;
+    }
+
+    function todayPreviewActivities(timeline) {
+      const selected = [];
+      const add = (activity) => {
+        if (activity && !selected.includes(activity)) selected.push(activity);
+      };
+      let latestComplete;
+      timeline.forEach((activity) => {
+        if (activity.state === 'complete') latestComplete = activity;
+      });
+      add(latestComplete);
+      add(timeline.find((activity) => activity.state === 'current'));
+      add(timeline.find((activity) => activity.state === 'next'));
+      if (selected.length < 2) {
+        timeline.forEach((activity) => {
+          if (activity.state !== 'complete' && selected.length < 3) add(activity);
+        });
+      }
+      return selected
+        .sort((left, right) => timeline.indexOf(left) - timeline.indexOf(right))
+        .slice(0, 3);
+    }
+
+    function renderTodayView(clock) {
+      if (!clock.inTrip) return;
+      const day = tripData[clock.dayNumber - 1];
+      const timeline = activityTimeline(day, clock);
+      const focus = timeline.find((activity) => activity.state === 'current')
+        || timeline.find((activity) => activity.state === 'next')
+        || timeline.find((activity) => !['complete'].includes(activity.state));
+      const { stay: hotel, label: hotelLabel } = currentHotel(clock);
+      const stateLabels = { complete: 'Complete', current: 'Now', next: 'Next', upcoming: 'Later', flexible: 'Flexible' };
+
+      document.querySelector('#todayViewKicker').textContent = `Today · Day ${day.day} · ${day.location}`;
+      document.querySelector('#todayViewTitle').textContent = day.title;
+      document.querySelector('#todayViewSummary').textContent = `${timeline.filter((activity) => activity.state === 'complete').length} of ${timeline.length} stops complete · local trip time`;
+      document.querySelector('#todayNextTime').textContent = focus?.state === 'current' ? `Now · ${focus.time || 'in progress'}` : focus?.time || 'Flexible';
+      document.querySelector('#todayNextTitle').textContent = focus?.route || focus?.title || 'Enjoy the open space in today’s plan';
+      document.querySelector('#todayLeaveBy').textContent = focus?.leaveBy ? `Leave by ${focus.leaveBy}` : focus?.state === 'current' ? 'You’re on schedule' : 'No fixed departure yet';
+
+      const nextMap = document.querySelector('#todayNextMap');
+      nextMap.href = mapsUrl(focus?.address || day.mapQuery);
+      const reservation = document.querySelector('#todayReservation');
+      reservation.hidden = !focus?.reservationLink;
+      if (focus?.reservationLink) reservation.href = focus.reservationLink;
+      const bookingStatus = document.querySelector('#todayBookingStatus');
+      bookingStatus.hidden = !focus?.booking || Boolean(focus?.reservationLink);
+      bookingStatus.querySelector('span').textContent = focus?.booking?.statusLabel || 'Booking confirmed';
+
+      document.querySelector('#todayTransit').textContent = day.transit.route;
+      document.querySelector('#todayTransitDetail').textContent = `${day.transit.detail} · ${day.transit.local}`;
+      document.querySelector('#todayWeather').href = weatherUrl(day.weatherCity);
+      document.querySelector('#todayWeatherCity').textContent = day.weatherCity;
+      document.querySelector('#todayHotel').href = mapsUrl(hotel.address);
+      document.querySelector('#todayHotelLabel').textContent = hotelLabel;
+      document.querySelector('#todayHotelName').textContent = hotel.name;
+      document.querySelector('#todayHotelDetail').textContent = `${hotel.location} · ${hotel.dates}`;
+
+      const preview = todayPreviewActivities(timeline);
+      document.querySelector('#todayRunSheet').innerHTML = preview.map((activity) => `<div class="today-run-row" data-state="${activity.state}"><span class="today-run-time">${activity.time || 'Flexible'}</span><span class="today-run-title">${activity.route || activity.title}</span><span class="today-run-state">${stateLabels[activity.state]}</span></div>`).join('');
+
+      document.querySelector('#todayOpenRunSheet').onclick = () => openDayView(day.day);
+      document.querySelector('#todayFullRoute').onclick = () => {
+        showFullRoute();
+        document.querySelector('main').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      };
     }
 
     let soundEnabled = false;
@@ -2493,6 +3212,7 @@
       const jumpButton = document.querySelector('#jumpToday');
       const todayShortcut = document.querySelector('#todayShortcut');
       let targetDay = tripDays[0];
+      document.body.classList.toggle('is-in-trip', clock.inTrip);
       tripDays.forEach((day) => {
         const isPast = day.dataset.date < clock.currentDate;
         const isToday = day.dataset.date === clock.currentDate;
@@ -2511,27 +3231,51 @@
         kicker.textContent = 'Adventure complete'; status.textContent = 'Trip completed · 15 unforgettable days'; detail.textContent = 'Hong Kong, Shenzhen and Japan · August 2026'; greeting.textContent = `Welcome home, ${travellers}`; jumpButton.textContent = 'Revisit the final day'; targetDay = tripDays.at(-1);
         hideCountdownDelight();
       } else {
-        const location = locationForDay(clock.dayNumber);
+        const currentDay = tripData[clock.dayNumber - 1];
+        const location = currentDay.location;
         const hour = localHour(clock.now, clock.timeZone);
         const salutation = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
-        kicker.textContent = `Day ${clock.dayNumber} of 15 · ${location}`; status.textContent = targetDay.querySelector('h3').textContent; detail.textContent = `${Math.round((clock.dayNumber / 15) * 100)}% of the adventure · local trip time`; greeting.textContent = `${salutation} from ${location}`; jumpButton.textContent = 'Jump to today';
+        kicker.textContent = `Day ${clock.dayNumber} of 15 · ${location}`; status.textContent = currentDay.title; detail.textContent = `${Math.round((clock.dayNumber / 15) * 100)}% of the adventure · local trip time`; greeting.textContent = `${salutation} from ${location}`; jumpButton.textContent = 'Open today’s run sheet';
         hideCountdownDelight();
       }
-      const jumpToTarget = () => { showFullRoute(); targetDay.scrollIntoView({ behavior: 'smooth', block: 'center' }); };
-      jumpButton.onclick = jumpToTarget;
+      const jumpToTarget = () => {
+        if (clock.inTrip) {
+          showTodayMode(clock);
+          document.querySelector('#todayView').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+        showFullRoute();
+        targetDay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      };
+      jumpButton.onclick = clock.inTrip ? () => openDayView(clock.dayNumber) : jumpToTarget;
       todayShortcut.hidden = !clock.inTrip;
       todayShortcut.onclick = jumpToTarget;
       window.tripState = clock;
       applyPreTripCompanionMood(); renderPrepChecklist(clock);
       updateProgress(clock); updateNextBooking(clock); updateHotel(clock); updateTimeGrid(clock); updateActivityMoments(clock); updateStamps(clock); renderWallets(clock);
+      if (clock.inTrip) renderTodayView(clock);
+      refreshOpenDayDialog(clock);
+      if (clock.inTrip && itineraryView === 'auto') showTodayMode(clock);
+      else if (!clock.inTrip) showFullRoute();
     }
 
     function initialiseFilters() {
       chips.forEach((chip) => chip.addEventListener('click', () => {
+        if (chip.dataset.filter === 'all') {
+          showFullRoute();
+          document.querySelector('main').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+        itineraryView = 'region';
+        document.body.classList.remove('is-today-mode');
+        document.querySelector('#todayView').hidden = true;
+        document.querySelector('#todayShortcut').classList.remove('is-active');
+        document.querySelector('#nextBooking').hidden = false;
+        if (window.tripState) renderPrepChecklist(window.tripState);
         chips.forEach((item) => item.classList.remove('active')); chip.classList.add('active');
         const filter = chip.dataset.filter;
-        regions.forEach((region) => { region.hidden = filter !== 'all' && region.dataset.region !== filter; });
-        const target = filter === 'all' ? document.querySelector('main') : [...regions].find((region) => region.dataset.region === filter);
+        regions.forEach((region) => { region.hidden = region.dataset.region !== filter; });
+        const target = [...regions].find((region) => region.dataset.region === filter);
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }));
     }
@@ -2565,9 +3309,8 @@
     function initialiseApp() {
       if (window.__tripAppInitialised) return;
       window.__tripAppInitialised = true;
-      tripDays.forEach((day, index) => { day.dataset.date = `2026-08-${String(index + 1).padStart(2, '0')}`; });
-      Object.entries({ 6: 'teamlab', 8: 'ninja', 11: 'sakura' }).forEach(([dayNumber, effect]) => tripDays[dayNumber - 1].classList.add(`effect-${effect}`));
-      renderDayEnhancements(); initialiseFilters(); initialiseDialogs(); initialiseCompanion(); initialiseSound(); initialiseEasterEggs(); initialiseOffline(); updateTripState(); initialiseCountdownExtras();
+      renderItinerary();
+      renderDayEnhancements(); initialiseFilters(); initialiseDialogs(); initialiseCompanion(); initialiseCompanionControls(); initialiseSound(); initialiseEasterEggs(); initialiseOffline(); updateTripState(); initialiseCountdownExtras();
       window.setInterval(updateTripState, 60000);
     }
 

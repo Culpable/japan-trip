@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bug_sweep>
+<bug_1>
+<summary>
+<title>[P1 Today] Primary run-sheet button renders with invisible text</title>
+<one_line_description>The main Open full run sheet action is white on a transparent card because its colour variables are not defined outside itinerary regions.</one_line_description>
+</summary>
+<file_locations>
+- /Users/sacino/japan-trip/index.html - Today action styles and markup, Lines 1097-1099 and 1597-1599
+</file_locations>
+<issue_description>
+<description>The Today card reuses the region-scoped day-action primary style, but the Today section has no --accent or --text custom properties. Chromium discards the unresolved background and border declarations while retaining white text. At 390x844 on Day 6 noon, the primary path into the run sheet is effectively invisible. Define Today-specific action colours or safe variable fallbacks.</description>
+<code_example><![CDATA[
+```css
+.day-action { color: var(--text); border-color: color-mix(in srgb, var(--accent) 24%, transparent); }
+.day-action.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+```
+]]></code_example>
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Behaviour** | The primary Today action has a clear filled treatment and readable label. | The background and border are transparent while the text remains white. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_1>
+
+<bug_2>
+<summary>
+<title>[P1 Today] Day 6 noon omits Dior completion and reservation context</title>
+<one_line_description>The default Day 6 Today preview excludes the completed Dior stop and exposes no booking context while teamLab is next.</one_line_description>
+</summary>
+<file_locations>
+- /Users/sacino/japan-trip/index.html - `tripData`, Lines 1784-1793
+- /Users/sacino/japan-trip/index.html - `renderTodayView`, Lines 2622-2655
+- /Users/sacino/japan-trip/tests/live-run-sheet.test.js - Day 6 noon assertions, Lines 36-52
+</file_locations>
+<issue_description>
+<description>At 12:00PM JST on 6 August, the timeline correctly produces Dior as complete and teamLab as next. The compact preview anchors one row before teamLab, yielding only the Toyosu transfer and teamLab, while teamLab has no reservationLink so the booking control is hidden. The rendered Today view therefore fails to show Dior complete and teamLab next together with booking context. Select the preview by meaningful states and expose a confirmed-admission state when a booked activity has no external reservation URL.</description>
+<code_example><![CDATA[
+```text
+Timeline: Dior=complete, metro=flexible, Toyosu transfer=flexible, teamLab=next
+Actual preview: Toyosu transfer, teamLab
+Actual booking context: hidden
+```
+]]></code_example>
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Day 6 Today preview** | Dior is visibly complete and teamLab is visibly next. | Dior is omitted from the compact preview. |
+| **Booking context** | teamLab shows confirmed admission context with its leave-by and map. | The reservation control is hidden because no external URL is stored. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_2>
+
+<bug_3>
+<summary>
+<title>[P1 timeline] Deadline-only and ordered flexible stops do not advance correctly</title>
+<one_line_description>Future-day bookings can be labelled globally next, deadlines without instants remain flexible, and earlier untimed stops resurface after later timed events.</one_line_description>
+</summary>
+<file_locations>
+- /Users/sacino/japan-trip/index.html - `activityTimeline`, Lines 2179-2200
+- /Users/sacino/japan-trip/index.html - Day 14 deadline data, Lines 1879-1885
+- /Users/sacino/japan-trip/index.html - `renderTodayView`, Lines 2625-2628
+</file_locations>
+<issue_description>
+<description>The state engine computes nextTimed inside any opened day even when that day is not current, and every activity without an instant remains flexible forever. This labels future-day bookings Up next, ignores Day 14's visible 2:00PM departure as a deadline, and moves Today backwards to earlier transfers or sightseeing after a later timed milestone completes. Add machine-readable instants for time-critical entries, assign next only on the current day, and mark earlier ordered flexible stops complete when a later timed milestone has started or completed.</description>
+<code_example><![CDATA[
+```text
+Pre-trip Day 6: Dior=next
+Day 6 at 18:30: focus=Ginza to Toyosu after teamLab completed
+Day 11 at 12:30: focus=Arashiyama before 8:00AM after kimono completed
+Day 14 at 13:00: focus=first flexible stop instead of 14:00 departure
+```
+]]></code_example>
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Future day dialog** | Future activities remain upcoming until their day becomes current. | The first timed activity in each future day is Up next. |
+| **Current-day focus** | Today advances through the ordered plan and prioritises known deadlines. | Earlier untimed stops remain flexible and can become the focus after later milestones. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_3>
+
+<bug_4>
+<summary>
+<title>[P1 run sheet] Missing activity locations open unrelated map destinations</title>
+<one_line_description>Rows without their own location always receive an Open map action pointing at the day-level destination.</one_line_description>
+</summary>
+<file_locations>
+- /Users/sacino/japan-trip/index.html - Day 6 activities, Lines 1784-1789
+- /Users/sacino/japan-trip/index.html - `renderRunSheet`, Lines 2383-2396
+</file_locations>
+<issue_description>
+<description>renderRunSheet uses activity.address || day.mapQuery and always renders Open map. Travel across Tokyo to Toyosu therefore opens Dior Café Ginza, while other locationless rows can open unrelated hotels or landmarks. Add a specific mapQuery or address to mappable activities and omit the row-level map action for non-location tasks instead of silently falling back to the day destination.</description>
+<code_example><![CDATA[
+```javascript
+const mapQuery = activity.address || day.mapQuery;
+```
+]]></code_example>
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Open map** | Each action opens the named stop or a deliberately modelled endpoint. | Missing locations fall back to an unrelated day-level destination. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_4>
+
+<bug_5>
+<summary>
+<title>[P1 canonical model] Hero location bypasses tripData and contradicts Today</title>
+<one_line_description>The in-trip hero uses a hardcoded day-range location while Today reads the canonical day location.</one_line_description>
+</summary>
+<file_locations>
+- /Users/sacino/japan-trip/index.html - `locationForDay`, Lines 2152-2158
+- /Users/sacino/japan-trip/index.html - `updateTripState`, Lines 3068-3073
+</file_locations>
+<issue_description>
+<description>The canonical model records the exact location for each day, but updateTripState still calls locationForDay for the hero. Day 3 says Hong Kong and Shenzhen in the hero while Today says Guangzhou, and Day 12 says Kyoto and Nara while Today says Nara. Derive the hero location from tripData so there is one source of truth.</description>
+<code_example><![CDATA[
+```text
+Day 3: hero=Hong Kong & Shenzhen; tripData=Guangzhou
+Day 12: hero=Kyoto & Nara; tripData=Nara
+```
+]]></code_example>
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Canonical location** | Hero and Today use the current day location from tripData. | The hero uses a separate hardcoded mapping and disagrees with Today. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_5>
+
+<bug_6>
+<summary>
+<title>[P1 time] Day 15 flight status completes one hour before Perth arrival</title>
+<one_line_description>The model stores a 780-minute duration for a Tokyo-to-Perth interval that spans 840 minutes.</one_line_description>
+</summary>
+<file_locations>
+- /Users/sacino/japan-trip/index.html - Day 15 transit model, Lines 1890-1895
+- /Users/sacino/japan-trip/index.html - `activityTimeline`, Lines 2185-2198
+</file_locations>
+<issue_description>
+<description>The final transit begins at 9:30AM JST and lists arrival at 10:30PM AWST. Those endpoints are 840 minutes apart, but durationMinutes is 780, so the run sheet marks the flight complete at 9:30PM Perth time. Store the correct duration or an explicit arrival instant with the destination offset.</description>
+<code_example><![CDATA[
+```text
+Departure: 2026-08-15 09:30 JST = 00:30 UTC
+Arrival:   2026-08-15 22:30 AWST = 14:30 UTC
+Elapsed:   840 minutes
+```
+]]></code_example>
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Flight state** | Current until 10:30PM Perth time. | Complete at 9:30PM Perth time. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_6>
+
+<bug_7>
+<summary>
+<title>[P1 Today] Final-day stay card calls a checked-out hotel Tonight</title>
+<one_line_description>Day 15 Today labels Narita Tobu Hotel as tonight's stay even though checkout is that morning.</one_line_description>
+</summary>
+<file_locations>
+- /Users/sacino/japan-trip/index.html - Today stay label, Lines 1614-1617
+- /Users/sacino/japan-trip/index.html - `currentHotel`, Lines 2245-2249
+- /Users/sacino/japan-trip/index.html - `renderTodayView`, Lines 2629 and 2649-2651
+</file_locations>
+<issue_description>
+<description>The dashboard already returns Departing from on the final day through currentHotel, but Today bypasses that helper and keeps a static Tonight label. Render the Today stay card from the same helper so the departure-day context is accurate.</description>
+<code_example><![CDATA[
+```text
+Model checkout: 2026-08-15
+Dashboard label: Departing from
+Today label: Tonight
+```
+]]></code_example>
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Day 15 stay context** | The card says Departing from or describes morning checkout. | The card presents the checked-out hotel as tonight's stay. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_7>
+
+<bug_8>
+<summary>
+<title>[P1 boundary] Post-trip refresh leaves Today-hidden state behind</title>
+<one_line_description>A session crossing from Day 15 Today mode into 16 August restores regions but not the Full route selection or next-booking panel.</one_line_description>
+</summary>
+<file_locations>
+- /Users/sacino/japan-trip/index.html - `showTodayMode`, Lines 2215-2226
+- /Users/sacino/japan-trip/index.html - `updateTripState`, Lines 3084-3096
+</file_locations>
+<issue_description>
+<description>showTodayMode clears region chip selection and hides nextBooking. On the first post-trip minute, updateTripState hides Today and reveals all regions but does not activate Full route or restore nextBooking. Use a dedicated non-trip reset path when crossing out of the trip while preserving explicit route or region choices only during the in-trip period.</description>
+<code_example><![CDATA[
+```text
+Day 15 Today: nextBookingHidden=true, fullRouteActive=false
+16 August refresh: nextBookingHidden=true, fullRouteActive=false, allRegionsVisible=true
+```
+]]></code_example>
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Post-trip view state** | Full route is selected and route-level content is restored. | Regions appear with no active route chip and next booking stays hidden. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_8>
+
+<bug_9>
+<summary>
+<title>[P1 Pikachu] Manual visibility toggle bypasses control speech suppression</title>
+<one_line_description>Pointer interaction with the non-Pikachu visibility control is exempted from the temporary speech mute.</one_line_description>
+</summary>
+<file_locations>
+- /Users/sacino/japan-trip/index.html - `initialiseCompanionControls`, Lines 2567-2579
+- /Users/sacino/japan-trip/tests/pikachu-visibility-controls.test.js - static suppression coverage
+</file_locations>
+<issue_description>
+<description>The pointerdown handler suppresses speech for non-Pikachu controls but returns early when the control is pikachuToggle. On desktop, Show Pikachu restores the companion with its bubble immediately visible while the toggle remains active. Treat the visibility toggle like every other non-Pikachu control while continuing to exempt the Pikachu companion itself.</description>
+<code_example><![CDATA[
+```javascript
+if (!control || control === companion || control === toggle) return;
+```
+]]></code_example>
+<expected_vs_actual><![CDATA[
+| Aspect | Expected | Actual |
+|--------|----------|--------|
+| **Pointer activation** | Show or Hide Pikachu temporarily suppresses the bubble. | Showing Pikachu makes the desktop bubble immediately visible. |
+| **Input consistency** | Pointer and keyboard activation use the same suppression rule. | Only pointer activation is exempted. |
+]]></expected_vs_actual>
+</issue_description>
+</bug_9>
+</bug_sweep>
