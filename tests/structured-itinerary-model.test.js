@@ -44,6 +44,16 @@ assert.equal(dior.reservationLink, 'https://www.tablecheck.com/en/reservation/4L
 assert.equal(teamLab.instant, '2026-08-06T16:30:00+09:00');
 assert.equal(teamLab.leaveBy, '3:45PM');
 
+const dayThirteen = tripData[12];
+const universalStudios = dayThirteen.activities.find((activity) => activity.id === 'universal-studios');
+assert.equal(dayThirteen.date, '2026-08-13');
+assert.equal(universalStudios.booking?.name, 'USJ Express Pass + Super Nintendo World');
+assert.equal(universalStudios.booking?.displayDate, 'Thursday 13 August');
+assert.ok(
+  dayThirteen.notes.some((note) => note.kind === 'confirmed' && /USJ Express Pass/.test(note.text)),
+  'Thursday 13 August should present the USJ Express Pass as confirmed'
+);
+
 assert.doesNotMatch(html, /const dayPlans =|const transitByDay =|const activityMoments =/, 'legacy split itinerary datasets should be removed');
 
 console.log('structured itinerary model test passed');

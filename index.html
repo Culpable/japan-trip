@@ -1716,7 +1716,7 @@
 
     <aside class="urgent">
       <span class="urgent-mark">!</span>
-      <p><strong>Still to book:</strong> Shibuya Sky · USJ Express Pass</p>
+      <p><strong>Still to book:</strong> Shibuya Sky</p>
     </aside>
 
     <section class="prep-checklist" id="prepChecklist" hidden aria-label="Pre-trip preparation checklist">
@@ -1954,12 +1954,12 @@
           day: 13, date: '2026-08-13', weekday: 'THU', region: 'osaka', location: 'Osaka', title: 'Universal Studios & Osaka night', mapQuery: 'DoubleTree by Hilton Osaka Castle', weatherCity: 'Osaka', hotel: stays.osaka,
           transit: { id: 'osaka-usj-transit', order: 0, mode: 'Rail', route: 'Osaka → Universal City → Dotonbori', detail: 'JR and Osaka Metro · check live route', local: '大阪駅 → ユニバーサルシティ駅 → なんば駅' },
           activities: [
-            { id: 'universal-studios', order: 1, title: 'Universal Studios Japan and Super Nintendo World', address: 'Universal Studios Japan, Osaka, Japan' },
+            { id: 'universal-studios', order: 1, title: 'Universal Studios Japan and Super Nintendo World', address: 'Universal Studios Japan, Osaka, Japan', booking: { emoji: '🎢', name: 'USJ Express Pass + Super Nintendo World', shortName: 'USJ Express Pass', displayDate: 'Thursday 13 August', statusLabel: 'Express Pass booked' } },
             { id: 'umeda-sky', order: 2, title: 'Umeda Sky Building at night if energy allows', address: 'Umeda Sky Building, Osaka, Japan' },
             { id: 'don-quijote-wheel', order: 3, title: 'Ride the Don Quijote Ferris wheel' },
             { id: 'dotonbori-food', order: 4, title: 'Dotonbori street food and takoyaki crawl', address: 'Dotonbori, Osaka, Japan' }
           ],
-          notes: [{ kind: 'booking', text: 'USJ Express Pass and Super Nintendo World entry sell out months ahead' }]
+          notes: [{ kind: 'confirmed', text: 'USJ Express Pass + Super Nintendo World · Thursday 13 August 2026' }]
         },
         {
           day: 14, date: '2026-08-14', weekday: 'FRI', region: 'osaka', location: 'Osaka & Koyasan', title: 'Koyasan day trip → return to Tokyo', mapQuery: 'Narita Tobu Hotel Airport', weatherCity: 'Narita', hotel: stays.narita,
@@ -2087,10 +2087,9 @@
     ];
 
     // A shared prep list the two of them tick off together; progress persists per-device.
-    // The first two mirror the "Still to book" banner so bookings live in one place.
+    // The Shibuya task mirrors the "Still to book" banner so bookings live in one place.
     const preTripTasks = [
       { id: 'book-shibuya', label: 'Book Shibuya Sky timed entry (on the 24th of July)' },
-      { id: 'book-usj', label: 'Book USJ Express Pass + Nintendo World' },
       { id: 'passports', label: 'Passports valid 6+ months' },
       { id: 'money', label: 'Set up Suica, WeChat Pay & Alipay' },
       { id: 'esim', label: 'Buy a Japan eSIM / pocket wifi' },

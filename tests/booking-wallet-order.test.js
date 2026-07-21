@@ -63,7 +63,7 @@ function verifySameDayBookingCompletion() {
 
   assert.deepEqual(
     walletNames(bookingWallet.rows),
-    ['teamLab Planets', 'Ninja Restaurant', 'Kimono Miyabi Kyoto', 'Dior Café'],
+    ['teamLab Planets', 'Ninja Restaurant', 'Kimono Miyabi Kyoto', 'USJ Express Pass + Super Nintendo World', 'Dior Café'],
     'upcoming bookings should be shown first and elapsed bookings should move to the end'
   );
   assert.match(bookingWallet.rows.at(-1).className, /is-past/, 'Dior Café should be marked past after its 10:30AM reservation');
@@ -78,8 +78,10 @@ function verifyNextBookingPromotion() {
   vm.runInContext('renderWallets(clock)', context);
 
   assert.equal(walletNames(bookingWallet.rows)[0], 'Kimono Miyabi Kyoto', 'the next confirmed booking should appear first');
+  assert.equal(walletNames(bookingWallet.rows)[1], 'USJ Express Pass + Super Nintendo World', 'the later USJ booking should remain with upcoming bookings');
   assert.equal(bookingWallet.rows[0].className, 'wallet-item');
-  assert.ok(bookingWallet.rows.slice(1).every((row) => row.className.includes('is-past')), 'completed bookings should follow the next booking');
+  assert.equal(bookingWallet.rows[1].className, 'wallet-item');
+  assert.ok(bookingWallet.rows.slice(2).every((row) => row.className.includes('is-past')), 'completed bookings should follow upcoming bookings');
 }
 
 verifySameDayBookingCompletion();
