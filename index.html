@@ -799,6 +799,8 @@
       font-weight: 800;
       text-decoration: none;
     }
+    .next-booking-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .4rem; }
+    button.booking-link { border: 0; cursor: pointer; font-family: inherit; }
     .day.effect-teamlab.is-today .card {
       background: linear-gradient(120deg, #dff6ff, #e7e2ff, #ffe8f0, #dff6ff);
       background-size: 300% 300%;
@@ -1114,6 +1116,13 @@
       color: #6b4b08;
     }
     .local-name-action .action-ico { width: 16px; height: 16px; }
+    .moment-local-action { min-height: 32px; padding: .38rem .55rem; font-size: .66rem; white-space: nowrap; }
+    .moment-place { display: flex; align-items: center; gap: .5rem; }
+    .moment-place > [data-local-name] { min-width: 0; flex: 1; }
+    .day-title-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .6rem; align-items: start; margin-bottom: 1rem; }
+    .day-title-row h3 { margin: 0; }
+    .day-title-copy span { display: block; margin-top: .3rem; color: var(--muted); font-size: .7rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+    .day-title-row.is-local { padding: .65rem; border-radius: 12px; }
     .hotel-now.is-local h3, .today-essential.is-local h3 { font-size: 1.12rem; }
     .hotel-now.is-local p:not(.utility-label), .today-essential.is-local p:not(.today-card-label) {
       color: #544a32;
@@ -1323,6 +1332,7 @@
     .today-run-row[data-state="next"] { box-shadow: inset 3px 0 #ffcc28; background: #fff; }
     .today-run-time, .today-run-state { color: #647383; font-size: .68rem; font-weight: 900; text-transform: uppercase; }
     .today-run-title { min-width: 0; font-size: .82rem; font-weight: 800; }
+    .today-run-row .moment-local-action { grid-column: 2 / -1; justify-self: start; }
 
     .run-sheet { display: grid; gap: .65rem; }
     .run-sheet-item {
@@ -1449,10 +1459,12 @@
       .time-grid { gap: .45rem; }
       .transit-card { grid-template-columns: auto minmax(0, 1fr); }
       .copy-transit { grid-column: 2; justify-self: start; }
+      .transit-card .moment-local-action { grid-column: 1 / -1; justify-self: start; }
       .card li.is-next-moment { padding-left: .78rem; padding-top: 2rem; }
       .card li.is-next-moment::after { top: .72rem; transform: none; }
       .trip-dialog { max-height: calc(100dvh - 1rem); border-radius: 20px; }
       .wallet-item { grid-template-columns: 1fr; }
+      .next-booking-actions { grid-column: 2; justify-content: flex-start; }
       .wallet-actions { justify-content: flex-start; }
       .wallet-badge { width: fit-content; }
       body.is-in-trip .hero { width: calc(100% - 1rem); }
@@ -1465,6 +1477,8 @@
       .today-essentials { grid-template-columns: 1fr; }
       .today-run-row { grid-template-columns: 60px minmax(0, 1fr); }
       .today-run-state { grid-column: 2; }
+      .day-title-row { grid-template-columns: 1fr; }
+      .day-title-row .moment-local-action { justify-self: start; }
       .run-sheet-item { grid-template-columns: 68px minmax(0, 1fr); gap: .65rem; }
     }
     /* ---- Pre-trip countdown delight -------------------------------------------- */
@@ -1697,23 +1711,27 @@
         <button class="utility-chip today-full-route" id="todayFullRoute" type="button">Full route</button>
       </div>
       <div class="today-command-grid">
-        <article class="today-next">
+        <article class="today-next local-place" id="todayNext">
           <p class="today-card-label">Up next</p>
           <div class="today-next-time" id="todayNextTime">Flexible</div>
-          <h3 id="todayNextTitle">Checking today’s plan…</h3>
+          <h3 id="todayNextTitle" data-local-name>Checking today’s plan…</h3>
           <p class="today-leave-by" id="todayLeaveBy">No fixed departure yet</p>
           <div class="today-actions">
             <button class="day-action primary" id="todayOpenRunSheet" type="button"><span>Open full run sheet</span></button>
             <a class="day-action" id="todayNextMap" href="#" target="_blank" rel="noopener noreferrer"><span>Open map</span></a>
             <a class="day-action" id="todayReservation" href="#" target="_blank" rel="noopener noreferrer" hidden><span>Reservation</span></a>
+            <button class="day-action local-name-action" id="todayNextLocal" type="button" aria-pressed="false" hidden><span>Show local name</span></button>
             <span class="booking-status" id="todayBookingStatus" hidden><span>Booking confirmed</span></span>
           </div>
         </article>
         <div class="today-essentials">
-          <article class="today-essential">
+          <article class="today-essential local-place" id="todayTransitCard">
             <p class="today-card-label">Getting around</p>
-            <h3 id="todayTransit">Checking today’s transit…</h3>
-            <p id="todayTransitDetail"></p>
+            <h3 id="todayTransit" data-local-name>Checking today’s transit…</h3>
+            <p id="todayTransitDetail" data-local-detail></p>
+            <div class="utility-actions">
+              <button class="mini-action local-name-action" id="todayTransitLocal" type="button" aria-pressed="false"><span>Show local name</span></button>
+            </div>
           </article>
           <a class="today-essential today-essential-link" id="todayWeather" href="#" target="_blank" rel="noopener noreferrer">
             <p class="today-card-label">Weather</p>
@@ -1734,14 +1752,17 @@
       <div class="today-run-sheet" id="todayRunSheet"></div>
     </section>
 
-    <section class="next-booking" id="nextBooking" aria-live="polite">
+    <section class="next-booking local-place" id="nextBooking" aria-live="polite">
       <span class="next-booking-tag" aria-hidden="true">NEXT</span>
       <div>
         <p class="next-booking-label">Next confirmed moment</p>
-        <h3 id="nextBookingName">Checking the calendar…</h3>
+        <h3 id="nextBookingName" data-local-name>Checking the calendar…</h3>
         <p class="next-booking-time" id="nextBookingTime"></p>
       </div>
-      <a class="booking-link" id="nextBookingLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open reservation</a>
+      <div class="next-booking-actions">
+        <button class="booking-link local-name-action" id="nextBookingLocal" type="button" aria-pressed="false" hidden>Show local name</button>
+        <a class="booking-link" id="nextBookingLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Open reservation</a>
+      </div>
     </section>
 
     <aside class="urgent">
@@ -1837,7 +1858,7 @@
     const tripData = (() => {
       const stays = {
         shenzhen: { id: 'shenzhen', emoji: '🏙️', location: 'Shenzhen', name: 'The Langham, Shenzhen', address: '7888 Shennan Boulevard, Futian District, Shenzhen 518040, China', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', localName: '深圳东海朗廷酒店', localAddress: '中国广东省深圳市福田区深南大道7888号', checkIn: '2026-08-01', checkOut: '2026-08-04', dates: '1–4 August · 3 nights' },
-        hongKong: { id: 'hong-kong-airport', emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', localName: '香港银樾美憬阁精选酒店', localAddress: '中国香港东涌达东路16号', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night' },
+        hongKong: { id: 'hong-kong-airport', emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', localLanguage: 'Traditional Chinese', localLang: 'zh-Hant', localName: '香港銀樾美憬閣精選酒店', localAddress: '香港東涌達東路16號', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night' },
         tokyo: { id: 'tokyo-ginza', emoji: '🗼', location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'YOTEL 東京 銀座', localAddress: '〒105-0004 東京都港区新橋1丁目7-7', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
         fuji: { id: 'fuji', emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '精進レークホテル', localAddress: '〒401-0336 山梨県南都留郡富士河口湖町精進255', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night' },
         kyoto: { id: 'kyoto', emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0846, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ノーガホテル 清水 京都', localAddress: '〒605-0846 京都府京都市東山区五条橋東4丁目450番1号', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights' },
@@ -1846,63 +1867,63 @@
       };
       return [
         {
-          day: 1, date: '2026-08-01', weekday: 'SAT', region: 'china', location: 'Hong Kong & Shenzhen', title: 'Arrive Hong Kong → cross to Shenzhen', mapQuery: 'The Langham Shenzhen', weatherCity: 'Shenzhen', hotel: stays.shenzhen,
-          transit: { id: 'cx184-flight', order: 0, mode: 'Flight', route: 'Perth T1 → Hong Kong', detail: 'CX 184 · 8:20AM–4:20PM', local: '香港國際機場', time: '8:20AM', instant: '2026-08-01T08:20:00+08:00', durationMinutes: 480, address: 'Hong Kong International Airport' },
+          id: 'day-1', day: 1, date: '2026-08-01', weekday: 'SAT', region: 'china', location: 'Hong Kong & Shenzhen', localLocation: '香港・深圳', title: 'Arrive Hong Kong → cross to Shenzhen', localName: '抵達香港 → 前往深圳', localLanguage: 'Traditional Chinese', localLang: 'zh-Hant', mapQuery: 'The Langham Shenzhen', weatherCity: 'Shenzhen', hotel: stays.shenzhen,
+          transit: { id: 'cx184-flight', order: 0, mode: 'Flight', route: 'Perth T1 → Hong Kong', detail: 'CX 184 · 8:20AM–4:20PM', localName: '珀斯第1航廈 → 香港國際機場', localAddress: '香港國際機場', localLanguage: 'Traditional Chinese', localLang: 'zh-Hant', time: '8:20AM', instant: '2026-08-01T08:20:00+08:00', durationMinutes: 480, address: 'Hong Kong International Airport' },
           activities: [
-            { id: 'cross-shenzhen-border', order: 1, title: 'Cross Lo Wu or Shenzhen Bay border into China' },
-            { id: 'set-up-china-apps', order: 2, title: 'Set up DiDi, WeChat Pay, Alipay and Meituan' },
-            { id: 'shenzhen-neighbourhood', order: 3, title: 'Check in and explore the local neighbourhood', address: stays.shenzhen.address }
+            { id: 'cross-shenzhen-border', order: 1, title: 'Cross Lo Wu or Shenzhen Bay border into China', localName: '经罗湖或深圳湾口岸进入中国内地', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' },
+            { id: 'set-up-china-apps', order: 2, title: 'Set up DiDi, WeChat Pay, Alipay and Meituan', localName: '设置滴滴、微信支付、支付宝和美团', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' },
+            { id: 'shenzhen-neighbourhood', order: 3, title: 'Check in and explore the local neighbourhood', localName: '办理入住并探索酒店周边', localAddress: stays.shenzhen.localAddress, localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', address: stays.shenzhen.address }
           ],
           notes: []
         },
         {
-          day: 2, date: '2026-08-02', weekday: 'SUN', region: 'china', location: 'Shenzhen', title: 'Huaqiangbei & Shenzhen city life', mapQuery: 'Huaqiangbei Shenzhen', weatherCity: 'Shenzhen', hotel: stays.shenzhen,
-          transit: { id: 'shenzhen-local-transit', order: 1.5, mode: 'Local', route: 'Huaqiangbei → Futian → Nanshan', detail: 'Metro and DiDi · check live route', local: '华强北 → 福田 → 南山' },
+          id: 'day-2', day: 2, date: '2026-08-02', weekday: 'SUN', region: 'china', location: 'Shenzhen', localLocation: '深圳', title: 'Huaqiangbei & Shenzhen city life', localName: '华强北与深圳城市生活', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', mapQuery: 'Huaqiangbei Shenzhen', weatherCity: 'Shenzhen', hotel: stays.shenzhen,
+          transit: { id: 'shenzhen-local-transit', order: 1.5, mode: 'Local', route: 'Huaqiangbei → Futian → Nanshan', detail: 'Metro and DiDi · check live route', localName: '华强北 → 福田 → 南山', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' },
           activities: [
-            { id: 'huaqiangbei-markets', order: 1, title: 'Explore the Huaqiangbei electronics markets', address: 'Huaqiangbei, Futian District, Shenzhen, China' },
-            { id: 'meituan-drone', order: 2, title: 'Try Meituan drone food delivery' },
-            { id: 'futian-nanshan', order: 3, title: 'Visit Futian CBD and the Nanshan tech area' },
-            { id: 'shenzhen-food-halls', order: 4, title: 'Browse wet markets and local food halls' }
+            { id: 'huaqiangbei-markets', order: 1, title: 'Explore the Huaqiangbei electronics markets', localName: '逛华强北电子市场', localAddress: '中国广东省深圳市福田区华强北', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', address: 'Huaqiangbei, Futian District, Shenzhen, China' },
+            { id: 'meituan-drone', order: 2, title: 'Try Meituan drone food delivery', localName: '体验美团无人机外卖', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' },
+            { id: 'futian-nanshan', order: 3, title: 'Visit Futian CBD and the Nanshan tech area', localName: '游览福田中央商务区和南山科技园', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' },
+            { id: 'shenzhen-food-halls', order: 4, title: 'Browse wet markets and local food halls', localName: '逛湿货市场和本地美食广场', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' }
           ],
           notes: []
         },
         {
-          day: 3, date: '2026-08-03', weekday: 'MON', region: 'china', location: 'Guangzhou', title: 'Day trip to Guangzhou Circle', mapQuery: 'Guangzhou Circle', weatherCity: 'Guangzhou', hotel: stays.shenzhen,
-          transit: { id: 'guangzhou-rail', order: 0, mode: 'Rail', route: 'Shenzhen North → Guangzhou South', detail: 'High-speed rail · about 55 minutes', local: '深圳北站 → 广州南站', durationMinutes: 55, address: 'Guangzhou South Railway Station' },
+          id: 'day-3', day: 3, date: '2026-08-03', weekday: 'MON', region: 'china', location: 'Guangzhou', localLocation: '广州', title: 'Day trip to Guangzhou Circle', localName: '广州圆大厦一日游', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', mapQuery: 'Guangzhou Circle', weatherCity: 'Guangzhou', hotel: stays.shenzhen,
+          transit: { id: 'guangzhou-rail', order: 0, mode: 'Rail', route: 'Shenzhen North → Guangzhou South', detail: 'High-speed rail · about 55 minutes', localName: '深圳北站 → 广州南站', localAddress: '中国广东省广州市番禺区广州南站', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', durationMinutes: 55, address: 'Guangzhou South Railway Station' },
           activities: [
-            { id: 'guangzhou-circle', order: 1, title: 'See the 138-metre coin-shaped tower on the Pearl River', address: 'Guangzhou Circle, Liwan District, Guangzhou, China' },
-            { id: 'guangzhou-dusk', order: 2, title: 'Stay for dusk photography and the figure-eight reflection' },
-            { id: 'return-shenzhen', order: 3, title: 'Return to Shenzhen in the evening' }
+            { id: 'guangzhou-circle', order: 1, title: 'See the 138-metre coin-shaped tower on the Pearl River', localName: '参观珠江畔高138米的广州圆大厦', localAddress: '中国广东省广州市荔湾区东沙大道', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', address: 'Guangzhou Circle, Liwan District, Guangzhou, China' },
+            { id: 'guangzhou-dusk', order: 2, title: 'Stay for dusk photography and the figure-eight reflection', localName: '黄昏拍摄广州圆及其“8”字倒影', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' },
+            { id: 'return-shenzhen', order: 3, title: 'Return to Shenzhen in the evening', localName: '傍晚返回深圳', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' }
           ],
           notes: [{ kind: 'note', text: 'The Guangzhou Circle is in Guangzhou, not Shenzhen. The high-speed rail is the practical route.' }]
         },
         {
-          day: 4, date: '2026-08-04', weekday: 'TUE', region: 'china', location: 'Hong Kong', title: 'Final Shenzhen day → Hong Kong', mapQuery: 'The Silveri Hong Kong', weatherCity: 'Hong Kong', hotel: stays.hongKong,
-          transit: { id: 'shenzhen-hong-kong', order: 2, mode: 'Border', route: 'Shenzhen → Hong Kong airport', detail: 'Border crossing and airport transfer · check live route', local: '深圳 → 香港國際機場', address: stays.hongKong.address },
+          id: 'day-4', day: 4, date: '2026-08-04', weekday: 'TUE', region: 'china', location: 'Hong Kong', localLocation: '香港', title: 'Final Shenzhen day → Hong Kong', localName: '深圳最后一天 → 前往香港', localLanguage: 'Simplified Chinese and Traditional Chinese', localLang: 'und', mapQuery: 'The Silveri Hong Kong', weatherCity: 'Hong Kong', hotel: stays.hongKong,
+          transit: { id: 'shenzhen-hong-kong', order: 2, mode: 'Border', route: 'Shenzhen → Hong Kong airport', detail: 'Border crossing and airport transfer · check live route', localName: '深圳 → 香港國際機場', localAddress: stays.hongKong.localAddress, localLanguage: 'Simplified Chinese and Traditional Chinese', localLang: 'und', address: stays.hongKong.address },
           activities: [
-            { id: 'final-shenzhen', order: 1, title: 'Final Shenzhen shopping and street food' },
-            { id: 'cross-hong-kong', order: 2.5, title: 'Cross back into Hong Kong' },
-            { id: 'airport-hotel', order: 3, title: 'Stay near the airport for the early departure', address: stays.hongKong.address }
+            { id: 'final-shenzhen', order: 1, title: 'Final Shenzhen shopping and street food', localName: '最后一天在深圳购物和品尝街头美食', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' },
+            { id: 'cross-hong-kong', order: 2.5, title: 'Cross back into Hong Kong', localName: '返回香港', localLanguage: 'Traditional Chinese', localLang: 'zh-Hant' },
+            { id: 'airport-hotel', order: 3, title: 'Stay near the airport for the early departure', localName: '入住機場附近酒店，準備明早出發', localAddress: stays.hongKong.localAddress, localLanguage: 'Traditional Chinese', localLang: 'zh-Hant', address: stays.hongKong.address }
           ],
           notes: [{ kind: 'note', text: 'CX 450 departs at 9:55AM tomorrow. Aim to reach the airport by 7:30AM.' }]
         },
         {
-          day: 5, date: '2026-08-05', weekday: 'WED', region: 'tokyo', location: 'Tokyo', title: 'Fly to Tokyo & first night in Ginza', mapQuery: 'YOTEL Japan Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
-          transit: { id: 'cx450-flight', order: 0, mode: 'Flight', route: 'Hong Kong T1 → Narita T2', detail: 'CX 450 · 9:55AM–5:15PM', local: '香港國際機場 → 成田空港第2ターミナル', time: '9:55AM', instant: '2026-08-05T09:55:00+08:00', durationMinutes: 380, leaveBy: '7:30AM', address: 'Narita International Airport Terminal 2' },
+          id: 'day-5', day: 5, date: '2026-08-05', weekday: 'WED', region: 'tokyo', location: 'Tokyo', localLocation: '東京', title: 'Fly to Tokyo & first night in Ginza', localName: '東京へ飛び、銀座で最初の夜', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'YOTEL Japan Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
+          transit: { id: 'cx450-flight', order: 0, mode: 'Flight', route: 'Hong Kong T1 → Narita T2', detail: 'CX 450 · 9:55AM–5:15PM', localName: '香港國際機場第1客運大樓 → 成田空港第2ターミナル', localAddress: '成田国際空港 第2ターミナル', localLanguage: 'Traditional Chinese and Japanese', localLang: 'und', time: '9:55AM', instant: '2026-08-05T09:55:00+08:00', durationMinutes: 380, leaveBy: '7:30AM', address: 'Narita International Airport Terminal 2' },
           activities: [
-            { id: 'tokyo-check-in', order: 1, title: 'Check in and pick up a Suica card at Narita', address: stays.tokyo.address },
-            { id: 'ginza-dior', order: 2, title: 'Explore Ginza and the Dior Ginza boutique', address: 'House of Dior Ginza, Tokyo, Japan' },
-            { id: 'konbini-run', order: 3, title: 'Make the first Lawson or 7-Eleven run' }
+            { id: 'tokyo-check-in', order: 1, title: 'Check in and pick up a Suica card at Narita', localName: 'ホテルにチェックインし、成田空港でSuicaを受け取る', localAddress: stays.tokyo.localAddress, localLanguage: 'Japanese', localLang: 'ja', address: stays.tokyo.address },
+            { id: 'ginza-dior', order: 2, title: 'Explore Ginza and the Dior Ginza boutique', localName: '銀座とハウス オブ ディオール ギンザを散策', localAddress: '〒104-0061 東京都中央区銀座6丁目10-1', localLanguage: 'Japanese', localLang: 'ja', address: 'House of Dior Ginza, Tokyo, Japan' },
+            { id: 'konbini-run', order: 3, title: 'Make the first Lawson or 7-Eleven run', localName: 'ローソンまたはセブン-イレブンへ', localLanguage: 'Japanese', localLang: 'ja' }
           ],
           notes: [{ kind: 'note', text: 'You arrive at Narita T2 but depart from T1 on 15 August.' }]
         },
         {
-          day: 6, date: '2026-08-06', weekday: 'THU', region: 'tokyo', location: 'Tokyo', title: 'Dior Café → teamLab Planets', mapQuery: 'Dior Café Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
-          transit: { id: 'ginza-to-toyosu', order: 2, mode: 'Metro', route: 'Ginza → Toyosu', detail: 'Tokyo Metro and local connection · check live route', local: '銀座駅 → 新豊洲駅', address: 'Shin-Toyosu Station, Tokyo, Japan' },
+          id: 'day-6', day: 6, date: '2026-08-06', weekday: 'THU', region: 'tokyo', location: 'Tokyo', localLocation: '東京', title: 'Dior Café → teamLab Planets', localName: 'カフェ ディオール → チームラボプラネッツ', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Dior Café Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
+          transit: { id: 'ginza-to-toyosu', order: 2, mode: 'Metro', route: 'Ginza → Toyosu', detail: 'Tokyo Metro and local connection · check live route', localName: '銀座駅 → 新豊洲駅', localAddress: '東京都江東区豊洲6丁目', localLanguage: 'Japanese', localLang: 'ja', address: 'Shin-Toyosu Station, Tokyo, Japan' },
           activities: [
-            { id: 'dior-cafe', order: 1, title: 'Dior Café', time: '10:30AM', instant: '2026-08-06T10:30:00+09:00', durationMinutes: 90, leaveBy: '9:45AM', address: 'Café Dior by Anne-Sophie Pic, House of Dior Ginza 4F, 6-10-1 Ginza, Chuo City, Tokyo 104-0061, Japan', reservationLink: 'https://www.tablecheck.com/en/reservation/4LEMYV', booking: { emoji: '☕', name: 'Dior Café', shortName: 'Dior Café', displayDate: 'Thursday 6 August' } },
-            { id: 'toyosu-transfer', order: 2.5, title: 'Travel across Tokyo to Toyosu after lunch', address: 'Toyosu, Koto City, Tokyo, Japan' },
-            { id: 'teamlab-planets', order: 3, title: 'teamLab Planets admission', time: '4:30PM', instant: '2026-08-06T16:30:00+09:00', durationMinutes: 90, leaveBy: '3:45PM', address: 'teamLab Planets TOKYO, 6-1-16 Toyosu, Koto City, Tokyo 135-0061, Japan', booking: { emoji: '🎨', name: 'teamLab Planets', shortName: 'teamLab', displayDate: 'Thursday 6 August', statusLabel: 'Admission confirmed' } }
+            { id: 'dior-cafe', order: 1, title: 'Dior Café', localName: 'カフェ ディオール by アンヌ＝ソフィー・ピック', localAddress: '〒104-0061 東京都中央区銀座6丁目10-1 GINZA SIX ハウス オブ ディオール ギンザ4階', localLanguage: 'Japanese', localLang: 'ja', time: '10:30AM', instant: '2026-08-06T10:30:00+09:00', durationMinutes: 90, leaveBy: '9:45AM', address: 'Café Dior by Anne-Sophie Pic, House of Dior Ginza 4F, 6-10-1 Ginza, Chuo City, Tokyo 104-0061, Japan', reservationLink: 'https://www.tablecheck.com/en/reservation/4LEMYV', booking: { emoji: '☕', name: 'Dior Café', shortName: 'Dior Café', displayDate: 'Thursday 6 August' } },
+            { id: 'toyosu-transfer', order: 2.5, title: 'Travel across Tokyo to Toyosu after lunch', localName: '昼食後、豊洲へ移動', localAddress: '東京都江東区豊洲', localLanguage: 'Japanese', localLang: 'ja', address: 'Toyosu, Koto City, Tokyo, Japan' },
+            { id: 'teamlab-planets', order: 3, title: 'teamLab Planets admission', localName: 'チームラボプラネッツ TOKYO DMM 入場', localAddress: '〒135-0061 東京都江東区豊洲6丁目1-16', localLanguage: 'Japanese', localLang: 'ja', time: '4:30PM', instant: '2026-08-06T16:30:00+09:00', durationMinutes: 90, leaveBy: '3:45PM', address: 'teamLab Planets TOKYO, 6-1-16 Toyosu, Koto City, Tokyo 135-0061, Japan', booking: { emoji: '🎨', name: 'teamLab Planets', shortName: 'teamLab', displayDate: 'Thursday 6 August', statusLabel: 'Admission confirmed' } }
           ],
           notes: [
             { kind: 'confirmed', text: 'Dior Café · Thursday 6 August 2026 · 10:30AM', link: 'https://www.tablecheck.com/en/reservation/4LEMYV', linkLabel: 'Open reservation' },
@@ -1910,25 +1931,25 @@
           ]
         },
         {
-          day: 7, date: '2026-08-07', weekday: 'FRI', region: 'tokyo', location: 'Tokyo', title: 'West Tokyo, Shibuya & Shinjuku', mapQuery: 'Shibuya Sky', weatherCity: 'Tokyo', hotel: stays.tokyo,
-          transit: { id: 'west-tokyo-transit', order: 3.5, mode: 'Rail', route: 'Tachikawa → Kichijoji → Shibuya → Shinjuku', detail: 'JR and local trains · check live route', local: '立川駅 → 吉祥寺駅 → 渋谷駅 → 新宿駅' },
+          id: 'day-7', day: 7, date: '2026-08-07', weekday: 'FRI', region: 'tokyo', location: 'Tokyo', localLocation: '東京', title: 'West Tokyo, Shibuya & Shinjuku', localName: '東京西部・渋谷・新宿', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Shibuya Sky', weatherCity: 'Tokyo', hotel: stays.tokyo,
+          transit: { id: 'west-tokyo-transit', order: 3.5, mode: 'Rail', route: 'Tachikawa → Kichijoji → Shibuya → Shinjuku', detail: 'JR and local trains · check live route', localName: '立川駅 → 吉祥寺駅 → 渋谷駅 → 新宿駅', localLanguage: 'Japanese', localLang: 'ja' },
           activities: [
-            { id: 'showa-kinen-bikes', order: 1, title: 'Rent bikes at Showa Kinen Park in Tachikawa', address: 'Showa Kinen Park, Tokyo, Japan' },
-            { id: 'inokashira-swan', order: 2, title: 'Ride a swan boat at Inokashira Park', address: 'Inokashira Park, Tokyo, Japan' },
-            { id: 'mario-kart', order: 3, title: 'Mario Kart street racing with an international driving permit' },
-            { id: 'shibuya-sky', order: 4, title: 'Shibuya Sky at sunset', address: 'Shibuya Sky, Tokyo, Japan' },
-            { id: 'shinjuku-sights', order: 5, title: 'See the 3D cat billboard and Tokyo Metropolitan Government Building' },
-            { id: 'game-centre-reissue', order: 6, title: 'Visit a game centre and Cafe Reissue for 3D latte art' }
+            { id: 'showa-kinen-bikes', order: 1, title: 'Rent bikes at Showa Kinen Park in Tachikawa', localName: '国営昭和記念公園でレンタサイクル', localAddress: '〒190-0014 東京都立川市緑町3173', localLanguage: 'Japanese', localLang: 'ja', address: 'Showa Kinen Park, Tokyo, Japan' },
+            { id: 'inokashira-swan', order: 2, title: 'Ride a swan boat at Inokashira Park', localName: '井の頭恩賜公園でスワンボート', localAddress: '〒180-0005 東京都武蔵野市御殿山1丁目18-31', localLanguage: 'Japanese', localLang: 'ja', address: 'Inokashira Park, Tokyo, Japan' },
+            { id: 'mario-kart', order: 3, title: 'Mario Kart street racing with an international driving permit', localName: '国際運転免許証でマリオカート公道走行', localLanguage: 'Japanese', localLang: 'ja' },
+            { id: 'shibuya-sky', order: 4, title: 'Shibuya Sky at sunset', localName: '夕暮れのSHIBUYA SKY', localAddress: '〒150-6145 東京都渋谷区渋谷2丁目24-12 渋谷スクランブルスクエア14階', localLanguage: 'Japanese', localLang: 'ja', address: 'Shibuya Sky, Tokyo, Japan' },
+            { id: 'shinjuku-sights', order: 5, title: 'See the 3D cat billboard and Tokyo Metropolitan Government Building', localName: '3D猫と東京都庁展望室', localLanguage: 'Japanese', localLang: 'ja' },
+            { id: 'game-centre-reissue', order: 6, title: 'Visit a game centre and Cafe Reissue for 3D latte art', localName: 'ゲームセンターとリシューの3Dラテアート', localLanguage: 'Japanese', localLang: 'ja' }
           ],
           notes: [{ kind: 'booking', text: 'Shibuya Sky timed entry · Cafe Reissue at opening' }]
         },
         {
-          day: 8, date: '2026-08-08', weekday: 'SAT', region: 'tokyo', location: 'Tokyo', title: 'Cultural Tokyo: Asakusa to Akasaka', mapQuery: 'Art Aquarium Museum Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
-          transit: { id: 'nihonbashi-akasaka', order: 2.5, mode: 'Metro', route: 'Nihonbashi → Akasaka', detail: 'Tokyo Metro · check live route', local: '日本橋駅 → 赤坂見附駅' },
+          id: 'day-8', day: 8, date: '2026-08-08', weekday: 'SAT', region: 'tokyo', location: 'Tokyo', localLocation: '東京', title: 'Cultural Tokyo: Ginza to Akasaka', localName: '東京文化巡り：銀座から赤坂へ', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Art Aquarium Museum Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
+          transit: { id: 'nihonbashi-akasaka', order: 2.5, mode: 'Metro', route: 'Nihonbashi → Akasaka', detail: 'Tokyo Metro · check live route', localName: '日本橋駅 → 赤坂見附駅', localLanguage: 'Japanese', localLang: 'ja' },
           activities: [
-            { id: 'art-aquarium', order: 1, title: 'Art Aquarium Museum in Nihonbashi', address: 'Art Aquarium Museum Ginza, Tokyo, Japan' },
-            { id: 'pokemon-cafe', order: 2, title: 'Try a walk-in at Pokémon Cafe in Nihonbashi', address: 'Pokémon Cafe Tokyo, Nihonbashi, Japan' },
-            { id: 'ninja-restaurant', order: 3, title: 'Ninja Restaurant dinner in Akasaka', address: 'Ninja Akasaka, Akasaka Tokyu Plaza 1F, 2-14-3 Nagatacho, Chiyoda City, Tokyo 100-0014, Japan', booking: { emoji: '🥷🏻', name: 'Ninja Restaurant', shortName: 'Ninja dinner', displayDate: 'Saturday 8 August' } }
+            { id: 'art-aquarium', order: 1, title: 'Art Aquarium Museum in Ginza', localName: 'アートアクアリウム美術館 GINZA', localAddress: '〒104-8212 東京都中央区銀座4丁目6-16 銀座三越 新館9階受付', localLanguage: 'Japanese', localLang: 'ja', address: 'Art Aquarium Museum Ginza, Tokyo, Japan' },
+            { id: 'pokemon-cafe', order: 2, title: 'Try a walk-in at Pokémon Cafe in Nihonbashi', localName: 'ポケモンカフェ（日本橋）で当日入店に挑戦', localAddress: '〒103-0027 東京都中央区日本橋2丁目11-2 日本橋髙島屋S.C.東館5階', localLanguage: 'Japanese', localLang: 'ja', address: 'Pokémon Cafe Tokyo, Nihonbashi, Japan' },
+            { id: 'ninja-restaurant', order: 3, title: 'Ninja Restaurant dinner in Akasaka', localName: 'NINJA TOKYOでディナー', localAddress: '〒100-0014 東京都千代田区永田町2丁目14-3 赤坂東急プラザ1階', localLanguage: 'Japanese', localLang: 'ja', address: 'Ninja Akasaka, Akasaka Tokyu Plaza 1F, 2-14-3 Nagatacho, Chiyoda City, Tokyo 100-0014, Japan', booking: { emoji: '🥷🏻', name: 'Ninja Restaurant', shortName: 'Ninja dinner', displayDate: 'Saturday 8 August' } }
           ],
           notes: [
             { kind: 'note', text: 'Pokémon Cafe is booked out online · try a walk-in on Saturday 8 August' },
@@ -1936,34 +1957,34 @@
           ]
         },
         {
-          day: 9, date: '2026-08-09', weekday: 'SUN', region: 'fuji', location: 'Fuji', title: 'Mt Fuji views → overnight', mapQuery: 'Shoji Lake Hotel', weatherCity: 'Fujikawaguchiko', hotel: stays.fuji,
-          transit: { id: 'tokyo-fuji-transfer', order: 0, mode: 'Transfer', route: 'Tokyo → Fuji Five Lakes', detail: 'Rail and bus · check live route', local: '東京駅 → 富士五湖', address: stays.fuji.address },
+          id: 'day-9', day: 9, date: '2026-08-09', weekday: 'SUN', region: 'fuji', location: 'Fuji', localLocation: '富士山', title: 'Mt Fuji views → overnight', localName: '富士山の景色 → 一泊', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Shoji Lake Hotel', weatherCity: 'Fujikawaguchiko', hotel: stays.fuji,
+          transit: { id: 'tokyo-fuji-transfer', order: 0, mode: 'Transfer', route: 'Tokyo → Fuji Five Lakes', detail: 'Rail and bus · check live route', localName: '東京駅 → 富士五湖', localAddress: stays.fuji.localAddress, localLanguage: 'Japanese', localLang: 'ja', address: stays.fuji.address },
           activities: [
-            { id: 'fuji-five-lakes', order: 1, title: 'Mt Fuji views around the Five Lakes area', address: 'Fuji Five Lakes, Yamanashi, Japan' },
-            { id: 'fuji-onsen', order: 2, title: 'Choose a Fuji-area stay with an onsen for the night', address: stays.fuji.address },
-            { id: 'prepare-kyoto', order: 3, title: 'Prepare for an early departure toward Kyoto' }
+            { id: 'fuji-five-lakes', order: 1, title: 'Mt Fuji views around the Five Lakes area', localName: '富士五湖周辺から富士山を眺める', localAddress: '山梨県南都留郡富士河口湖町', localLanguage: 'Japanese', localLang: 'ja', address: 'Fuji Five Lakes, Yamanashi, Japan' },
+            { id: 'fuji-onsen', order: 2, title: 'Choose a Fuji-area stay with an onsen for the night', localName: '温泉のある富士エリアの宿に宿泊', localAddress: stays.fuji.localAddress, localLanguage: 'Japanese', localLang: 'ja', address: stays.fuji.address },
+            { id: 'prepare-kyoto', order: 3, title: 'Prepare for an early departure toward Kyoto', localName: '京都への早朝出発に備える', localLanguage: 'Japanese', localLang: 'ja' }
           ],
           notes: []
         },
         {
-          day: 10, date: '2026-08-10', weekday: 'MON', region: 'kyoto', location: 'Kyoto', title: 'Start Kyoto: Shinkansen & Gion', mapQuery: 'NOHGA Hotel Kiyomizu Kyoto', weatherCity: 'Kyoto', hotel: stays.kyoto,
-          transit: { id: 'fuji-kyoto-transfer', order: 0, mode: 'Transfer', route: 'Shoji Lake → Kyoto', detail: 'Bus and Shinkansen · allow a half day', local: '精進湖 → 京都駅', durationMinutes: 300, address: 'Kyoto Station, Japan' },
+          id: 'day-10', day: 10, date: '2026-08-10', weekday: 'MON', region: 'kyoto', location: 'Kyoto', localLocation: '京都', title: 'Start Kyoto: Shinkansen & Gion', localName: '京都初日：新幹線と祇園', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'NOHGA Hotel Kiyomizu Kyoto', weatherCity: 'Kyoto', hotel: stays.kyoto,
+          transit: { id: 'fuji-kyoto-transfer', order: 0, mode: 'Transfer', route: 'Shoji Lake → Kyoto', detail: 'Bus and Shinkansen · allow a half day', localName: '精進湖 → 京都駅', localAddress: '京都府京都市下京区東塩小路釜殿町', localLanguage: 'Japanese', localLang: 'ja', durationMinutes: 300, address: 'Kyoto Station, Japan' },
           activities: [
-            { id: 'fuji-facing-seat', order: 1, title: 'Reserve a Fuji-facing seat where the route allows' },
-            { id: 'nishiki-market', order: 2, title: 'Check in and wander Nishiki Market', address: 'Nishiki Market, Kyoto, Japan' },
-            { id: 'gion-dusk', order: 3, title: 'Explore Gion at dusk and the stone-paved lanes', address: 'Gion, Kyoto, Japan' }
+            { id: 'fuji-facing-seat', order: 1, title: 'Reserve a Fuji-facing seat where the route allows', localName: '富士山側の座席を予約する', localLanguage: 'Japanese', localLang: 'ja' },
+            { id: 'nishiki-market', order: 2, title: 'Check in and wander Nishiki Market', localName: 'ホテルにチェックインして錦市場を散策', localAddress: '京都府京都市中京区中魚屋町', localLanguage: 'Japanese', localLang: 'ja', address: 'Nishiki Market, Kyoto, Japan' },
+            { id: 'gion-dusk', order: 3, title: 'Explore Gion at dusk and the stone-paved lanes', localName: '夕暮れの祇園と石畳の路地を散策', localAddress: '京都府京都市東山区祇園町', localLanguage: 'Japanese', localLang: 'ja', address: 'Gion, Kyoto, Japan' }
           ],
           notes: []
         },
         {
-          day: 11, date: '2026-08-11', weekday: 'TUE', region: 'kyoto', location: 'Kyoto', title: 'Kyoto: kimono, bamboo & torii gates', mapQuery: 'Kimono Miyabi Kyoto', weatherCity: 'Kyoto', hotel: stays.kyoto,
-          transit: { id: 'kyoto-cross-city', order: 3.5, mode: 'Local', route: 'Arashiyama → Higashiyama → Fushimi', detail: 'Rail and local connection · check live route', local: '嵐山駅 → 東山 → 伏見稲荷駅' },
+          id: 'day-11', day: 11, date: '2026-08-11', weekday: 'TUE', region: 'kyoto', location: 'Kyoto', localLocation: '京都', title: 'Kyoto: kimono, bamboo & torii gates', localName: '京都：着物・竹林・千本鳥居', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Kimono Miyabi Kyoto', weatherCity: 'Kyoto', hotel: stays.kyoto,
+          transit: { id: 'kyoto-cross-city', order: 3.5, mode: 'Local', route: 'Arashiyama → Higashiyama → Fushimi', detail: 'Rail and local connection · check live route', localName: '嵐山駅 → 東山 → 伏見稲荷駅', localLanguage: 'Japanese', localLang: 'ja' },
           activities: [
-            { id: 'arashiyama-grove', order: 1, title: 'Reach Arashiyama Bamboo Grove before 8:00AM', time: 'Before 8:00AM', address: 'Arashiyama Bamboo Grove, Kyoto, Japan' },
-            { id: 'tenryuji-riverside', order: 2, title: 'Explore Tenryu-ji and the Arashiyama riverside' },
-            { id: 'kimono-miyabi', order: 3, title: 'Kimono and yukata rental at Kimono Miyabi Kyoto', time: '10:00AM', instant: '2026-08-11T10:00:00+09:00', durationMinutes: 120, leaveBy: '9:15AM', address: 'Kimono Miyabi Kyoto (Kiyomizu Temple Branch), 2F 10-2 Tsukimicho, Higashiyama Ward, Kyoto 605-0829, Japan', booking: { emoji: '👘', name: 'Kimono Miyabi Kyoto', shortName: 'Kimono rental', displayDate: 'Tuesday 11 August' } },
-            { id: 'fushimi-inari-transfer', order: 4, title: 'Cross Kyoto to Fushimi Inari' },
-            { id: 'fushimi-inari-walk', order: 5, title: 'Walk through the torii gates, allowing about two hours', durationMinutes: 120, address: 'Fushimi Inari Taisha, Kyoto, Japan' }
+            { id: 'arashiyama-grove', order: 1, title: 'Reach Arashiyama Bamboo Grove before 8:00AM', localName: '午前8時前に嵐山 竹林の小径へ', localAddress: '京都府京都市右京区嵯峨天龍寺芒ノ馬場町', localLanguage: 'Japanese', localLang: 'ja', time: 'Before 8:00AM', address: 'Arashiyama Bamboo Grove, Kyoto, Japan' },
+            { id: 'tenryuji-riverside', order: 2, title: 'Explore Tenryu-ji and the Arashiyama riverside', localName: '天龍寺と嵐山の川沿いを散策', localAddress: '〒616-8385 京都府京都市右京区嵯峨天龍寺芒ノ馬場町68', localLanguage: 'Japanese', localLang: 'ja' },
+            { id: 'kimono-miyabi', order: 3, title: 'Kimono and yukata rental at Kimono Miyabi Kyoto', localName: '着物レンタル ミヤビ京都 清水寺店', localAddress: '〒605-0829 京都府京都市東山区月見町10-2 2階', localLanguage: 'Japanese', localLang: 'ja', time: '10:00AM', instant: '2026-08-11T10:00:00+09:00', durationMinutes: 120, leaveBy: '9:15AM', address: 'Kimono Miyabi Kyoto (Kiyomizu Temple Branch), 2F 10-2 Tsukimicho, Higashiyama Ward, Kyoto 605-0829, Japan', booking: { emoji: '👘', name: 'Kimono Miyabi Kyoto', shortName: 'Kimono rental', displayDate: 'Tuesday 11 August' } },
+            { id: 'fushimi-inari-transfer', order: 4, title: 'Cross Kyoto to Fushimi Inari', localName: '伏見稲荷へ京都市内を横断', localLanguage: 'Japanese', localLang: 'ja' },
+            { id: 'fushimi-inari-walk', order: 5, title: 'Walk through the torii gates, allowing about two hours', localName: '伏見稲荷大社の千本鳥居を約2時間歩く', localAddress: '〒612-0882 京都府京都市伏見区深草藪之内町68', localLanguage: 'Japanese', localLang: 'ja', durationMinutes: 120, address: 'Fushimi Inari Taisha, Kyoto, Japan' }
           ],
           notes: [
             { kind: 'confirmed', text: 'Kimono Miyabi Kyoto · Tuesday 11 August 2026 · 10:00AM' },
@@ -1971,44 +1992,44 @@
           ]
         },
         {
-          day: 12, date: '2026-08-12', weekday: 'WED', region: 'kyoto', location: 'Nara', title: 'Nara: deer, temples & giant Buddha', mapQuery: 'Nara Park', weatherCity: 'Nara', hotel: stays.kyoto,
-          transit: { id: 'kyoto-nara-rail', order: 0, mode: 'Rail', route: 'Kyoto → Nara', detail: 'JR or Kintetsu · about 40–50 minutes', local: '京都駅 → 奈良駅', durationMinutes: 50, address: 'Nara Station, Japan' },
+          id: 'day-12', day: 12, date: '2026-08-12', weekday: 'WED', region: 'kyoto', location: 'Nara', localLocation: '奈良', title: 'Nara: deer, temples & giant Buddha', localName: '奈良：鹿・寺院・大仏', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Nara Park', weatherCity: 'Nara', hotel: stays.kyoto,
+          transit: { id: 'kyoto-nara-rail', order: 0, mode: 'Rail', route: 'Kyoto → Nara', detail: 'JR or Kintetsu · about 40–50 minutes', localName: '京都駅 → 奈良駅', localAddress: '奈良県奈良市三条本町1-1', localLanguage: 'Japanese', localLang: 'ja', durationMinutes: 50, address: 'Nara Station, Japan' },
           activities: [
-            { id: 'nara-deer', order: 1, title: 'Feed the bowing deer in Nara Park', address: 'Nara Park, Japan' },
-            { id: 'todaiji', order: 2, title: 'Visit Tōdai-ji and the Great Buddha Hall', address: 'Tōdai-ji, Nara, Japan' },
-            { id: 'return-kansai', order: 3, title: 'Return to Kyoto or continue toward Osaka in the evening' }
+            { id: 'nara-deer', order: 1, title: 'Feed the bowing deer in Nara Park', localName: '奈良公園でお辞儀する鹿に鹿せんべいをあげる', localAddress: '〒630-8212 奈良県奈良市春日野町', localLanguage: 'Japanese', localLang: 'ja', address: 'Nara Park, Japan' },
+            { id: 'todaiji', order: 2, title: 'Visit Tōdai-ji and the Great Buddha Hall', localName: '東大寺と大仏殿を拝観', localAddress: '〒630-8587 奈良県奈良市雑司町406-1', localLanguage: 'Japanese', localLang: 'ja', address: 'Tōdai-ji, Nara, Japan' },
+            { id: 'return-kansai', order: 3, title: 'Return to Kyoto or continue toward Osaka in the evening', localName: '夕方に京都へ戻るか大阪へ向かう', localLanguage: 'Japanese', localLang: 'ja' }
           ],
           notes: []
         },
         {
-          day: 13, date: '2026-08-13', weekday: 'THU', region: 'osaka', location: 'Osaka', title: 'Universal Studios & Osaka night', mapQuery: 'DoubleTree by Hilton Osaka Castle', weatherCity: 'Osaka', hotel: stays.osaka,
-          transit: { id: 'osaka-usj-transit', order: 0, mode: 'Rail', route: 'Osaka → Universal City → Dotonbori', detail: 'JR and Osaka Metro · check live route', local: '大阪駅 → ユニバーサルシティ駅 → なんば駅' },
+          id: 'day-13', day: 13, date: '2026-08-13', weekday: 'THU', region: 'osaka', location: 'Osaka', localLocation: '大阪', title: 'Universal Studios & Osaka night', localName: 'ユニバーサル・スタジオと大阪の夜', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'DoubleTree by Hilton Osaka Castle', weatherCity: 'Osaka', hotel: stays.osaka,
+          transit: { id: 'osaka-usj-transit', order: 0, mode: 'Rail', route: 'Osaka → Universal City → Dotonbori', detail: 'JR and Osaka Metro · check live route', localName: '大阪駅 → ユニバーサルシティ駅 → なんば駅', localLanguage: 'Japanese', localLang: 'ja' },
           activities: [
-            { id: 'universal-studios', order: 1, title: 'Universal Studios Japan and Super Nintendo World', address: 'Universal Studios Japan, Osaka, Japan', booking: { emoji: '🎢', name: 'USJ Express Pass + Super Nintendo World', shortName: 'USJ Express Pass', displayDate: 'Thursday 13 August', statusLabel: 'Express Pass booked' } },
-            { id: 'umeda-sky', order: 2, title: 'Umeda Sky Building at night if energy allows', address: 'Umeda Sky Building, Osaka, Japan' },
-            { id: 'don-quijote-wheel', order: 3, title: 'Ride the Don Quijote Ferris wheel' },
-            { id: 'dotonbori-food', order: 4, title: 'Dotonbori street food and takoyaki crawl', address: 'Dotonbori, Osaka, Japan' }
+            { id: 'universal-studios', order: 1, title: 'Universal Studios Japan and Super Nintendo World', localName: 'ユニバーサル・スタジオ・ジャパンとスーパー・ニンテンドー・ワールド', localAddress: '〒554-0031 大阪府大阪市此花区桜島2丁目1-33', localLanguage: 'Japanese', localLang: 'ja', address: 'Universal Studios Japan, Osaka, Japan', booking: { emoji: '🎢', name: 'USJ Express Pass + Super Nintendo World', shortName: 'USJ Express Pass', displayDate: 'Thursday 13 August', statusLabel: 'Express Pass booked' } },
+            { id: 'umeda-sky', order: 2, title: 'Umeda Sky Building at night if energy allows', localName: '余力があれば夜の梅田スカイビルへ', localAddress: '〒531-6039 大阪府大阪市北区大淀中1丁目1-88', localLanguage: 'Japanese', localLang: 'ja', address: 'Umeda Sky Building, Osaka, Japan' },
+            { id: 'don-quijote-wheel', order: 3, title: 'Ride the Don Quijote Ferris wheel', localName: 'ドン・キホーテ道頓堀店の観覧車に乗る', localAddress: '〒542-0084 大阪府大阪市中央区宗右衛門町7-13', localLanguage: 'Japanese', localLang: 'ja' },
+            { id: 'dotonbori-food', order: 4, title: 'Dotonbori street food and takoyaki crawl', localName: '道頓堀で食べ歩きとたこ焼き巡り', localAddress: '大阪府大阪市中央区道頓堀', localLanguage: 'Japanese', localLang: 'ja', address: 'Dotonbori, Osaka, Japan' }
           ],
           notes: [{ kind: 'confirmed', text: 'USJ Express Pass + Super Nintendo World · Thursday 13 August 2026' }]
         },
         {
-          day: 14, date: '2026-08-14', weekday: 'FRI', region: 'osaka', location: 'Osaka & Koyasan', title: 'Koyasan day trip → return to Tokyo', mapQuery: 'Narita Tobu Hotel Airport', weatherCity: 'Narita', hotel: stays.narita,
-          transit: { id: 'koyasan-narita-transfer', order: 4, mode: 'Transfer', route: 'Koyasan → Narita', detail: 'Nankai, Shinkansen and airport transfer', local: '高野山駅 → 成田駅', time: '2:00PM', leaveBy: '2:00PM', address: stays.narita.address },
+          id: 'day-14', day: 14, date: '2026-08-14', weekday: 'FRI', region: 'osaka', location: 'Osaka & Koyasan', localLocation: '大阪・高野山', title: 'Koyasan day trip → return to Tokyo', localName: '高野山日帰り旅行 → 東京へ戻る', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Narita Tobu Hotel Airport', weatherCity: 'Narita', hotel: stays.narita,
+          transit: { id: 'koyasan-narita-transfer', order: 4, mode: 'Transfer', route: 'Koyasan → Narita', detail: 'Nankai, Shinkansen and airport transfer', localName: '高野山駅 → 成田駅', localAddress: stays.narita.localAddress, localLanguage: 'Japanese', localLang: 'ja', time: '2:00PM', leaveBy: '2:00PM', address: stays.narita.address },
           activities: [
-            { id: 'koyasan-town', order: 1, title: 'Visit the sacred Buddhist mountain town', address: 'Koyasan, Wakayama, Japan' },
-            { id: 'okunoin', order: 2, title: 'Walk Okunoin Cemetery beneath the cedar forest', address: 'Okunoin Cemetery, Koyasan, Japan' },
-            { id: 'kongobuji-pagoda', order: 3, title: 'See Kongobuji Temple and Konpon Daito pagoda' },
-            { id: 'leave-koyasan', order: 3.5, title: 'Leave by 2:00PM and travel back to Tokyo to pack', time: '2:00PM', instant: '2026-08-14T14:00:00+09:00', leaveBy: '2:00PM' }
+            { id: 'koyasan-town', order: 1, title: 'Visit the sacred Buddhist mountain town', localName: '聖地・高野山を巡る', localAddress: '和歌山県伊都郡高野町高野山', localLanguage: 'Japanese', localLang: 'ja', address: 'Koyasan, Wakayama, Japan' },
+            { id: 'okunoin', order: 2, title: 'Walk Okunoin Cemetery beneath the cedar forest', localName: '杉木立の奥之院墓地を歩く', localAddress: '〒648-0294 和歌山県伊都郡高野町高野山550', localLanguage: 'Japanese', localLang: 'ja', address: 'Okunoin Cemetery, Koyasan, Japan' },
+            { id: 'kongobuji-pagoda', order: 3, title: 'See Kongobuji Temple and Konpon Daito pagoda', localName: '金剛峯寺と根本大塔を拝観', localAddress: '〒648-0294 和歌山県伊都郡高野町高野山132', localLanguage: 'Japanese', localLang: 'ja' },
+            { id: 'leave-koyasan', order: 3.5, title: 'Leave by 2:00PM and travel back to Tokyo to pack', localName: '午後2時までに出発し、東京へ戻って荷造り', localLanguage: 'Japanese', localLang: 'ja', time: '2:00PM', instant: '2026-08-14T14:00:00+09:00', leaveBy: '2:00PM' }
           ],
           notes: [{ kind: 'note', text: 'Nankai Koya Line from Osaka Namba plus cable car takes about 1.5 hours each way.' }]
         },
         {
-          day: 15, date: '2026-08-15', weekday: 'SAT', region: 'osaka', location: 'Tokyo', title: 'Tokyo → Perth via Ho Chi Minh City', mapQuery: 'Narita Airport Terminal 1', weatherCity: 'Narita', hotel: stays.narita,
-          transit: { id: 'vn307-vn791-flight', order: 2, mode: 'Flight', route: 'Narita T1 → Perth via Ho Chi Minh City', detail: 'VN 307/791 · 9:30AM–10:30PM', local: '成田空港第1ターミナル', time: '9:30AM', instant: '2026-08-15T09:30:00+09:00', durationMinutes: 840, leaveBy: '5:30AM', address: 'Narita International Airport Terminal 1' },
+          id: 'day-15', day: 15, date: '2026-08-15', weekday: 'SAT', region: 'osaka', location: 'Tokyo', localLocation: '東京', title: 'Tokyo → Perth via Ho Chi Minh City', localName: '東京 → ホーチミン市経由でパースへ', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Narita Airport Terminal 1', weatherCity: 'Narita', hotel: stays.narita,
+          transit: { id: 'vn307-vn791-flight', order: 2, mode: 'Flight', route: 'Narita T1 → Perth via Ho Chi Minh City', detail: 'VN 307/791 · 9:30AM–10:30PM', localName: '成田空港第1ターミナル → ホーチミン市 → パース', localAddress: '成田国際空港 第1ターミナル', localLanguage: 'Japanese', localLang: 'ja', time: '9:30AM', instant: '2026-08-15T09:30:00+09:00', durationMinutes: 840, leaveBy: '5:30AM', address: 'Narita International Airport Terminal 1' },
           activities: [
-            { id: 'leave-narita-hotel', order: 0, title: 'Leave the hotel by about 5:30AM', time: '5:30AM', instant: '2026-08-15T05:30:00+09:00', durationMinutes: 30, address: stays.narita.address },
-            { id: 'narita-check-in', order: 1, title: 'Check in at Narita Terminal 1', address: 'Narita International Airport Terminal 1' },
-            { id: 'flight-sectors', order: 3, title: 'Allow for the six-hour and six-hour-ten-minute flight sectors' }
+            { id: 'leave-narita-hotel', order: 0, title: 'Leave the hotel by about 5:30AM', localName: '午前5時30分頃に成田東武ホテルエアポートを出発', localAddress: stays.narita.localAddress, localLanguage: 'Japanese', localLang: 'ja', time: '5:30AM', instant: '2026-08-15T05:30:00+09:00', durationMinutes: 30, address: stays.narita.address },
+            { id: 'narita-check-in', order: 1, title: 'Check in at Narita Terminal 1', localName: '成田空港第1ターミナルでチェックイン', localAddress: '成田国際空港 第1ターミナル', localLanguage: 'Japanese', localLang: 'ja', address: 'Narita International Airport Terminal 1' },
+            { id: 'flight-sectors', order: 3, title: 'Allow for the six-hour and six-hour-ten-minute flight sectors', localName: '6時間と6時間10分のフライトに備える', localLanguage: 'Japanese', localLang: 'ja' }
           ],
           notes: [{ kind: 'note', text: 'The free T1–T2 shuttle takes about 15 minutes. Check-in opens roughly three hours before departure.' }]
         }
@@ -2017,6 +2038,7 @@
     const bookings = tripData.flatMap((day) => day.activities
       .filter((activity) => activity.booking)
       .map((activity) => ({
+        id: activity.id,
         emoji: activity.booking.emoji,
         name: activity.booking.name || activity.title,
         shortName: activity.booking.shortName,
@@ -2025,9 +2047,18 @@
         time: activity.time || null,
         displayDate: activity.booking.displayDate,
         link: activity.reservationLink,
-        address: activity.address
+        address: activity.address,
+        localName: activity.localName,
+        localAddress: activity.localAddress,
+        localLanguage: activity.localLanguage,
+        localLang: activity.localLang
       })));
     const hotels = [...new Map(tripData.map((day) => [day.hotel.id, day.hotel])).values()];
+    const localPlaces = [
+      ...hotels,
+      ...tripData.flatMap((day) => [day, day.transit, ...day.activities])
+    ].filter((place) => place?.id && place.localName);
+    const localPlaceIndex = new Map(localPlaces.map((place) => [place.id, place]));
 
     // --- Pre-trip "delight" content ---------------------------------------------------
     // The two travellers. Used to personalise every greeting so the app feels handmade
@@ -2275,8 +2306,14 @@
           const link = note.link ? ` · <a href="${note.link}" target="_blank" rel="noopener noreferrer">${note.linkLabel || 'Open'}</a>` : '';
           return `<p class="note ${note.kind || 'note'}">${note.text}${link}</p>`;
         }).join('');
-        day.innerHTML = `<div class="date"><strong>${String(plan.day).padStart(2, '0')}</strong><span class="day-label">${plan.weekday} · AUG</span></div><div class="card"><h3>${plan.title}</h3><ul>${plan.activities.map((activity) => `<li data-activity-id="${activity.id}">${activity.time ? `${activity.title} · ${activity.time}` : activity.title}</li>`).join('')}</ul>${notes}</div>`;
+        const activityItems = plan.activities.map((activity) => {
+          const englishTitle = activity.time ? `${activity.title} · ${activity.time}` : activity.title;
+          return `<li class="local-place moment-place" data-activity-id="${activity.id}" data-local-place="${activity.id}" data-english-name="${englishTitle}"><span data-local-name>${englishTitle}</span>${localPlaceAction(activity, '', true)}</li>`;
+        }).join('');
+        day.innerHTML = `<div class="date"><strong>${String(plan.day).padStart(2, '0')}</strong><span class="day-label">${plan.weekday} · AUG</span></div><div class="card"><div class="day-title-row local-place" data-local-place="${plan.id}" data-english-name="${plan.title}" data-english-detail="${plan.location}"><div class="day-title-copy"><h3 data-local-name>${plan.title}</h3><span data-local-detail>${plan.location}</span></div>${localPlaceAction(plan, '', true)}</div><ul>${activityItems}</ul>${notes}</div>`;
         document.querySelector(`[data-region="${plan.region}"] .days`).append(day);
+        syncLocalPlaceDisplays(plan.id);
+        plan.activities.forEach((activity) => syncLocalPlaceDisplays(activity.id));
       });
       tripDays = [...document.querySelectorAll('.day')];
       Object.entries({ 6: 'teamlab', 8: 'ninja', 11: 'sakura' }).forEach(([dayNumber, effect]) => tripDays[dayNumber - 1].classList.add(`effect-${effect}`));
@@ -2361,14 +2398,18 @@
       return { stay: hotels.at(-1), label: clock.currentDate === endDate ? 'Departing from' : 'Final stay' };
     }
 
-    // Keep each hotel in one language across the dashboard, Today view and booking wallet.
+    // Keep each place or itinerary moment in one language across every surface where it appears.
     // State intentionally lasts only for the open page: returning to English on the next visit
     // avoids surprising either traveller, while the saved local text itself remains offline-ready.
     const localPlaceVisibility = new Set();
 
-    function localPlaceAction(place, id = '') {
+    function placeEnglishName(place) {
+      return place.name || place.route || place.title || '';
+    }
+
+    function localPlaceAction(place, id = '', compact = false) {
       const showingLocal = localPlaceVisibility.has(place.id);
-      return `<button class="mini-action local-name-action"${id ? ` id="${id}"` : ''} type="button" data-local-toggle="${place.id}" aria-pressed="${showingLocal}">${actionIcons.language}<span>${showingLocal ? 'Show English' : 'Show local name'}</span></button>`;
+      return `<button class="mini-action local-name-action${compact ? ' moment-local-action' : ''}"${id ? ` id="${id}"` : ''} type="button" data-local-toggle="${place.id}" aria-pressed="${showingLocal}">${actionIcons.language}<span>${showingLocal ? 'Show English' : 'Show local name'}</span></button>`;
     }
 
     function syncLocalPlaceDisplay(container, place) {
@@ -2379,30 +2420,32 @@
       const button = container.querySelector('[data-local-toggle]');
       container.classList.toggle('is-local', showingLocal);
       if (name) {
-        name.textContent = showingLocal ? place.localName : container.dataset.englishName || place.name;
+        name.textContent = showingLocal ? place.localName : container.dataset.englishName || placeEnglishName(place);
         if (showingLocal) name.lang = place.localLang;
         else name.removeAttribute('lang');
       }
       if (detail) {
-        detail.textContent = showingLocal ? place.localAddress : container.dataset.englishDetail || place.address;
+        const localDetail = place.localAddress || place.localLocation || container.dataset.englishDetail || place.address || '';
+        detail.textContent = showingLocal ? localDetail : container.dataset.englishDetail || place.address || '';
         if (showingLocal) detail.lang = place.localLang;
         else detail.removeAttribute('lang');
       }
       if (button) {
         button.setAttribute('aria-pressed', String(showingLocal));
-        button.querySelector('span').textContent = showingLocal ? 'Show English' : 'Show local name';
-        button.setAttribute('aria-label', `${showingLocal ? 'Show English for' : `Show ${place.localLanguage} for`} ${place.name}`);
+        const buttonLabel = button.querySelector('span') || button;
+        buttonLabel.textContent = showingLocal ? 'Show English' : 'Show local name';
+        button.setAttribute('aria-label', `${showingLocal ? 'Show English for' : `Show ${place.localLanguage} for`} ${placeEnglishName(place)}`);
       }
     }
 
     function syncLocalPlaceDisplays(placeId) {
-      const place = hotels.find((hotel) => hotel.id === placeId);
+      const place = localPlaceIndex.get(placeId);
       if (!place) return;
       document.querySelectorAll(`[data-local-place="${placeId}"]`).forEach((container) => syncLocalPlaceDisplay(container, place));
     }
 
     function toggleLocalPlace(placeId) {
-      const place = hotels.find((hotel) => hotel.id === placeId);
+      const place = localPlaceIndex.get(placeId);
       if (!place) return;
       if (localPlaceVisibility.has(placeId)) localPlaceVisibility.delete(placeId);
       else localPlaceVisibility.add(placeId);
@@ -2460,11 +2503,14 @@
         const transit = plan.transit;
         if (transit) {
           const panel = document.createElement('div');
-          panel.className = 'transit-card';
+          panel.className = 'transit-card local-place';
           panel.dataset.activityId = transit.id;
-          panel.innerHTML = `<span class="transit-mode">${transit.mode}</span><span class="transit-route"><strong>${transit.route}</strong><span>${transit.detail} · Check live platform</span></span><button class="copy-transit" type="button" aria-label="Copy local station names">文</button>`;
-          panel.querySelector('button').addEventListener('click', () => copyText(transit.local, 'Local station names copied'));
+          panel.dataset.localPlace = transit.id;
+          panel.dataset.englishName = transit.route;
+          panel.dataset.englishDetail = `${transit.detail} · Check live platform`;
+          panel.innerHTML = `<span class="transit-mode">${transit.mode}</span><span class="transit-route"><strong data-local-name>${transit.route}</strong><span data-local-detail>${panel.dataset.englishDetail}</span></span>${localPlaceAction(transit, '', true)}`;
           card.querySelector('ul').before(panel);
+          syncLocalPlaceDisplay(panel, transit);
         }
         const actions = document.createElement('div');
         actions.className = 'day-actions';
@@ -2567,9 +2613,9 @@
         const mapQuery = activity.address || activity.mapQuery;
         const reservationAction = activity.reservationLink ? `<a class="mini-action primary" href="${activity.reservationLink}" target="_blank" rel="noopener noreferrer"><span>Reservation</span></a>` : '';
         const mapAction = mapQuery ? `<a class="mini-action${activity.reservationLink ? '' : ' primary'}" href="${mapsUrl(mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a>` : '';
-        const actions = `${reservationAction}${mapAction}`;
+        const actions = `${localPlaceAction(activity, '', true)}${reservationAction}${mapAction}`;
         const expanded = activity.state === 'current' || activity.state === 'next';
-        return `<article class="run-sheet-item" data-state="${activity.state}" data-expanded="${expanded}"><div class="run-sheet-time">${activity.time || 'Flexible'}</div><div class="run-sheet-content"><h3>${title}</h3>${metadata ? `<p class="run-sheet-meta">${metadata}</p>` : ''}<span class="run-sheet-status">${labels[activity.state]}</span>${actions ? `<div class="run-sheet-actions">${actions}</div>` : ''}</div></article>`;
+        return `<article class="run-sheet-item local-place" data-local-place="${activity.id}" data-english-name="${title}" data-english-detail="${metadata}" data-state="${activity.state}" data-expanded="${expanded}"><div class="run-sheet-time">${activity.time || 'Flexible'}</div><div class="run-sheet-content"><h3 data-local-name>${title}</h3>${metadata || activity.localAddress ? `<p class="run-sheet-meta" data-local-detail>${metadata}</p>` : ''}<span class="run-sheet-status">${labels[activity.state]}</span><div class="run-sheet-actions">${actions}</div></div></article>`;
       }).join('')}</div>`;
     }
 
@@ -2583,6 +2629,7 @@
       document.querySelector('#dayDialogTitle').textContent = `Day ${dayNumber} · ${day.title}`;
       body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions"><a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
       syncLocalPlaceDisplays(hotel.id);
+      activityTimeline(day, clock).forEach((activity) => syncLocalPlaceDisplays(activity.id));
       body.scrollTop = scrollTop;
     }
 
@@ -2618,13 +2665,17 @@
       const bookingWallet = document.querySelector('#bookingWallet');
       bookingWallet.replaceChildren(...orderedBookings(clock).map((booking) => {
         const row = document.createElement('article');
-        row.className = `wallet-item${bookingHasElapsed(booking, clock) ? ' is-past' : ''}`;
+        row.className = `wallet-item local-place${bookingHasElapsed(booking, clock) ? ' is-past' : ''}`;
+        row.dataset.localPlace = booking.id;
+        row.dataset.englishName = `${booking.emoji ? `${booking.emoji} ` : ''}${booking.name}`;
+        row.dataset.englishDetail = `${booking.displayDate}${booking.time ? ` · ${booking.time}` : ''}`;
         // Every confirmed moment now carries a Map link (pin icon + label) to its venue, mirroring
         // the hotel rows. Bookings with a reservation link keep an "Open" action beside the map.
         const mapAction = booking.address ? `<a class="mini-action" href="${mapsUrl(booking.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a>` : '';
         const openAction = booking.link ? `<a class="mini-action" href="${booking.link}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span>Reservation</span></a>` : '';
-        const actions = openAction || mapAction ? `<div class="wallet-actions">${openAction}${mapAction}</div>` : '<span class="wallet-badge">Booked</span>';
-        row.innerHTML = `<div><strong>${booking.emoji ? `${booking.emoji} ` : ''}${booking.name}</strong><span>${booking.displayDate}${booking.time ? ` · ${booking.time}` : ''}</span></div>${actions}`;
+        const actions = `<div class="wallet-actions">${localPlaceAction(booking)}${openAction}${mapAction}</div>`;
+        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div>${actions}`;
+        syncLocalPlaceDisplay(row, localPlaceIndex.get(booking.id));
         return row;
       }));
       const hotelWallet = document.querySelector('#hotelWallet');
@@ -2834,13 +2885,20 @@
       const name = document.querySelector('#nextBookingName');
       const time = document.querySelector('#nextBookingTime');
       const link = document.querySelector('#nextBookingLink');
+      const card = document.querySelector('#nextBooking');
+      const localButton = document.querySelector('#nextBookingLocal');
       if (!next) {
         name.textContent = 'All confirmed moments complete';
         time.textContent = 'The booked itinerary has reached its finale.';
         link.hidden = true;
+        localButton.hidden = true;
+        card.removeAttribute('data-local-place');
         return;
       }
-      name.textContent = next.name;
+      card.dataset.localPlace = next.id;
+      card.dataset.englishName = next.name;
+      localButton.dataset.localToggle = next.id;
+      localButton.hidden = false;
       const isToday = next.date === clock.currentDate;
       let timing = isToday ? 'Today' : next.displayDate;
       timing += next.time ? ` · ${next.time}` : ' · time in reservation';
@@ -2852,6 +2910,7 @@
       time.textContent = timing;
       link.hidden = !next.link;
       if (next.link) link.href = next.link;
+      syncLocalPlaceDisplay(card, localPlaceIndex.get(next.id));
     }
 
     function todayPreviewActivities(timeline) {
@@ -2890,7 +2949,19 @@
       document.querySelector('#todayViewTitle').textContent = day.title;
       document.querySelector('#todayViewSummary').textContent = `${timeline.filter((activity) => activity.state === 'complete').length} of ${timeline.length} stops complete · local trip time`;
       document.querySelector('#todayNextTime').textContent = focus?.state === 'current' ? `Now · ${focus.time || 'in progress'}` : focus?.time || 'Flexible';
-      document.querySelector('#todayNextTitle').textContent = focus?.route || focus?.title || 'Enjoy the open space in today’s plan';
+      const todayNext = document.querySelector('#todayNext');
+      const todayNextTitle = document.querySelector('#todayNextTitle');
+      const todayNextLocal = document.querySelector('#todayNextLocal');
+      const focusTitle = focus?.route || focus?.title || 'Enjoy the open space in today’s plan';
+      todayNext.dataset.localPlace = focus?.id || '';
+      todayNext.dataset.englishName = focusTitle;
+      todayNextTitle.textContent = focusTitle;
+      todayNextLocal.hidden = !focus?.localName;
+      if (focus?.localName) {
+        todayNextLocal.dataset.localToggle = focus.id;
+        todayNextLocal.innerHTML = `${actionIcons.language}<span>Show local name</span>`;
+        syncLocalPlaceDisplay(todayNext, focus);
+      }
       document.querySelector('#todayLeaveBy').textContent = focus?.leaveBy ? `Leave by ${focus.leaveBy}` : focus?.state === 'current' ? 'You’re on schedule' : 'No fixed departure yet';
 
       const nextMap = document.querySelector('#todayNextMap');
@@ -2902,8 +2973,13 @@
       bookingStatus.hidden = !focus?.booking || Boolean(focus?.reservationLink);
       bookingStatus.querySelector('span').textContent = focus?.booking?.statusLabel || 'Booking confirmed';
 
-      document.querySelector('#todayTransit').textContent = day.transit.route;
-      document.querySelector('#todayTransitDetail').textContent = `${day.transit.detail} · ${day.transit.local}`;
+      const todayTransitCard = document.querySelector('#todayTransitCard');
+      todayTransitCard.dataset.localPlace = day.transit.id;
+      todayTransitCard.dataset.englishName = day.transit.route;
+      todayTransitCard.dataset.englishDetail = day.transit.detail;
+      document.querySelector('#todayTransitLocal').dataset.localToggle = day.transit.id;
+      document.querySelector('#todayTransitLocal').innerHTML = `${actionIcons.language}<span>Show local name</span>`;
+      syncLocalPlaceDisplay(todayTransitCard, day.transit);
       document.querySelector('#todayWeather').href = weatherUrl(day.weatherCity);
       document.querySelector('#todayWeatherCity').textContent = day.weatherCity;
       const todayHotel = document.querySelector('#todayHotel');
@@ -2916,7 +2992,11 @@
       syncLocalPlaceDisplay(todayHotel, hotel);
 
       const preview = todayPreviewActivities(timeline);
-      document.querySelector('#todayRunSheet').innerHTML = preview.map((activity) => `<div class="today-run-row" data-state="${activity.state}"><span class="today-run-time">${activity.time || 'Flexible'}</span><span class="today-run-title">${activity.route || activity.title}</span><span class="today-run-state">${stateLabels[activity.state]}</span></div>`).join('');
+      document.querySelector('#todayRunSheet').innerHTML = preview.map((activity) => {
+        const title = activity.route || activity.title;
+        return `<div class="today-run-row local-place" data-local-place="${activity.id}" data-english-name="${title}" data-state="${activity.state}"><span class="today-run-time">${activity.time || 'Flexible'}</span><span class="today-run-title" data-local-name>${title}</span><span class="today-run-state">${stateLabels[activity.state]}</span>${localPlaceAction(activity, '', true)}</div>`;
+      }).join('');
+      preview.forEach((activity) => syncLocalPlaceDisplays(activity.id));
 
       document.querySelector('#todayOpenRunSheet').onclick = () => openDayView(day.day);
       document.querySelector('#todayFullRoute').onclick = () => {

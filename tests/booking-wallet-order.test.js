@@ -35,6 +35,7 @@ function createHarness() {
       createElement: () => ({ className: '', innerHTML: '', dataset: {} }),
       querySelector: (selector) => selector === '#bookingWallet' ? bookingWallet : hotelWallet
     },
+    localPlaceIndex: new Map(),
     localPlaceAction: () => '',
     syncLocalPlaceDisplay() {}
   };
@@ -52,7 +53,7 @@ function createHarness() {
 function walletNames(rows) {
   // The wallet now prefixes each name with a decorative emoji (e.g. "🥷🏻 Ninja Restaurant").
   // Strip that leading non-ASCII glyph so these assertions stay focused on booking order.
-  return rows.map((row) => row.innerHTML.match(/<strong>(.*?)<\/strong>/)?.[1]?.replace(/^[^\x00-\x7F]+\s+/, ''));
+  return rows.map((row) => row.innerHTML.match(/<strong(?:\s[^>]*)?>(.*?)<\/strong>/)?.[1]?.replace(/^[^\x00-\x7F]+\s+/, ''));
 }
 
 function verifySameDayBookingCompletion() {
@@ -81,8 +82,10 @@ function verifyNextBookingPromotion() {
 
   assert.equal(walletNames(bookingWallet.rows)[0], 'Kimono Miyabi Kyoto', 'the next confirmed booking should appear first');
   assert.equal(walletNames(bookingWallet.rows)[1], 'USJ Express Pass + Super Nintendo World', 'the later USJ booking should remain with upcoming bookings');
-  assert.equal(bookingWallet.rows[0].className, 'wallet-item');
-  assert.equal(bookingWallet.rows[1].className, 'wallet-item');
+  assert.match(bookingWallet.rows[0].className, /\blocal-place\b/);
+  assert.doesNotMatch(bookingWallet.rows[0].className, /\bis-past\b/);
+  assert.match(bookingWallet.rows[1].className, /\blocal-place\b/);
+  assert.doesNotMatch(bookingWallet.rows[1].className, /\bis-past\b/);
   assert.ok(bookingWallet.rows.slice(2).every((row) => row.className.includes('is-past')), 'completed bookings should follow upcoming bookings');
 }
 

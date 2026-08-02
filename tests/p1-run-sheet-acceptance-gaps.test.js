@@ -125,6 +125,7 @@ function createRendererContext() {
       maps: '<svg data-icon="map"></svg>',
       reservation: '<svg data-icon="reservation"></svg>',
     },
+    localPlaceAction: () => '',
     mapsUrl: (query) => `https://maps.example.test/?q=${encodeURIComponent(query)}`,
   };
 
@@ -160,7 +161,7 @@ function clockFor(isoDate, timeMinutes, currentDay) {
 }
 
 function rowFor(markup, title) {
-  const rows = markup.match(/<article class="run-sheet-item"[\s\S]*?<\/article>/g) || [];
+  const rows = markup.match(/<article class="run-sheet-item[^"]*"[\s\S]*?<\/article>/g) || [];
   const row = rows.find((candidate) => candidate.includes(title));
   assert.ok(row, `Expected run-sheet row for ${title}`);
   return row;

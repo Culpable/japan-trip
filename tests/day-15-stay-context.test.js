@@ -51,6 +51,9 @@ const context = vm.createContext({
   },
   mapsUrl: (query) => `map:${query}`,
   weatherUrl: (city) => `weather:${city}`,
+  actionIcons: { language: '' },
+  localPlaceAction: () => '',
+  syncLocalPlaceDisplays() {},
   openDayView() {},
   showFullRoute() {},
   syncLocalPlaceDisplay(container, place) {

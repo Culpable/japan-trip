@@ -39,6 +39,7 @@ function rowFor(markup, activityTitle) {
 const context = vm.createContext({
   Date,
   actionIcons: { maps: '' },
+  localPlaceAction: () => '',
   mapsUrl: (query) => `map:${query}`,
 });
 
