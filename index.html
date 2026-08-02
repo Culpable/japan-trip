@@ -1096,6 +1096,29 @@
     .mini-action:hover, .day-action:hover { transform: translateY(-1px); box-shadow: 0 3px 9px rgba(23, 47, 72, .14); border-color: color-mix(in srgb, var(--accent) 55%, rgba(23, 47, 72, .16)); }
     .day-action.primary:hover { background: color-mix(in srgb, var(--accent) 86%, #000); border-color: color-mix(in srgb, var(--accent) 86%, #000); }
     .mini-action:active, .day-action:active { transform: scale(.96); box-shadow: none; }
+    /* A local-name card is a deliberately narrow translation aid. It swaps only one saved
+       place between English and its taxi-ready Chinese or Japanese name and address. */
+    .local-place { transition: box-shadow .18s ease, background-color .18s ease; }
+    .local-place.is-local {
+      background: linear-gradient(135deg, rgba(255, 253, 247, .98), rgba(255, 246, 218, .96));
+      box-shadow: inset 3px 0 #c89c3c, var(--shadow-border);
+    }
+    .local-place [data-local-name][lang], .local-place [data-local-detail][lang] {
+      font-family: "Hiragino Sans", "Yu Gothic", "PingFang SC", "Noto Sans CJK JP", sans-serif;
+      letter-spacing: .01em;
+    }
+    .local-place [data-local-detail] { white-space: pre-line; }
+    .local-name-action[aria-pressed="true"] {
+      border-color: #c89c3c;
+      background: #fff4cf;
+      color: #6b4b08;
+    }
+    .local-name-action .action-ico { width: 16px; height: 16px; }
+    .hotel-now.is-local h3, .today-essential.is-local h3 { font-size: 1.12rem; }
+    .hotel-now.is-local p:not(.utility-label), .today-essential.is-local p:not(.today-card-label) {
+      color: #544a32;
+      font-size: .82rem;
+    }
     .time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
     .time-zone strong { display: block; color: #172f48; font-size: .86rem; }
     .time-zone span { display: block; margin-top: .15rem; color: #6b7680; font-size: .66rem; font-weight: 800; text-transform: uppercase; }
@@ -1275,9 +1298,11 @@
     .today-essentials { display: grid; gap: .6rem; }
     .today-essential { display: block; padding: .8rem .9rem; color: #242522; text-decoration: none; }
     .today-essential h3 { margin: 0; font: 800 .92rem/1.25 "Nunito Sans", sans-serif; }
-    .today-essential p:last-child { margin: .22rem 0 0; color: #6c7580; font-size: .76rem; font-weight: 700; }
+    .today-essential > p:not(.today-card-label) { margin: .22rem 0 0; color: #6c7580; font-size: .76rem; font-weight: 700; }
     .today-essential-link { transition: transform .16s ease, box-shadow .16s ease; }
     .today-essential-link:hover { transform: translateY(-2px); box-shadow: var(--shadow-border-hover), 0 8px 20px rgba(23, 107, 180, .1); }
+    .today-essential .utility-actions { margin-top: .55rem; }
+    .today-essential .mini-action { min-height: 36px; padding-inline: .68rem; }
     .today-run-sheet {
       display: grid;
       gap: .45rem;
@@ -1436,8 +1461,9 @@
       body.is-in-trip .live-greeting { margin-top: .35rem; }
       .today-view { border-radius: 18px; }
       .today-view-head { align-items: center; }
-      .today-essentials { grid-template-columns: 1fr 1fr; }
-      .today-essentials .today-essential:first-child { grid-column: 1 / -1; }
+      /* Each essential gets the full phone width. This keeps station names and taxi-ready hotel
+         details legible without narrow columns or empty grid cells when local text is shown. */
+      .today-essentials { grid-template-columns: 1fr; }
       .today-run-row { grid-template-columns: 60px minmax(0, 1fr); }
       .today-run-state { grid-column: 2; }
       .run-sheet-item { grid-template-columns: 68px minmax(0, 1fr); gap: .65rem; }
@@ -1651,6 +1677,7 @@
           <div class="utility-actions">
             <a class="mini-action" id="hotelMap" href="#" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Open map</span></a>
             <button class="mini-action" id="copyHotel" type="button"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2.5"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2"/></svg><span>Copy address</span></button>
+            <button class="mini-action local-name-action" id="hotelNowLocal" type="button" aria-pressed="false"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h8M9 3v2M4 9c3.5 0 6.5-1.7 8-4M6 6c1.2 2.3 3.1 4.1 5.5 5.2M14 21l4-10 4 10M15.5 17h5"/></svg><span>Show local name</span></button>
             <button class="mini-action" id="openHotels" type="button"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span>All stays</span></button>
           </div>
         </article>
@@ -1694,11 +1721,15 @@
             <h3 id="todayWeatherCity">Today’s destination</h3>
             <p>Open live conditions</p>
           </a>
-          <a class="today-essential today-essential-link" id="todayHotel" href="#" target="_blank" rel="noopener noreferrer">
+          <article class="today-essential local-place" id="todayHotel">
             <p class="today-card-label" id="todayHotelLabel">Tonight’s hotel</p>
-            <h3 id="todayHotelName">Checking your stay…</h3>
-            <p id="todayHotelDetail"></p>
-          </a>
+            <h3 id="todayHotelName" data-local-name>Checking your stay…</h3>
+            <p id="todayHotelDetail" data-local-detail></p>
+            <div class="utility-actions">
+              <a class="mini-action" id="todayHotelMap" href="#" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Open map</span></a>
+              <button class="mini-action local-name-action" id="todayHotelLocal" type="button" aria-pressed="false"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h8M9 3v2M4 9c3.5 0 6.5-1.7 8-4M6 6c1.2 2.3 3.1 4.1 5.5 5.2M14 21l4-10 4 10M15.5 17h5"/></svg><span>Show local name</span></button>
+            </div>
+          </article>
         </div>
       </div>
       <div class="today-run-sheet" id="todayRunSheet"></div>
@@ -1806,13 +1837,13 @@
     const endDate = '2026-08-15';
     const tripData = (() => {
       const stays = {
-        shenzhen: { id: 'shenzhen', emoji: '🏙️', location: 'Shenzhen', name: 'The Langham, Shenzhen', address: '7888 Shennan Boulevard, Futian District, Shenzhen 518040, China', checkIn: '2026-08-01', checkOut: '2026-08-04', dates: '1–4 August · 3 nights' },
-        hongKong: { id: 'hong-kong-airport', emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night' },
-        tokyo: { id: 'tokyo-ginza', emoji: '🗼', location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
-        fuji: { id: 'fuji', emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night' },
-        kyoto: { id: 'kyoto', emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0847, Japan', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights' },
-        osaka: { id: 'osaka', emoji: '🏯', location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', checkIn: '2026-08-13', checkOut: '2026-08-14', dates: '13–14 August · 1 night' },
-        narita: { id: 'narita', emoji: '✈️', location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', checkIn: '2026-08-14', checkOut: '2026-08-15', dates: '14–15 August · 1 night' }
+        shenzhen: { id: 'shenzhen', emoji: '🏙️', location: 'Shenzhen', name: 'The Langham, Shenzhen', address: '7888 Shennan Boulevard, Futian District, Shenzhen 518040, China', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', localName: '深圳东海朗廷酒店', localAddress: '中国广东省深圳市福田区深南大道7888号', checkIn: '2026-08-01', checkOut: '2026-08-04', dates: '1–4 August · 3 nights' },
+        hongKong: { id: 'hong-kong-airport', emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', localName: '香港银樾美憬阁精选酒店', localAddress: '中国香港东涌达东路16号', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night' },
+        tokyo: { id: 'tokyo-ginza', emoji: '🗼', location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'YOTEL 東京 銀座', localAddress: '〒105-0004 東京都港区新橋1丁目7-7', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
+        fuji: { id: 'fuji', emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '精進レークホテル', localAddress: '〒401-0336 山梨県南都留郡富士河口湖町精進255', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night' },
+        kyoto: { id: 'kyoto', emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0846, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ノーガホテル 清水 京都', localAddress: '〒605-0846 京都府京都市東山区五条橋東4丁目450番1号', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights' },
+        osaka: { id: 'osaka', emoji: '🏯', location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ダブルツリーbyヒルトン大阪城', localAddress: '〒540-0008 大阪府大阪市中央区大手前1丁目1番1号', checkIn: '2026-08-13', checkOut: '2026-08-14', dates: '13–14 August · 1 night' },
+        narita: { id: 'narita', emoji: '✈️', location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '成田東武ホテルエアポート', localAddress: '〒286-0106 千葉県成田市取香320-1', checkIn: '2026-08-14', checkOut: '2026-08-15', dates: '14–15 August · 1 night' }
       };
       return [
         {
@@ -2195,7 +2226,8 @@
     const actionIcons = {
       dayView: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg>',
       maps: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg>',
-      weather: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>'
+      weather: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>',
+      language: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h8M9 3v2M4 9c3.5 0 6.5-1.7 8-4M6 6c1.2 2.3 3.1 4.1 5.5 5.2M14 21l4-10 4 10M15.5 17h5"/></svg>'
     };
 
     function dateKeyInZone(date, timeZone) {
@@ -2330,13 +2362,74 @@
       return { stay: hotels.at(-1), label: clock.currentDate === endDate ? 'Departing from' : 'Final stay' };
     }
 
+    // Keep each hotel in one language across the dashboard, Today view and booking wallet.
+    // State intentionally lasts only for the open page: returning to English on the next visit
+    // avoids surprising either traveller, while the saved local text itself remains offline-ready.
+    const localPlaceVisibility = new Set();
+
+    function localPlaceAction(place, id = '') {
+      const showingLocal = localPlaceVisibility.has(place.id);
+      return `<button class="mini-action local-name-action"${id ? ` id="${id}"` : ''} type="button" data-local-toggle="${place.id}" aria-pressed="${showingLocal}">${actionIcons.language}<span>${showingLocal ? 'Show English' : 'Show local name'}</span></button>`;
+    }
+
+    function syncLocalPlaceDisplay(container, place) {
+      if (!container || !place) return;
+      const showingLocal = localPlaceVisibility.has(place.id);
+      const name = container.querySelector('[data-local-name]');
+      const detail = container.querySelector('[data-local-detail]');
+      const button = container.querySelector('[data-local-toggle]');
+      container.classList.toggle('is-local', showingLocal);
+      if (name) {
+        name.textContent = showingLocal ? place.localName : container.dataset.englishName || place.name;
+        if (showingLocal) name.lang = place.localLang;
+        else name.removeAttribute('lang');
+      }
+      if (detail) {
+        detail.textContent = showingLocal ? place.localAddress : container.dataset.englishDetail || place.address;
+        if (showingLocal) detail.lang = place.localLang;
+        else detail.removeAttribute('lang');
+      }
+      if (button) {
+        button.setAttribute('aria-pressed', String(showingLocal));
+        button.querySelector('span').textContent = showingLocal ? 'Show English' : 'Show local name';
+        button.setAttribute('aria-label', `${showingLocal ? 'Show English for' : `Show ${place.localLanguage} for`} ${place.name}`);
+      }
+    }
+
+    function syncLocalPlaceDisplays(placeId) {
+      const place = hotels.find((hotel) => hotel.id === placeId);
+      if (!place) return;
+      document.querySelectorAll(`[data-local-place="${placeId}"]`).forEach((container) => syncLocalPlaceDisplay(container, place));
+    }
+
+    function toggleLocalPlace(placeId) {
+      const place = hotels.find((hotel) => hotel.id === placeId);
+      if (!place) return;
+      if (localPlaceVisibility.has(placeId)) localPlaceVisibility.delete(placeId);
+      else localPlaceVisibility.add(placeId);
+      syncLocalPlaceDisplays(placeId);
+    }
+
+    function initialiseLocalNames() {
+      document.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-local-toggle]');
+        if (button) toggleLocalPlace(button.dataset.localToggle);
+      });
+    }
+
     function updateHotel(clock) {
       const { stay, label } = currentHotel(clock);
+      const card = document.querySelector('#hotelNow');
+      card.dataset.localPlace = stay.id;
+      card.dataset.englishName = stay.name;
+      card.dataset.englishDetail = `${stay.location} · ${stay.dates}`;
       document.querySelector('#hotelNowLabel').textContent = label;
-      document.querySelector('#hotelNowName').textContent = stay.name;
-      document.querySelector('#hotelNowDetail').textContent = `${stay.location} · ${stay.dates}`;
+      document.querySelector('#hotelNowName').dataset.localName = '';
+      document.querySelector('#hotelNowDetail').dataset.localDetail = '';
       document.querySelector('#hotelMap').href = mapsUrl(stay.address);
-      document.querySelector('#copyHotel').onclick = () => copyText(stay.address, 'Hotel address copied');
+      document.querySelector('#hotelNowLocal').dataset.localToggle = stay.id;
+      document.querySelector('#copyHotel').onclick = () => copyText(localPlaceVisibility.has(stay.id) ? stay.localAddress : stay.address, `${localPlaceVisibility.has(stay.id) ? stay.localLanguage : 'English'} hotel address copied`);
+      syncLocalPlaceDisplay(card, stay);
     }
 
     function clockZones(clock) {
@@ -2489,7 +2582,8 @@
       const scrollTop = body.scrollTop;
       dialog.dataset.day = String(dayNumber);
       document.querySelector('#dayDialogTitle').textContent = `Day ${dayNumber} · ${day.title}`;
-      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item"><div><strong>${hotel.name}</strong><span>${hotel.address}</span></div><a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></section><div class="utility-actions"><a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions"><a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      syncLocalPlaceDisplays(hotel.id);
       body.scrollTop = scrollTop;
     }
 
@@ -2537,8 +2631,12 @@
       const hotelWallet = document.querySelector('#hotelWallet');
       hotelWallet.replaceChildren(...hotels.map((hotel) => {
         const row = document.createElement('article');
-        row.className = `wallet-item${hotel.checkOut <= clock.currentDate ? ' is-past' : ''}`;
-        row.innerHTML = `<div><strong>${hotel.emoji ? `${hotel.emoji} ` : ''}${hotel.name}</strong><span>${hotel.location} · ${hotel.dates}<br>${hotel.address}</span></div><a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a>`;
+        row.className = `wallet-item local-place${hotel.checkOut <= clock.currentDate ? ' is-past' : ''}`;
+        row.dataset.localPlace = hotel.id;
+        row.dataset.englishName = `${hotel.emoji ? `${hotel.emoji} ` : ''}${hotel.name}`;
+        row.dataset.englishDetail = `${hotel.location} · ${hotel.dates}\n${hotel.address}`;
+        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
+        syncLocalPlaceDisplay(row, hotel);
         return row;
       }));
     }
@@ -2809,10 +2907,14 @@
       document.querySelector('#todayTransitDetail').textContent = `${day.transit.detail} · ${day.transit.local}`;
       document.querySelector('#todayWeather').href = weatherUrl(day.weatherCity);
       document.querySelector('#todayWeatherCity').textContent = day.weatherCity;
-      document.querySelector('#todayHotel').href = mapsUrl(hotel.address);
+      const todayHotel = document.querySelector('#todayHotel');
+      todayHotel.dataset.localPlace = hotel.id;
+      todayHotel.dataset.englishName = hotel.name;
+      todayHotel.dataset.englishDetail = `${hotel.location} · ${hotel.dates}`;
+      document.querySelector('#todayHotelMap').href = mapsUrl(hotel.address);
       document.querySelector('#todayHotelLabel').textContent = hotelLabel;
-      document.querySelector('#todayHotelName').textContent = hotel.name;
-      document.querySelector('#todayHotelDetail').textContent = `${hotel.location} · ${hotel.dates}`;
+      document.querySelector('#todayHotelLocal').dataset.localToggle = hotel.id;
+      syncLocalPlaceDisplay(todayHotel, hotel);
 
       const preview = todayPreviewActivities(timeline);
       document.querySelector('#todayRunSheet').innerHTML = preview.map((activity) => `<div class="today-run-row" data-state="${activity.state}"><span class="today-run-time">${activity.time || 'Flexible'}</span><span class="today-run-title">${activity.route || activity.title}</span><span class="today-run-state">${stateLabels[activity.state]}</span></div>`).join('');
@@ -3308,7 +3410,7 @@
       if (window.__tripAppInitialised) return;
       window.__tripAppInitialised = true;
       renderItinerary();
-      renderDayEnhancements(); initialiseFilters(); initialiseDialogs(); initialiseCompanion(); initialiseCompanionControls(); initialiseSound(); initialiseEasterEggs(); initialiseOffline(); updateTripState(); initialiseCountdownExtras();
+      renderDayEnhancements(); initialiseFilters(); initialiseDialogs(); initialiseLocalNames(); initialiseCompanion(); initialiseCompanionControls(); initialiseSound(); initialiseEasterEggs(); initialiseOffline(); updateTripState(); initialiseCountdownExtras();
       window.setInterval(updateTripState, 60000);
     }
 

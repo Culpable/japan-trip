@@ -32,9 +32,11 @@ function createHarness() {
     Date,
     mapsUrl: () => '#',
     document: {
-      createElement: () => ({ className: '', innerHTML: '' }),
+      createElement: () => ({ className: '', innerHTML: '', dataset: {} }),
       querySelector: (selector) => selector === '#bookingWallet' ? bookingWallet : hotelWallet
-    }
+    },
+    localPlaceAction: () => '',
+    syncLocalPlaceDisplay() {}
   };
   vm.createContext(context);
   vm.runInContext(

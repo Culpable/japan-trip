@@ -34,6 +34,7 @@ const element = (selector) => {
       href: '',
       hidden: false,
       innerHTML: '',
+      dataset: {},
       onclick: null,
       querySelector: () => ({ textContent: '' }),
     });
@@ -52,6 +53,10 @@ const context = vm.createContext({
   weatherUrl: (city) => `weather:${city}`,
   openDayView() {},
   showFullRoute() {},
+  syncLocalPlaceDisplay(container, place) {
+    element('#todayHotelName').textContent = place.name;
+    element('#todayHotelDetail').textContent = container.dataset.englishDetail;
+  },
 });
 
 vm.runInContext([
