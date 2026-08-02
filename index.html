@@ -1310,31 +1310,32 @@
       background: #fff;
       box-shadow: var(--shadow-border);
     }
-    .run-sheet-item::before {
+    .run-sheet-time::after {
       content: "";
       position: absolute;
-      left: 75px;
-      top: 1.15rem;
+      right: .6rem;
+      top: 50%;
       width: 9px;
       height: 9px;
       border: 3px solid #fff;
       border-radius: 50%;
       background: #aeb8c2;
       box-shadow: 0 0 0 1px #d9d6ce;
+      transform: translateY(-50%);
     }
     .run-sheet-item[data-state="complete"] { opacity: .55; }
-    .run-sheet-item[data-state="complete"]::before { background: #194f45; }
+    .run-sheet-item[data-state="complete"] .run-sheet-time::after { background: #194f45; }
     .run-sheet-item[data-state="current"] { box-shadow: inset 4px 0 #176bb4, var(--shadow-border); }
-    .run-sheet-item[data-state="current"]::before { background: #176bb4; }
+    .run-sheet-item[data-state="current"] .run-sheet-time::after { background: #176bb4; }
     .run-sheet-item[data-state="next"] { box-shadow: inset 4px 0 #ffcc28, var(--shadow-border); }
-    .run-sheet-item[data-state="next"]::before { background: #ffcc28; }
+    .run-sheet-item[data-state="next"] .run-sheet-time::after { background: #ffcc28; }
     .run-sheet-item[data-expanded="true"] { padding: 1rem; }
     .run-sheet-item[data-expanded="true"] .run-sheet-content h3 { font-size: 1.02rem; }
     .run-sheet-item[data-expanded="false"] { padding: .68rem .9rem; }
     .run-sheet-item[data-expanded="false"] .run-sheet-meta { margin-top: .2rem; }
     .run-sheet-item[data-expanded="false"] .run-sheet-status { margin-top: .3rem; }
     .run-sheet-item[data-expanded="false"] .run-sheet-actions { margin-top: .35rem; }
-    .run-sheet-time { color: #606c78; font-size: .72rem; font-weight: 900; }
+    .run-sheet-time { position: relative; align-self: start; color: #606c78; font-size: .72rem; font-weight: 900; line-height: 1.2; }
     .run-sheet-content h3 { margin: 0; font: 800 .95rem/1.25 "Nunito Sans", sans-serif; }
     .run-sheet-meta { margin: .3rem 0 0; color: #727873; font-size: .74rem; font-weight: 700; line-height: 1.4; }
     .run-sheet-status {
@@ -1440,7 +1441,6 @@
       .today-run-row { grid-template-columns: 60px minmax(0, 1fr); }
       .today-run-state { grid-column: 2; }
       .run-sheet-item { grid-template-columns: 68px minmax(0, 1fr); gap: .65rem; }
-      .run-sheet-item::before { left: 59px; }
     }
     /* ---- Pre-trip countdown delight -------------------------------------------- */
     /* Scene warming: the dashboard glows warmer as the trip nears. --hype (0..1) is set

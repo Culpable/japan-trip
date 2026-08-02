@@ -47,6 +47,21 @@ assert.equal(timeline.find((activity) => activity.id === 'teamlab-planets').leav
 
 assert.match(html, /class="run-sheet"/, 'the daily dialog should render a run-sheet timeline');
 assert.match(html, /run-sheet-item[^`]*data-state=/, 'run-sheet rows should expose their live state');
+assert.match(
+  html,
+  /\.run-sheet-time\s*\{[^}]*position:\s*relative[^}]*align-self:\s*start[^}]*line-height:\s*1\.2[^}]*\}/s,
+  'the time label should use a tight line box instead of stretching to the full row height'
+);
+assert.match(
+  html,
+  /\.run-sheet-time::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)[^}]*\}/s,
+  'the timeline marker should centre itself against the time label'
+);
+assert.doesNotMatch(
+  html,
+  /\.run-sheet-item::before\s*\{/,
+  'the timeline marker should not use a fixed row-relative top offset'
+);
 assert.match(html, />Reservation<\/span>/, 'booked activities should expose reservation actions');
 assert.match(html, />Open map<\/span>/, 'run-sheet activities should expose map actions');
 assert.match(html, /Open full run sheet/, 'Today should open the complete daily run sheet');
