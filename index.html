@@ -1337,16 +1337,15 @@
     }
     .run-sheet-time::after {
       content: "";
-      position: absolute;
-      right: .6rem;
-      top: 50%;
+      position: static;
+      flex: 0 0 auto;
       width: 9px;
       height: 9px;
       border: 3px solid #fff;
       border-radius: 50%;
       background: #aeb8c2;
       box-shadow: 0 0 0 1px #d9d6ce;
-      transform: translateY(-50%);
+      transform: none;
     }
     .run-sheet-item[data-state="complete"] { opacity: .55; }
     .run-sheet-item[data-state="complete"] .run-sheet-time::after { background: #194f45; }
@@ -1360,7 +1359,7 @@
     .run-sheet-item[data-expanded="false"] .run-sheet-meta { margin-top: .2rem; }
     .run-sheet-item[data-expanded="false"] .run-sheet-status { margin-top: .3rem; }
     .run-sheet-item[data-expanded="false"] .run-sheet-actions { margin-top: .35rem; }
-    .run-sheet-time { position: relative; align-self: start; color: #606c78; font-size: .72rem; font-weight: 900; line-height: 1.2; }
+    .run-sheet-time { display: flex; align-items: center; gap: .35rem; align-self: start; color: #606c78; font-size: .72rem; font-weight: 900; white-space: nowrap; line-height: 1.2; }
     .run-sheet-content h3 { margin: 0; font: 800 .95rem/1.25 "Nunito Sans", sans-serif; }
     .run-sheet-meta { margin: .3rem 0 0; color: #727873; font-size: .74rem; font-weight: 700; line-height: 1.4; }
     .run-sheet-status {

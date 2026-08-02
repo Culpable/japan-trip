@@ -49,13 +49,13 @@ assert.match(html, /class="run-sheet"/, 'the daily dialog should render a run-sh
 assert.match(html, /run-sheet-item[^`]*data-state=/, 'run-sheet rows should expose their live state');
 assert.match(
   html,
-  /\.run-sheet-time\s*\{[^}]*position:\s*relative[^}]*align-self:\s*start[^}]*line-height:\s*1\.2[^}]*\}/s,
-  'the time label should use a tight line box instead of stretching to the full row height'
+  /\.run-sheet-time\s*\{[^}]*display:\s*flex[^}]*align-items:\s*center[^}]*gap:\s*\.35rem[^}]*white-space:\s*nowrap[^}]*line-height:\s*1\.2[^}]*\}/s,
+  'the time label and marker should use a non-overlapping inline layout'
 );
 assert.match(
   html,
-  /\.run-sheet-time::after\s*\{[^}]*top:\s*50%[^}]*transform:\s*translateY\(-50%\)[^}]*\}/s,
-  'the timeline marker should centre itself against the time label'
+  /\.run-sheet-time::after\s*\{[^}]*position:\s*static[^}]*flex:\s*0 0 auto[^}]*transform:\s*none[^}]*\}/s,
+  'the timeline marker should remain in layout instead of overlaying the time text'
 );
 assert.doesNotMatch(
   html,
