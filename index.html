@@ -1765,11 +1765,6 @@
       </div>
     </section>
 
-    <aside class="urgent">
-      <span class="urgent-mark">!</span>
-      <p><strong>Still to book:</strong> Shibuya Sky</p>
-    </aside>
-
     <section class="prep-checklist" id="prepChecklist" hidden aria-label="Pre-trip preparation checklist">
       <div class="prep-head">
         <div>
@@ -1942,11 +1937,14 @@
             { id: 'showa-kinen-bikes', order: 1, title: 'Rent bikes at Showa Kinen Park in Tachikawa', localName: '国営昭和記念公園でレンタサイクル', localAddress: '〒190-0014 東京都立川市緑町3173', localLanguage: 'Japanese', localLang: 'ja', address: 'Showa Kinen Park, Tokyo, Japan' },
             { id: 'inokashira-swan', order: 2, title: 'Ride a swan boat at Inokashira Park', localName: '井の頭恩賜公園でスワンボート', localAddress: '〒180-0005 東京都武蔵野市御殿山1丁目18-31', localLanguage: 'Japanese', localLang: 'ja', address: 'Inokashira Park, Tokyo, Japan' },
             { id: 'mario-kart', order: 3, title: 'Mario Kart street racing with an international driving permit', localName: '国際運転免許証でマリオカート公道走行', localLanguage: 'Japanese', localLang: 'ja' },
-            { id: 'shibuya-sky', order: 4, title: 'Shibuya Sky at sunset', localName: '夕暮れのSHIBUYA SKY', localAddress: '〒150-6145 東京都渋谷区渋谷2丁目24-12 渋谷スクランブルスクエア14階', localLanguage: 'Japanese', localLang: 'ja', address: 'Shibuya Sky, Tokyo, Japan' },
+            { id: 'shibuya-sky', order: 4, title: 'SHIBUYA SKY sunset admission', localName: 'SHIBUYA SKY（渋谷スカイ）', localAddress: '〒150-6145 東京都渋谷区渋谷2丁目24-12 渋谷スクランブルスクエア', localLanguage: 'Japanese', localLang: 'ja', time: '5:35PM', instant: '2026-08-07T17:35:00+09:00', address: 'SHIBUYA SKY, Shibuya Scramble Square, 2-24-12 Shibuya, Shibuya City, Tokyo 150-6145, Japan', booking: { emoji: '🌇', name: 'SHIBUYA SKY', shortName: 'Shibuya Sky', displayDate: 'Friday 7 August', statusLabel: 'Admission confirmed' } },
             { id: 'shinjuku-sights', order: 5, title: 'See the 3D cat billboard and Tokyo Metropolitan Government Building', localName: '3D猫と東京都庁展望室', localLanguage: 'Japanese', localLang: 'ja' },
             { id: 'game-centre-reissue', order: 6, title: 'Visit a game centre and Cafe Reissue for 3D latte art', localName: 'ゲームセンターとリシューの3Dラテアート', localLanguage: 'Japanese', localLang: 'ja' }
           ],
-          notes: [{ kind: 'booking', text: 'Shibuya Sky timed entry · Cafe Reissue at opening' }]
+          notes: [
+            { kind: 'confirmed', text: 'SHIBUYA SKY · Friday 7 August 2026 · entrance 5:35–5:50PM' },
+            { kind: 'note', text: 'Cafe Reissue · arrive at opening' }
+          ]
         },
         {
           id: 'day-8', day: 8, date: '2026-08-08', weekday: 'SAT', region: 'tokyo', location: 'Tokyo', localLocation: '東京', title: 'Cultural Tokyo: Ginza to Akasaka', localName: '東京文化巡り：銀座から赤坂へ', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Art Aquarium Museum Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
@@ -2153,9 +2151,7 @@
     ];
 
     // A shared prep list the two of them tick off together; progress persists per-device.
-    // The Shibuya task mirrors the "Still to book" banner so bookings live in one place.
     const preTripTasks = [
-      { id: 'book-shibuya', label: 'Book Shibuya Sky timed entry (on the 24th of July)' },
       { id: 'passports', label: 'Passports valid 6+ months' },
       { id: 'money', label: 'Set up Suica, WeChat Pay & Alipay' },
       { id: 'esim', label: 'Buy a Japan eSIM / pocket wifi' },
@@ -2375,7 +2371,6 @@
       chips.forEach((chip) => chip.classList.remove('active'));
       document.querySelector('#todayShortcut').classList.add('is-active');
       document.querySelector('#nextBooking').hidden = true;
-      document.querySelector('.urgent').hidden = true;
       document.querySelector('#prepChecklist').hidden = true;
       renderTodayView(clock);
     }
@@ -2430,7 +2425,7 @@
         else name.removeAttribute('lang');
       }
       if (detail) {
-        const localDetail = place.localAddress || place.localLocation || container.dataset.englishDetail || place.address || '';
+        const localDetail = container.dataset.localDetail || place.localAddress || place.localLocation || container.dataset.englishDetail || place.address || '';
         detail.textContent = showingLocal ? localDetail : container.dataset.englishDetail || place.address || '';
         if (showingLocal) detail.lang = place.localLang;
         else detail.removeAttribute('lang');
@@ -2675,6 +2670,7 @@
         row.dataset.localPlace = booking.id;
         row.dataset.englishName = `${booking.emoji ? `${booking.emoji} ` : ''}${booking.name}`;
         row.dataset.englishDetail = `${booking.displayDate}${booking.time ? ` · ${booking.time}` : ''}`;
+        row.dataset.localDetail = `${row.dataset.englishDetail}${booking.localAddress ? `\n${booking.localAddress}` : ''}`;
         // Every confirmed moment now carries a Map link (pin icon + label) to its venue, mirroring
         // the hotel rows. Bookings with a reservation link keep an "Open" action beside the map.
         const mapAction = booking.address ? `<a class="mini-action" href="${mapsUrl(booking.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a>` : '';
@@ -3221,8 +3217,7 @@
       if (progress) progress.textContent = `${done} / ${boxes.length} done`;
     }
 
-    // Build (once) and sync the shared prep checklist. Pre-trip it replaces the static
-    // "Still to book" banner; during and after the trip both are hidden.
+    // Build (once) and sync the shared prep checklist. During and after the trip it is hidden.
     function renderPrepChecklist(clock) {
       const section = document.querySelector('#prepChecklist');
       const urgent = document.querySelector('.urgent');

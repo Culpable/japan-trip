@@ -44,6 +44,20 @@ assert.equal(dior.reservationLink, 'https://www.tablecheck.com/en/reservation/4L
 assert.equal(teamLab.instant, '2026-08-06T16:30:00+09:00');
 assert.equal(teamLab.leaveBy, '3:45PM');
 
+const daySeven = tripData[6];
+const shibuyaSky = daySeven.activities.find((activity) => activity.id === 'shibuya-sky');
+assert.equal(daySeven.date, '2026-08-07');
+assert.equal(shibuyaSky.time, '5:35PM');
+assert.equal(shibuyaSky.instant, '2026-08-07T17:35:00+09:00');
+assert.equal(shibuyaSky.booking?.name, 'SHIBUYA SKY');
+assert.equal(shibuyaSky.booking?.displayDate, 'Friday 7 August');
+assert.equal(shibuyaSky.localName, 'SHIBUYA SKY（渋谷スカイ）');
+assert.match(shibuyaSky.localAddress, /東京都渋谷区渋谷2丁目24-12/);
+assert.ok(
+  daySeven.notes.some((note) => note.kind === 'confirmed' && /entrance 5:35–5:50PM/.test(note.text)),
+  'Friday 7 August should present the SHIBUYA SKY entrance window as confirmed'
+);
+
 const dayThirteen = tripData[12];
 const universalStudios = dayThirteen.activities.find((activity) => activity.id === 'universal-studios');
 assert.equal(dayThirteen.date, '2026-08-13');

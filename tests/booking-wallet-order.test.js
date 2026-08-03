@@ -66,9 +66,13 @@ function verifySameDayBookingCompletion() {
 
   assert.deepEqual(
     walletNames(bookingWallet.rows),
-    ['teamLab Planets', 'Ninja Restaurant', 'Kimono Miyabi Kyoto', 'USJ Express Pass + Super Nintendo World', 'Dior Café'],
+    ['teamLab Planets', 'SHIBUYA SKY', 'Ninja Restaurant', 'Kimono Miyabi Kyoto', 'USJ Express Pass + Super Nintendo World', 'Dior Café'],
     'upcoming bookings should be shown first and elapsed bookings should move to the end'
   );
+  const shibuyaSky = bookingWallet.rows.find((row) => row.dataset.localPlace === 'shibuya-sky');
+  assert.equal(shibuyaSky.dataset.englishDetail, 'Friday 7 August · 5:35PM');
+  assert.match(shibuyaSky.dataset.localDetail, /^Friday 7 August · 5:35PM\n/);
+  assert.match(shibuyaSky.dataset.localDetail, /東京都渋谷区渋谷2丁目24-12/);
   assert.match(bookingWallet.rows.at(-1).className, /is-past/, 'Dior Café should be marked past after its 10:30AM reservation');
 }
 
