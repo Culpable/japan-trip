@@ -1888,14 +1888,19 @@
           notes: []
         },
         {
-          id: 'day-3', day: 3, date: '2026-08-03', weekday: 'MON', region: 'china', location: 'Guangzhou', localLocation: '广州', title: 'Day trip to Guangzhou Circle', localName: '广州圆大厦一日游', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', mapQuery: 'Guangzhou Circle', weatherCity: 'Guangzhou', hotel: stays.shenzhen,
-          transit: { id: 'guangzhou-rail', order: 0, mode: 'Rail', route: 'Shenzhen North → Guangzhou South', detail: 'High-speed rail · about 55 minutes', localName: '深圳北站 → 广州南站', localAddress: '中国广东省广州市番禺区广州南站', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', durationMinutes: 55, address: 'Guangzhou South Railway Station' },
+          id: 'day-3', day: 3, date: '2026-08-03', weekday: 'MON', region: 'china', location: 'Shenzhen & Guangzhou', localLocation: '深圳・广州', title: 'Qianhai Snow World + Guangzhou Circle', localName: '华发冰雪热雪奇迹 + 广州圆大厦', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', mapQuery: 'HUAFA SNOW BONSKI, No. 666 Binjiang Avenue, Bao’an District, Shenzhen, Guangdong, China', weatherCity: 'Shenzhen', hotel: stays.shenzhen,
+          transit: { id: 'langham-to-qianhai-snow', order: 0, mode: 'Metro / DiDi', route: 'The Langham Shenzhen → Qianhai Snow World', detail: 'Metro Line 20 to Convention & Exhibition City station · check live route', localName: '深圳东海朗廷酒店 → 华发冰雪热雪奇迹', localAddress: '广东省深圳市宝安区滨江大道666号华发冰雪热雪奇迹', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', address: 'HUAFA SNOW BONSKI, No. 666 Binjiang Avenue, Bao’an District, Shenzhen, Guangdong, China' },
           activities: [
-            { id: 'guangzhou-circle', order: 1, title: 'See the 138-metre coin-shaped tower on the Pearl River', localName: '参观珠江畔高138米的广州圆大厦', localAddress: '中国广东省广州市荔湾区东沙大道', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', address: 'Guangzhou Circle, Liwan District, Guangzhou, China' },
-            { id: 'guangzhou-dusk', order: 2, title: 'Stay for dusk photography and the figure-eight reflection', localName: '黄昏拍摄广州圆及其“8”字倒影', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' },
-            { id: 'return-shenzhen', order: 3, title: 'Return to Shenzhen in the evening', localName: '傍晚返回深圳', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' }
+            { id: 'qianhai-snow-world', order: 1, title: 'Visit Qianhai Snow World (HUAFA SNOW BONSKI)', localName: '前往华发冰雪热雪奇迹', localAddress: '广东省深圳市宝安区滨江大道666号华发冰雪热雪奇迹', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', detail: 'Open 10:00AM–10:00PM · last entry 8:00PM · Klook suggests 3–5 hours · bring original passport', durationMinutes: 240, address: 'HUAFA SNOW BONSKI, No. 666 Binjiang Avenue, Bao’an District, Shenzhen, Guangdong, China', detailsLink: 'https://www.klook.com/en-US/activity/171780-shenzhen-huafa-snow-bonski/', detailsLabel: 'Klook details' },
+            { id: 'guangzhou-rail', order: 2, title: 'Take the high-speed rail from Shenzhen North to Guangzhou South', localName: '乘高铁从深圳北站前往广州南站', localAddress: '中国广东省广州市番禺区广州南站', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', detail: 'High-speed rail · about 55 minutes', durationMinutes: 55, address: 'Guangzhou South Railway Station' },
+            { id: 'guangzhou-circle', order: 3, title: 'See the 138-metre coin-shaped tower on the Pearl River', localName: '参观珠江畔高138米的广州圆大厦', localAddress: '中国广东省广州市荔湾区东沙大道', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', address: 'Guangzhou Circle, Liwan District, Guangzhou, China' },
+            { id: 'guangzhou-dusk', order: 4, title: 'Stay for dusk photography and the figure-eight reflection', localName: '黄昏拍摄广州圆及其“8”字倒影', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' },
+            { id: 'return-shenzhen', order: 5, title: 'Return to Shenzhen in the evening', localName: '傍晚返回深圳', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' }
           ],
-          notes: [{ kind: 'note', text: 'The Guangzhou Circle is in Guangzhou, not Shenzhen. The high-speed rail is the practical route.' }]
+          notes: [
+            { kind: 'confirmed', text: 'Qianhai Snow World · open 10:00AM–10:00PM · last entry 8:00PM · bring the original passport that matches the ticket', link: 'https://www.klook.com/en-US/activity/171780-shenzhen-huafa-snow-bonski/', linkLabel: 'Open Klook details' },
+            { kind: 'note', text: 'The Guangzhou Circle is in Guangzhou, not Shenzhen. The high-speed rail is the practical route.' }
+          ]
         },
         {
           id: 'day-4', day: 4, date: '2026-08-04', weekday: 'TUE', region: 'china', location: 'Hong Kong', localLocation: '香港', title: 'Final Shenzhen day → Hong Kong', localName: '深圳最后一天 → 前往香港', localLanguage: 'Simplified Chinese and Traditional Chinese', localLang: 'und', mapQuery: 'The Silveri Hong Kong', weatherCity: 'Hong Kong', hotel: stays.hongKong,
@@ -2612,8 +2617,9 @@
         ].filter(Boolean).join(' · ');
         const mapQuery = activity.address || activity.mapQuery;
         const reservationAction = activity.reservationLink ? `<a class="mini-action primary" href="${activity.reservationLink}" target="_blank" rel="noopener noreferrer"><span>Reservation</span></a>` : '';
-        const mapAction = mapQuery ? `<a class="mini-action${activity.reservationLink ? '' : ' primary'}" href="${mapsUrl(mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a>` : '';
-        const actions = `${localPlaceAction(activity, '', true)}${reservationAction}${mapAction}`;
+        const detailsAction = activity.detailsLink ? `<a class="mini-action primary" href="${activity.detailsLink}" target="_blank" rel="noopener noreferrer"><span>${activity.detailsLabel || 'Open details'}</span></a>` : '';
+        const mapAction = mapQuery ? `<a class="mini-action${activity.reservationLink || activity.detailsLink ? '' : ' primary'}" href="${mapsUrl(mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a>` : '';
+        const actions = `${localPlaceAction(activity, '', true)}${reservationAction}${detailsAction}${mapAction}`;
         const expanded = activity.state === 'current' || activity.state === 'next';
         return `<article class="run-sheet-item local-place" data-local-place="${activity.id}" data-english-name="${title}" data-english-detail="${metadata}" data-state="${activity.state}" data-expanded="${expanded}"><div class="run-sheet-time">${activity.time || 'Flexible'}</div><div class="run-sheet-content"><h3 data-local-name>${title}</h3>${metadata || activity.localAddress ? `<p class="run-sheet-meta" data-local-detail>${metadata}</p>` : ''}<span class="run-sheet-status">${labels[activity.state]}</span><div class="run-sheet-actions">${actions}</div></div></article>`;
       }).join('')}</div>`;
@@ -2967,8 +2973,10 @@
       const nextMap = document.querySelector('#todayNextMap');
       nextMap.href = mapsUrl(focus?.address || day.mapQuery);
       const reservation = document.querySelector('#todayReservation');
-      reservation.hidden = !focus?.reservationLink;
-      if (focus?.reservationLink) reservation.href = focus.reservationLink;
+      const focusLink = focus?.reservationLink || focus?.detailsLink;
+      reservation.hidden = !focusLink;
+      if (focusLink) reservation.href = focusLink;
+      reservation.querySelector('span').textContent = focus?.reservationLink ? 'Reservation' : (focus?.detailsLabel || 'Open details');
       const bookingStatus = document.querySelector('#todayBookingStatus');
       bookingStatus.hidden = !focus?.booking || Boolean(focus?.reservationLink);
       bookingStatus.querySelector('span').textContent = focus?.booking?.statusLabel || 'Booking confirmed';

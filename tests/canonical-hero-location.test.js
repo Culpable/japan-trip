@@ -31,7 +31,7 @@ vm.runInContext(`${extractDeclaration('tripData', 'bookings')}; this.model = tri
 const tripData = JSON.parse(vm.runInContext('JSON.stringify(model)', context));
 const updateTripState = extractFunction('updateTripState');
 
-assert.equal(tripData[2].location, 'Guangzhou', 'Day 3 should use its exact destination');
+assert.equal(tripData[2].location, 'Shenzhen & Guangzhou', 'Day 3 should include both of its exact destinations');
 assert.equal(tripData[11].location, 'Nara', 'Day 12 should use its exact destination');
 assert.match(
   updateTripState,
