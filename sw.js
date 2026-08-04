@@ -1,11 +1,12 @@
 const CACHE_PREFIX = 'jalena-japan-trip-';
-const CACHE_NAME = `${CACHE_PREFIX}v7`;
+const CACHE_NAME = `${CACHE_PREFIX}v8`;
 const CORE_ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
   './assets/pikachu.png',
   './assets/pikachu-animated.gif',
+  './assets/silveri-walking-map.jpg',
   './assets/app-icon-192.png',
   './assets/app-icon-512.png',
   './assets/apple-touch-icon.png',

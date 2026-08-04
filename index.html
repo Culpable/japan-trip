@@ -1228,6 +1228,57 @@
     .quick-list { margin: .8rem 0 0; padding: 0; list-style: none; }
     .quick-list li { padding: .6rem 0; border-top: 1px solid #dedbd3; font-size: .85rem; line-height: 1.45; }
     .quick-list li::before { content: "·"; margin-right: .5rem; color: #a44324; }
+
+    /* The border guide is a compact field manual, not another itinerary card. The dark route
+       overview gives the long instructions one clear anchor while the numbered paper-like
+       sections keep bilingual phrases and station changes easy to scan with luggage in hand. */
+    .border-guide-dialog { width: min(920px, calc(100% - 1.25rem)); max-height: min(92dvh, 920px); }
+    .border-guide-dialog .dialog-body { padding: 0; background: #eee9df; }
+    .border-guide-hero { padding: 1.25rem; background: #173f3a; color: #fff; }
+    .border-guide-hero p { margin: 0; max-width: 68ch; color: #d9e7e3; font-size: .88rem; font-weight: 700; line-height: 1.55; }
+    .border-guide-hero strong { color: #fff4ce; }
+    .border-alert { margin-top: 1rem; padding: .8rem .9rem; border: 1px solid rgba(255, 227, 145, .45); border-radius: 13px; background: rgba(255, 227, 145, .12); color: #fff4ce; font-size: .78rem; font-weight: 900; line-height: 1.45; }
+    .border-route { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: stretch; gap: .45rem; margin-top: 1rem; }
+    .border-route-stop { position: relative; min-width: 0; padding: .65rem .55rem; border-radius: 12px; background: rgba(255, 255, 255, .1); }
+    .border-route-stop:not(:last-child)::after { content: "→"; position: absolute; right: -.42rem; top: 50%; z-index: 1; transform: translateY(-50%); color: #ffd66f; font-weight: 900; }
+    .border-route-stop strong, .border-route-stop span { display: block; }
+    .border-route-stop strong { font-size: .67rem; line-height: 1.3; }
+    .border-route-stop span { margin-top: .2rem; color: #bcd0ca; font-size: .57rem; font-weight: 800; line-height: 1.3; }
+    .border-guide-content { display: grid; gap: .85rem; padding: 1rem; }
+    .border-step { overflow: hidden; border: 1px solid #d7d0c2; border-radius: 17px; background: #fffdf8; box-shadow: 0 2px 0 rgba(59, 48, 34, .04); }
+    .border-step-head { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: .75rem; align-items: center; padding: .85rem 1rem; border-bottom: 1px solid #e2ddd3; background: #f9f5ec; }
+    .border-step-number { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 11px; background: #173f3a; color: #fff; font-size: .73rem; font-weight: 900; }
+    .border-step-head h3 { margin: 0; font: 900 1rem/1.2 "Nunito Sans", sans-serif; }
+    .border-step-head p { margin: .18rem 0 0; color: #79756d; font-size: .68rem; font-weight: 800; line-height: 1.35; }
+    .border-step-body { padding: 1rem; color: #4d4b45; font-size: .82rem; line-height: 1.55; }
+    .border-step-body > :first-child { margin-top: 0; }
+    .border-step-body > :last-child { margin-bottom: 0; }
+    .border-step-body h4 { margin: 1rem 0 .45rem; color: #242522; font: 900 .72rem/1.2 "Nunito Sans", sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+    .border-step-body p { margin: .65rem 0; }
+    .border-step-body ul, .border-step-body ol { margin: .6rem 0; padding-left: 1.25rem; }
+    .border-step-body li + li { margin-top: .3rem; }
+    .guide-place { padding: .7rem .8rem; border-radius: 12px; background: #edf3f0; color: #173f3a; font-weight: 900; }
+    .guide-place span { display: block; margin-top: .2rem; font-size: .72rem; }
+    .guide-phrase { margin: .7rem 0; padding: .78rem .85rem; border-left: 4px solid #c58a16; border-radius: 0 12px 12px 0; background: #fff3cf; }
+    .guide-phrase [lang] { display: block; color: #5a3912; font-size: .9rem; font-weight: 900; line-height: 1.5; }
+    .guide-phrase span { display: block; margin-top: .35rem; color: #705d43; font-size: .72rem; font-weight: 700; }
+    .guide-warning { padding: .75rem .85rem; border-radius: 12px; background: #fae4dc; color: #7e321e; font-weight: 900; }
+    .guide-train { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .45rem; margin: .65rem 0; }
+    .guide-train div { padding: .65rem; border-radius: 11px; background: #edf3f0; }
+    .guide-train span, .guide-train strong { display: block; }
+    .guide-train span { color: #76766f; font-size: .57rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+    .guide-train strong { margin-top: .22rem; color: #173f3a; font-size: .74rem; line-height: 1.35; }
+    .guide-table-wrap { overflow-x: auto; margin-top: .75rem; border: 1px solid #ded8cc; border-radius: 12px; }
+    .guide-table { width: 100%; border-collapse: collapse; min-width: 560px; font-size: .72rem; }
+    .guide-table th, .guide-table td { padding: .65rem .7rem; border-bottom: 1px solid #e7e1d6; text-align: left; }
+    .guide-table th { background: #edf3f0; color: #173f3a; font-size: .6rem; letter-spacing: .06em; text-transform: uppercase; }
+    .guide-table tr:last-child td { border-bottom: 0; }
+    .silveri-walking-map { display: block; width: min(100%, 520px); height: auto; margin: .85rem auto 0; border: 1px solid #d7d0c2; border-radius: 14px; background: #fff; }
+    .guide-sources { padding: 1rem; border-radius: 17px; background: #242522; color: #fff; }
+    .guide-sources h3 { margin: 0 0 .6rem; font: 900 .8rem/1.2 "Nunito Sans", sans-serif; }
+    .guide-sources ul { margin: 0; padding-left: 1.1rem; }
+    .guide-sources li + li { margin-top: .35rem; }
+    .guide-sources a { color: #ffe59c; font-size: .72rem; font-weight: 800; }
     .offline-badge { display: none; position: fixed; left: calc(.75rem + env(safe-area-inset-left, 0px)); bottom: calc(.75rem + env(safe-area-inset-bottom, 0px)); z-index: 40; padding: .55rem .7rem; border-radius: 999px; background: #242522; color: #fff; font-size: .68rem; font-weight: 900; box-shadow: 0 5px 18px rgba(36,37,34,.2); }
     body.is-offline .offline-badge { display: block; }
 
@@ -1480,6 +1531,17 @@
       .day-title-row { grid-template-columns: 1fr; }
       .day-title-row .moment-local-action { justify-self: start; }
       .run-sheet-item { grid-template-columns: 68px minmax(0, 1fr); gap: .65rem; }
+      .border-guide-dialog { width: calc(100% - .75rem); max-height: calc(100dvh - .5rem); border-radius: 18px; }
+      .border-guide-dialog .dialog-head { padding: .85rem .9rem; }
+      .border-guide-dialog .dialog-head h2 { font-size: 1.08rem; }
+      .border-route { grid-template-columns: 1fr; }
+      .border-route-stop { padding: .58rem .7rem; }
+      .border-route-stop:not(:last-child)::after { content: "↓"; right: 1rem; top: auto; bottom: -.55rem; transform: none; }
+      .border-guide-content { padding: .7rem; }
+      .guide-train { grid-template-columns: 1fr 1fr; }
+      .guide-table { min-width: 0; table-layout: fixed; font-size: .62rem; }
+      .guide-table th, .guide-table td { padding: .5rem .3rem; overflow-wrap: anywhere; }
+      .guide-table th { font-size: .5rem; }
     }
     /* ---- Pre-trip countdown delight -------------------------------------------- */
     /* Scene warming: the dashboard glows warmer as the trip nears. --hype (0..1) is set
@@ -1718,6 +1780,7 @@
           <p class="today-leave-by" id="todayLeaveBy">No fixed departure yet</p>
           <div class="today-actions">
             <button class="day-action primary" id="todayOpenRunSheet" type="button"><span>Open full run sheet</span></button>
+            <button class="day-action" id="todayBorderGuide" type="button" data-open-border-guide hidden><span>Border guide</span></button>
             <a class="day-action" id="todayNextMap" href="#" target="_blank" rel="noopener noreferrer"><span>Open map</span></a>
             <a class="day-action" id="todayReservation" href="#" target="_blank" rel="noopener noreferrer" hidden><span>Reservation</span></a>
             <button class="day-action local-name-action" id="todayNextLocal" type="button" aria-pressed="false" hidden><span>Show local name</span></button>
@@ -1837,6 +1900,150 @@
     <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
   </dialog>
 
+  <dialog class="trip-dialog border-guide-dialog" id="borderGuideDialog" aria-labelledby="borderGuideTitle">
+    <div class="dialog-head"><div><p>4 August · Shenzhen to Hong Kong</p><h2 id="borderGuideTitle">Futian Port to The Silveri</h2></div><button class="dialog-close" type="button" data-close-dialog="borderGuideDialog" aria-label="Close border guide">×</button></div>
+    <div class="dialog-body" id="borderGuideBody">
+      <section class="border-guide-hero">
+        <p><strong>Take a DiDi from The Langham Shenzhen to Futian Port, cross the border on foot, then take three MTR lines to Tung Chung Station.</strong> The Silveri connects to Tung Chung Station through Citygate Outlets, so you do not need an Uber in Hong Kong.</p>
+        <div class="border-alert">Futian Port is open 6:30AM–10:30PM. Enter the Shenzhen departure area before it closes and keep both passports ready.</div>
+        <div class="border-route" aria-label="Complete border route">
+          <div class="border-route-stop"><strong>The Langham</strong><span>DiDi</span></div>
+          <div class="border-route-stop"><strong>Futian Port</strong><span lang="zh-Hans">福田口岸</span></div>
+          <div class="border-route-stop"><strong>Lok Ma Chau</strong><span lang="zh-Hant">落馬洲站</span></div>
+          <div class="border-route-stop"><strong>Hung Hom</strong><span lang="zh-Hant">紅磡站</span></div>
+          <div class="border-route-stop"><strong>Nam Cheong</strong><span lang="zh-Hant">南昌站</span></div>
+          <div class="border-route-stop"><strong>Tung Chung</strong><span lang="zh-Hant">東涌站 · Exit C</span></div>
+          <div class="border-route-stop"><strong>The Silveri</strong><span>Lobby · Level 9</span></div>
+        </div>
+      </section>
+
+      <div class="border-guide-content">
+        <section class="border-step" id="border-step-1">
+          <header class="border-step-head"><span class="border-step-number">01</span><div><h3>DiDi from The Langham to Futian Port</h3><p>Use the port name, not a railway station</p></div></header>
+          <div class="border-step-body">
+            <h4>Starting point</h4>
+            <p><strong>The Langham, Shenzhen</strong><br>7888 Shennan Boulevard, Futian District, Shenzhen</p>
+            <h4>Enter this destination into DiDi</h4>
+            <p class="guide-place">Futian Port<span lang="zh-Hans">福田口岸</span></p>
+            <p>Select <strong>Futian Port / 福田口岸</strong>.</p>
+            <div class="guide-warning">Do not select 福田站 (Futian railway station), 福田高铁站 (Futian high-speed railway station), or 皇岗口岸 (Huanggang Port).</div>
+            <h4>Show the DiDi driver</h4>
+            <blockquote class="guide-phrase"><span lang="zh-Hans">请送我们到福田口岸的出境大厅。我们要从这里过关去香港。请不要送我们去福田高铁站。</span><span>Please take us to the departures hall at Futian Port. We are crossing into Hong Kong. Please do not take us to Futian high-speed railway station.</span></blockquote>
+            <p>When you arrive, take all your luggage and enter the <strong>Futian Port immigration building</strong>.</p>
+          </div>
+        </section>
+
+        <section class="border-step" id="border-step-2">
+          <header class="border-step-head"><span class="border-step-number">02</span><div><h3>Find Mainland China exit immigration</h3><p>Complete Mainland departure formalities first</p></div></header>
+          <div class="border-step-body">
+            <p>Inside Futian Port, follow signs for:</p>
+            <ul><li><strong lang="zh-Hans">出境</strong></li><li><strong>Departures</strong></li><li><strong>Hong Kong / 香港</strong></li></ul>
+            <p>You are leaving Mainland China, so first complete <strong>Mainland exit immigration</strong>.</p>
+            <h4>Show a staff member</h4>
+            <blockquote class="guide-phrase"><span lang="zh-Hans">我们要从福田口岸去香港。请问出境大厅怎么走？</span><span>We are travelling to Hong Kong through Futian Port. Where is the departures hall?</span></blockquote>
+            <p>Keep your passports available. After immigration and customs, continue following signs for <strong>香港 / Hong Kong</strong>.</p>
+            <p>Futian Port connects to Hong Kong’s Lok Ma Chau control point through an enclosed pedestrian bridge.</p>
+          </div>
+        </section>
+
+        <section class="border-step" id="border-step-3">
+          <header class="border-step-head"><span class="border-step-number">03</span><div><h3>Cross into Hong Kong</h3><p>Walk to Lok Ma Chau and complete Hong Kong arrival formalities</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Follow the enclosed pedestrian walkway.</li><li>Enter the Hong Kong immigration area.</li><li>Complete Hong Kong arrival immigration.</li><li>Place your luggage through screening if an officer asks.</li><li>Follow signs for <strong>MTR / 港鐵</strong>.</li></ol>
+            <p class="guide-place">Lok Ma Chau MTR Station<span lang="zh-Hant">落馬洲站</span></p>
+            <h4>Show Hong Kong staff after immigration</h4>
+            <blockquote class="guide-phrase"><span lang="zh-Hant">請問港鐵站在哪裡？我們要坐港鐵去東涌站。</span><span>Where is the MTR station? We need to travel to Tung Chung Station.</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step" id="border-step-4">
+          <header class="border-step-head"><span class="border-step-number">04</span><div><h3>Buy your MTR ticket</h3><p>One paid journey covers all three trains and two transfers</p></div></header>
+          <div class="border-step-body">
+            <p>At Lok Ma Chau Station, buy <strong>one single-journey ticket per person</strong>.</p>
+            <ol><li>Press <strong>English</strong>.</li><li>Select <strong>Tung Chung</strong> as the destination.</li><li>Pay the displayed fare.</li><li>Keep the ticket throughout the journey.</li><li>Insert or scan it at the entry gate.</li></ol>
+            <p>One ticket covers the complete journey and both transfers if you remain inside the paid area.</p>
+            <p>You can instead use an Octopus card or a separate contactless bank card for each passenger. Use a designated contactless gate. MTR accepts contactless credit or debit cards, except UnionPay debit cards.</p>
+            <h4>Show MTR staff</h4>
+            <blockquote class="guide-phrase"><span lang="zh-Hant">我們要去東涌站。請問在哪裡購買單程車票？</span><span>We are going to Tung Chung Station. Where can we buy single-journey tickets?</span></blockquote>
+            <p class="guide-place">Destination to select<span>Tung Chung · <span lang="zh-Hant">東涌</span></span></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="border-step-5">
+          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Lok Ma Chau to Hung Hom</h3><p>Train 1 · East Rail Line towards Admiralty</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-train"><div><span>Line</span><strong>East Rail Line<br><span lang="zh-Hant">東鐵綫</span></strong></div><div><span>Direction</span><strong>Admiralty<br><span lang="zh-Hant">金鐘</span></strong></div><div><span>Leave at</span><strong>Hung Hom<br><span lang="zh-Hant">紅磡</span></strong></div><div><span>Map colour</span><strong>Light blue</strong></div></div>
+            <h4>Show MTR staff</h4>
+            <blockquote class="guide-phrase"><span lang="zh-Hant">請問東鐵綫往金鐘方向的月台在哪裡？我們要在紅磡站轉車。</span><span>Where is the East Rail Line platform towards Admiralty? We need to change trains at Hung Hom Station.</span></blockquote>
+            <p>Board a train displaying <strong>Admiralty / 金鐘</strong>. Stay aboard until <strong>Hung Hom / 紅磡</strong>.</p>
+            <p>The station immediately before Hung Hom is <strong>Mong Kok East / 旺角東</strong>. When you see Mong Kok East, prepare to leave at the next station.</p>
+          </div>
+        </section>
+
+        <section class="border-step" id="border-step-6">
+          <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Change at Hung Hom</h3><p>Train 2 · Tuen Ma Line towards Tuen Mun</p></div></header>
+          <div class="border-step-body">
+            <p>Leave the East Rail train but <strong>do not exit through the ticket gates</strong>. Follow signs for <strong>Tuen Ma Line / 屯馬綫</strong>.</p>
+            <div class="guide-train"><div><span>Line</span><strong>Tuen Ma Line<br><span lang="zh-Hant">屯馬綫</span></strong></div><div><span>Direction</span><strong>Tuen Mun<br><span lang="zh-Hant">屯門</span></strong></div><div><span>Leave at</span><strong>Nam Cheong<br><span lang="zh-Hant">南昌</span></strong></div><div><span>Map colour</span><strong>Brown</strong></div></div>
+            <h4>Show MTR staff</h4>
+            <blockquote class="guide-phrase"><span lang="zh-Hant">請問屯馬綫往屯門方向的月台在哪裡？我們要在南昌站下車。</span><span>Where is the Tuen Ma Line platform towards Tuen Mun? We need to get off at Nam Cheong Station.</span></blockquote>
+            <p>Make sure the train displays <strong>Tuen Mun / 屯門</strong>.</p>
+            <div class="guide-warning">Do not board a train displaying Wu Kai Sha / 烏溪沙.</div>
+            <p>After Hung Hom, the stations are <strong>East Tsim Sha Tsui / 尖東</strong>, <strong>Austin / 柯士甸</strong>, then <strong>Nam Cheong / 南昌</strong>. Leave at the third station.</p>
+          </div>
+        </section>
+
+        <section class="border-step" id="border-step-7">
+          <header class="border-step-head"><span class="border-step-number">07</span><div><h3>Change at Nam Cheong</h3><p>Train 3 · Tung Chung Line to the final station</p></div></header>
+          <div class="border-step-body">
+            <p>Leave the train but <strong>do not exit through the ticket gates</strong>. Follow the orange signs for <strong>Tung Chung Line / 東涌綫</strong>.</p>
+            <div class="guide-train"><div><span>Line</span><strong>Tung Chung Line<br><span lang="zh-Hant">東涌綫</span></strong></div><div><span>Direction</span><strong>Tung Chung<br><span lang="zh-Hant">東涌</span></strong></div><div><span>Leave at</span><strong>Tung Chung<br><span lang="zh-Hant">東涌</span></strong></div><div><span>Map colour</span><strong>Orange</strong></div></div>
+            <h4>Show MTR staff</h4>
+            <blockquote class="guide-phrase"><span lang="zh-Hant">請問東涌綫往東涌方向的月台在哪裡？</span><span>Where is the Tung Chung Line platform towards Tung Chung?</span></blockquote>
+            <p>Make sure the train displays <strong>Tung Chung / 東涌</strong>.</p>
+            <div class="guide-warning">Do not board a train travelling towards Hong Kong / 香港.</div>
+            <p>From Nam Cheong, the stations are <strong>Lai King / 荔景</strong>, <strong>Tsing Yi / 青衣</strong>, <strong>Sunny Bay / 欣澳</strong>, then <strong>Tung Chung / 東涌</strong>. Stay aboard until the final station.</p>
+          </div>
+        </section>
+
+        <section class="border-step" id="border-step-8">
+          <header class="border-step-head"><span class="border-step-number">08</span><div><h3>Exit Tung Chung Station</h3><p>Use Exit C into Citygate Outlets</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Leave the train.</li><li>Follow signs for <strong>Exit C</strong>.</li><li>Pass through the ticket gates.</li><li>Follow signs into <strong>Citygate Outlets</strong>.</li></ol>
+            <h4>Show MTR staff</h4>
+            <blockquote class="guide-phrase"><span lang="zh-Hant">請問C出口怎麼走？我們要去東薈城名店倉裡面的香港銀樾美憬閣精選酒店。</span><span>Where is Exit C? We are going to The Silveri Hong Kong - MGallery inside Citygate Outlets.</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step" id="border-step-9">
+          <header class="border-step-head"><span class="border-step-number">09</span><div><h3>Walk through Citygate Outlets to the hotel</h3><p>Find the dedicated hotel lift and go to Level 9</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Follow signs for <strong>The Silveri Hong Kong - MGallery</strong>.</li><li>Take the escalators to <strong>Level 3 or Level 7</strong>.</li><li>Find the hotel’s dedicated lift.</li><li>Take the hotel lift to the <strong>lobby on Level 9</strong>.</li></ol>
+            <h4>Show mall staff or security</h4>
+            <blockquote class="guide-phrase"><span lang="zh-Hant">請問香港銀樾美憬閣精選酒店的專用電梯在哪裡？我們要去九樓酒店大堂。</span><span>Where is the dedicated lift for The Silveri Hong Kong - MGallery? We need to go to the hotel lobby on Level 9.</span></blockquote>
+            <h4>Hotel details to show anyone</h4>
+            <p class="guide-place">The Silveri Hong Kong - MGallery<span lang="zh-Hant">香港銀樾美憬閣精選酒店</span><span>16 Tat Tung Road, Tung Chung, Hong Kong</span><span lang="zh-Hant">香港東涌達東路16號</span></p>
+            <a href="./assets/silveri-walking-map.jpg" target="_blank" rel="noopener"><img class="silveri-walking-map" src="./assets/silveri-walking-map.jpg" alt="Official Silveri walking map from Tung Chung Station Exit C through Citygate Outlets to the hotel lift on Level 3 or Level 7"></a>
+          </div>
+        </section>
+
+        <section class="border-step">
+          <header class="border-step-head"><span class="border-step-number">MTR</span><div><h3>The three trains to remember</h3><p>Stay inside the paid area at both transfers</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>From</th><th>Line</th><th>Direction</th><th>Leave at</th></tr></thead><tbody><tr><td>Lok Ma Chau</td><td>East Rail Line</td><td>Admiralty</td><td>Hung Hom</td></tr><tr><td>Hung Hom</td><td>Tuen Ma Line</td><td>Tuen Mun</td><td>Nam Cheong</td></tr><tr><td>Nam Cheong</td><td>Tung Chung Line</td><td>Tung Chung</td><td>Tung Chung</td></tr></tbody></table></div>
+            <div class="guide-warning">Do not order an Uber after entering Hong Kong. The MTR takes you directly to the shopping complex containing the hotel.</div>
+          </div>
+        </section>
+
+        <section class="guide-sources">
+          <h3>Official route sources</h3>
+          <ul><li><a href="https://www.mtr.com.hk/en/customer/services/system_map.html" target="_blank" rel="noopener noreferrer">MTR system map</a></li><li><a href="https://www.mtr.com.hk/en/customer/tickets/index.php" target="_blank" rel="noopener noreferrer">MTR tickets and fares</a></li><li><a href="https://www.sz.gov.cn/en_szgov/news/notices/content/post_12593648.html" target="_blank" rel="noopener noreferrer">Shenzhen Government border guide and current Futian Port hours</a></li><li><a href="https://www.sz.gov.cn/en_szgov/news/infocus/modern/checkpoints/content/post_12256697.html" target="_blank" rel="noopener noreferrer">Shenzhen Government Futian Port crossing details</a></li><li><a href="https://thesilveri-hongkong.com/destination-guide/" target="_blank" rel="noopener noreferrer">The Silveri destination guide</a></li></ul>
+        </section>
+      </div>
+    </div>
+    <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
+  </dialog>
+
   <footer><p>Pack light. Book early. Leave room for the unexpected.</p><small>01–15 August 2026</small></footer>
 
   <script>
@@ -1853,7 +2060,7 @@
     const tripData = (() => {
       const stays = {
         shenzhen: { id: 'shenzhen', emoji: '🏙️', location: 'Shenzhen', name: 'The Langham, Shenzhen', address: '7888 Shennan Boulevard, Futian District, Shenzhen 518040, China', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', localName: '深圳东海朗廷酒店', localAddress: '中国广东省深圳市福田区深南大道7888号', checkIn: '2026-08-01', checkOut: '2026-08-04', dates: '1–4 August · 3 nights' },
-        hongKong: { id: 'hong-kong-airport', emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', localLanguage: 'Traditional Chinese', localLang: 'zh-Hant', localName: '香港銀樾美憬閣精選酒店', localAddress: '香港東涌達東路16號', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night' },
+        hongKong: { id: 'hong-kong-airport', emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', localLanguage: 'Traditional Chinese', localLang: 'zh-Hant', localName: '香港銀樾美憬閣精選酒店', localAddress: '香港東涌達東路16號', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night', borderGuide: true },
         tokyo: { id: 'tokyo-ginza', emoji: '🗼', location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'YOTEL 東京 銀座', localAddress: '〒105-0004 東京都港区新橋1丁目7-7', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
         fuji: { id: 'fuji', emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '精進レークホテル', localAddress: '〒401-0336 山梨県南都留郡富士河口湖町精進255', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night' },
         kyoto: { id: 'kyoto', emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0846, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ノーガホテル 清水 京都', localAddress: '〒605-0846 京都府京都市東山区五条橋東4丁目450番1号', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights' },
@@ -1898,14 +2105,14 @@
           ]
         },
         {
-          id: 'day-4', day: 4, date: '2026-08-04', weekday: 'TUE', region: 'china', location: 'Hong Kong', localLocation: '香港', title: 'Final Shenzhen day → Hong Kong', localName: '深圳最后一天 → 前往香港', localLanguage: 'Simplified Chinese and Traditional Chinese', localLang: 'und', mapQuery: 'The Silveri Hong Kong', weatherCity: 'Hong Kong', hotel: stays.hongKong,
-          transit: { id: 'shenzhen-hong-kong', order: 2, mode: 'Border', route: 'Shenzhen → Hong Kong airport', detail: 'Border crossing and airport transfer · check live route', localName: '深圳 → 香港國際機場', localAddress: stays.hongKong.localAddress, localLanguage: 'Simplified Chinese and Traditional Chinese', localLang: 'und', address: stays.hongKong.address },
+          id: 'day-4', day: 4, date: '2026-08-04', weekday: 'TUE', region: 'china', location: 'Hong Kong', localLocation: '香港', title: 'Final Shenzhen day → Hong Kong', localName: '深圳最后一天 → 前往香港', localLanguage: 'Simplified Chinese and Traditional Chinese', localLang: 'und', mapQuery: 'The Silveri Hong Kong', weatherCity: 'Hong Kong', hotel: stays.hongKong, borderGuide: true,
+          transit: { id: 'shenzhen-hong-kong', order: 2, mode: 'Border', route: 'The Langham Shenzhen → The Silveri Hong Kong', detail: 'DiDi to Futian Port · walk across the border · 3 MTR lines to Tung Chung', localName: '深圳东海朗廷酒店 → 香港銀樾美憬閣精選酒店', localAddress: stays.hongKong.localAddress, localLanguage: 'Simplified Chinese and Traditional Chinese', localLang: 'und', address: stays.hongKong.address },
           activities: [
             { id: 'final-shenzhen', order: 1, title: 'Final Shenzhen shopping and street food', localName: '最后一天在深圳购物和品尝街头美食', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans' },
             { id: 'cross-hong-kong', order: 2.5, title: 'Cross back into Hong Kong', localName: '返回香港', localLanguage: 'Traditional Chinese', localLang: 'zh-Hant' },
             { id: 'airport-hotel', order: 3, title: 'Stay near the airport for the early departure', localName: '入住機場附近酒店，準備明早出發', localAddress: stays.hongKong.localAddress, localLanguage: 'Traditional Chinese', localLang: 'zh-Hant', address: stays.hongKong.address }
           ],
-          notes: [{ kind: 'note', text: 'CX 450 departs at 9:55AM tomorrow. Aim to reach the airport by 7:30AM.' }]
+          notes: [{ kind: 'confirmed', text: 'Futian Port is open 6:30AM–10:30PM. Cross on foot to Lok Ma Chau, then take 3 MTR lines to Tung Chung.' }, { kind: 'note', text: 'CX 450 departs at 9:55AM tomorrow. Aim to reach the airport by 7:30AM.' }]
         },
         {
           id: 'day-5', day: 5, date: '2026-08-05', weekday: 'WED', region: 'tokyo', location: 'Tokyo', localLocation: '東京', title: 'Fly to Tokyo & first night in Ginza', localName: '東京へ飛び、銀座で最初の夜', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'YOTEL Japan Ginza', weatherCity: 'Tokyo', hotel: stays.tokyo,
@@ -2258,7 +2465,8 @@
       dayView: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/></svg>',
       maps: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg>',
       weather: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>',
-      language: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h8M9 3v2M4 9c3.5 0 6.5-1.7 8-4M6 6c1.2 2.3 3.1 4.1 5.5 5.2M14 21l4-10 4 10M15.5 17h5"/></svg>'
+      language: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h8M9 3v2M4 9c3.5 0 6.5-1.7 8-4M6 6c1.2 2.3 3.1 4.1 5.5 5.2M14 21l4-10 4 10M15.5 17h5"/></svg>',
+      borderGuide: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h3a3 3 0 0 0 3-3V9a3 3 0 0 1 3-3h1"/><path d="m15 3 4 3-4 3"/></svg>'
     };
 
     function dateKeyInZone(date, timeZone) {
@@ -2514,7 +2722,8 @@
         }
         const actions = document.createElement('div');
         actions.className = 'day-actions';
-        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button><a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
+        const borderGuideAction = plan.borderGuide ? `<button class="day-action" type="button" data-open-border-guide>${actionIcons.borderGuide}<span>Border guide</span></button>` : '';
+        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
         card.append(actions);
       });
     }
@@ -2579,6 +2788,9 @@
     }
     function releaseBodyForDialog() {
       if (!document.body.classList.contains('dialog-locked')) return;
+      // The guide can sit above Day view or Bookings. Keep the page pinned until the final
+      // modal closes so the underlying dialog never exposes a scrollable background.
+      if (document.querySelector?.('dialog[open]')) return;
       document.body.classList.remove('dialog-locked');
       document.body.style.top = '';
       document.body.style.paddingRight = '';
@@ -2628,7 +2840,8 @@
       const scrollTop = body.scrollTop;
       dialog.dataset.day = String(dayNumber);
       document.querySelector('#dayDialogTitle').textContent = `Day ${dayNumber} · ${day.title}`;
-      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions"><a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      const borderGuideAction = day.borderGuide ? `<button class="mini-action primary" type="button" data-open-border-guide>${actionIcons.borderGuide}<span>Open border guide</span></button>` : '';
+      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
       syncLocalPlaceDisplays(hotel.id);
       activityTimeline(day, clock).forEach((activity) => syncLocalPlaceDisplays(activity.id));
       body.scrollTop = scrollTop;
@@ -2646,6 +2859,13 @@
       const clock = window.tripState || tripClock(previewableNow());
       renderDayDialog(dayNumber, clock);
       showModalDialog(document.querySelector('#dayDialog'));
+    }
+
+    function openBorderGuide() {
+      const dialog = document.querySelector('#borderGuideDialog');
+      const body = document.querySelector('#borderGuideBody');
+      showModalDialog(dialog);
+      if (body) body.scrollTop = 0;
     }
 
     function bookingHasElapsed(booking, clock) {
@@ -2687,7 +2907,9 @@
         row.dataset.localPlace = hotel.id;
         row.dataset.englishName = `${hotel.emoji ? `${hotel.emoji} ` : ''}${hotel.name}`;
         row.dataset.englishDetail = `${hotel.location} · ${hotel.dates}\n${hotel.address}`;
-        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
+        const borderGuideIcon = typeof actionIcons === 'undefined' ? '' : actionIcons.borderGuide;
+        const borderGuideAction = hotel.borderGuide ? `<button class="mini-action primary" type="button" data-open-border-guide>${borderGuideIcon}<span>Border guide</span></button>` : '';
+        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}${borderGuideAction}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
         syncLocalPlaceDisplay(row, hotel);
         return row;
       }));
@@ -2697,6 +2919,8 @@
       document.addEventListener('click', (event) => {
         const dayButton = event.target.closest('[data-day-view]');
         if (dayButton) openDayView(Number(dayButton.dataset.dayView));
+        const borderGuideButton = event.target.closest('[data-open-border-guide]');
+        if (borderGuideButton) openBorderGuide();
         const closeButton = event.target.closest('[data-close-dialog]');
         if (closeButton) document.querySelector(`#${closeButton.dataset.closeDialog}`).close();
       });
@@ -2968,6 +3192,7 @@
 
       const nextMap = document.querySelector('#todayNextMap');
       nextMap.href = mapsUrl(focus?.address || day.mapQuery);
+      document.querySelector('#todayBorderGuide').hidden = !day.borderGuide;
       const reservation = document.querySelector('#todayReservation');
       const focusLink = focus?.reservationLink || focus?.detailsLink;
       reservation.hidden = !focusLink;
