@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'jalena-japan-trip-';
-const CACHE_NAME = `${CACHE_PREFIX}v8`;
+const CACHE_NAME = `${CACHE_PREFIX}v9`;
 const CORE_ASSETS = [
   './',
   './index.html',

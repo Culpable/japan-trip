@@ -1279,6 +1279,16 @@
     .guide-sources ul { margin: 0; padding-left: 1.1rem; }
     .guide-sources li + li { margin-top: .35rem; }
     .guide-sources a { color: #ffe59c; font-size: .72rem; font-weight: 800; }
+    /* The Shoji guide uses the same field-manual system as the border guide, with a
+       cool lake-and-mountain palette so the two long-form travel tools stay distinct. */
+    .shoji-guide-dialog .border-guide-hero { background: #244f67; }
+    .shoji-guide-dialog .border-step-number { background: #244f67; }
+    .shoji-guide-dialog .guide-place,
+    .shoji-guide-dialog .guide-train strong,
+    .shoji-guide-dialog .guide-table th { color: #244f67; }
+    .shoji-guide-dialog .guide-place,
+    .shoji-guide-dialog .guide-train div,
+    .shoji-guide-dialog .guide-table th { background: #e9f2f6; }
     .offline-badge { display: none; position: fixed; left: calc(.75rem + env(safe-area-inset-left, 0px)); bottom: calc(.75rem + env(safe-area-inset-bottom, 0px)); z-index: 40; padding: .55rem .7rem; border-radius: 999px; background: #242522; color: #fff; font-size: .68rem; font-weight: 900; box-shadow: 0 5px 18px rgba(36,37,34,.2); }
     body.is-offline .offline-badge { display: block; }
 
@@ -1781,6 +1791,7 @@
           <div class="today-actions">
             <button class="day-action primary" id="todayOpenRunSheet" type="button"><span>Open full run sheet</span></button>
             <button class="day-action" id="todayBorderGuide" type="button" data-open-border-guide hidden><span>Border guide</span></button>
+            <button class="day-action" id="todayShojiGuide" type="button" data-open-shoji-guide hidden><span>Shoji travel guide</span></button>
             <a class="day-action" id="todayNextMap" href="#" target="_blank" rel="noopener noreferrer"><span>Open map</span></a>
             <a class="day-action" id="todayReservation" href="#" target="_blank" rel="noopener noreferrer" hidden><span>Reservation</span></a>
             <button class="day-action local-name-action" id="todayNextLocal" type="button" aria-pressed="false" hidden><span>Show local name</span></button>
@@ -2044,6 +2055,130 @@
     <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
   </dialog>
 
+  <dialog class="trip-dialog border-guide-dialog shoji-guide-dialog" id="shojiGuideDialog" aria-labelledby="shojiGuideTitle">
+    <div class="dialog-head"><div><p>9 August · Tokyo to Lake Shoji</p><h2 id="shojiGuideTitle">YOTEL Ginza to Shoji Lake Hotel</h2></div><button class="dialog-close" type="button" data-close-dialog="shojiGuideDialog" aria-label="Close Shoji travel guide">×</button></div>
+    <div class="dialog-body" id="shojiGuideBody">
+      <section class="border-guide-hero">
+        <p><strong>Walk from YOTEL to Shimbashi Station, travel to Shinjuku, continue to Kawaguchiko by direct train or via Otsuki, then take a Fujikyu bus to Shoji Lake Hotel.</strong> This guide has no fixed departure times. Use the next suitable service at each step.</p>
+        <div class="border-alert">The final bus section has limited service. At Kawaguchiko Station, show the hotel name to the bus information desk before boarding.</div>
+        <div class="border-route" aria-label="Complete route from YOTEL to Shoji Lake Hotel">
+          <div class="border-route-stop"><strong>YOTEL Ginza</strong><span lang="ja">YOTEL 東京 銀座</span></div>
+          <div class="border-route-stop"><strong>Shimbashi</strong><span lang="ja">新橋駅</span></div>
+          <div class="border-route-stop"><strong>Shinjuku</strong><span lang="ja">新宿駅</span></div>
+          <div class="border-route-stop"><strong>Otsuki</strong><span lang="ja">大月駅 · if required</span></div>
+          <div class="border-route-stop"><strong>Kawaguchiko</strong><span lang="ja">河口湖駅</span></div>
+          <div class="border-route-stop"><strong>Shoji</strong><span lang="ja">精進</span></div>
+          <div class="border-route-stop"><strong>Shoji Lake Hotel</strong><span lang="ja">精進レークホテル</span></div>
+        </div>
+      </section>
+
+      <div class="border-guide-content">
+        <section class="border-step" id="shoji-step-1">
+          <header class="border-step-head"><span class="border-step-number">01</span><div><h3>Check out and walk to Shimbashi Station</h3><p>Start from YOTEL Tokyo Ginza with all luggage</p></div></header>
+          <div class="border-step-body">
+            <h4>Starting point</h4>
+            <p class="guide-place">YOTEL Tokyo Ginza<span lang="ja">YOTEL 東京 銀座</span><span lang="ja">〒105-0004 東京都港区新橋1丁目7-7</span></p>
+            <ol><li>Check the room, safe and charging points before leaving.</li><li>Walk to <strong>Shimbashi Station / 新橋駅</strong>.</li><li>Follow signs for the <strong>JR Lines / JR線</strong>.</li></ol>
+            <h4>Ask hotel staff</h4>
+            <blockquote class="guide-phrase"><span lang="ja">新橋駅のJR線の入口はどちらですか？</span><span>Which way is the JR entrance at Shimbashi Station?</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step" id="shoji-step-2">
+          <header class="border-step-head"><span class="border-step-number">02</span><div><h3>Travel from Shimbashi to Shinjuku</h3><p>Use the JR Yamanote Line toward Shibuya and Shinjuku</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-train"><div><span>Board at</span><strong>Shimbashi<br><span lang="ja">新橋</span></strong></div><div><span>Line</span><strong>JR Yamanote Line<br><span lang="ja">山手線</span></strong></div><div><span>Direction</span><strong>Shibuya / Shinjuku<br><span lang="ja">渋谷・新宿方面</span></strong></div><div><span>Leave at</span><strong>Shinjuku<br><span lang="ja">新宿</span></strong></div></div>
+            <p>Stay on the train until <strong>Shinjuku Station</strong>. Keep your luggage close and allow extra time to move through the large station.</p>
+            <h4>Ask JR staff</h4>
+            <blockquote class="guide-phrase"><span lang="ja">新宿駅まで行きたいです。渋谷・新宿方面の山手線はどのホームですか？</span><span>We want to go to Shinjuku Station. Which platform is the Yamanote Line toward Shibuya and Shinjuku?</span></blockquote>
+            <div class="guide-warning">Do not take the Yamanote Line in the Tokyo and Ueno direction. That route travels the long way around the loop.</div>
+          </div>
+        </section>
+
+        <section class="border-step" id="shoji-step-3">
+          <header class="border-step-head"><span class="border-step-number">03</span><div><h3>Choose the next train to Kawaguchiko</h3><p>Direct FUJI EXCURSION or a connection at Otsuki</p></div></header>
+          <div class="border-step-body">
+            <p>At Shinjuku, follow signs for the <strong>JR Chuo Line limited express platforms / 中央線特急</strong>. Ask staff which option leaves next:</p>
+            <ol><li><strong>Best option:</strong> FUJI EXCURSION / 富士回遊 directly to Kawaguchiko. It requires a reserved seat.</li><li><strong>Flexible option:</strong> a Chuo Line train to Otsuki, then the Fujikyu Railway to Kawaguchiko.</li></ol>
+            <h4>Ask at the JR ticket office or a staffed gate</h4>
+            <blockquote class="guide-phrase"><span lang="ja">河口湖駅まで行きたいです。次に乗れる富士回遊の指定席はありますか？なければ、大月駅で乗り換える行き方を教えてください。</span><span>We want to go to Kawaguchiko Station. Are reserved seats available on the next FUJI EXCURSION? If not, please show us the route that changes at Otsuki.</span></blockquote>
+            <div class="guide-warning">FUJI EXCURSION is reserved-seat only. Do not board it without the required base fare and reserved-seat limited express ticket.</div>
+          </div>
+        </section>
+
+        <section class="border-step" id="shoji-step-4">
+          <header class="border-step-head"><span class="border-step-number">04</span><div><h3>Change at Otsuki if required</h3><p>Skip this step if your train runs directly to Kawaguchiko</p></div></header>
+          <div class="border-step-body">
+            <p>If you are not on a direct FUJI EXCURSION service, leave at <strong>Otsuki Station / 大月駅</strong>.</p>
+            <ol><li>Follow signs for the <strong>Fujikyu Railway / 富士急行線</strong>.</li><li>Buy any additional Fujikyu fare or ticket that your original ticket does not cover.</li><li>Board a train for <strong>Kawaguchiko / 河口湖</strong>.</li><li>Stay aboard to the final stop.</li></ol>
+            <h4>Ask station staff</h4>
+            <blockquote class="guide-phrase"><span lang="ja">河口湖駅へ行く富士急行線はどこですか？この切符で乗れますか？</span><span>Where is the Fujikyu Railway train to Kawaguchiko Station? Can we use this ticket?</span></blockquote>
+            <div class="guide-warning">Check that the destination display says 河口湖. Do not leave the train at Fujisan or Fuji-Q Highland.</div>
+          </div>
+        </section>
+
+        <section class="border-step" id="shoji-step-5">
+          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Find the correct bus at Kawaguchiko</h3><p>Ask for the next Fujikyu bus serving the hotel</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Leave Kawaguchiko Station with all luggage.</li><li>Go to the bus information desk or a staffed boarding area.</li><li>Show the hotel name and ask for the next suitable bus.</li><li>Depending on the service, staff may direct you to a local bus or the Narusawa, Shojiko and Motosuko Blue Line.</li></ol>
+            <h4>Show the bus information desk</h4>
+            <blockquote class="guide-phrase"><span lang="ja">精進レークホテルに行きたいです。次に乗れるバスと乗り場を教えてください。</span><span>We want to go to Shoji Lake Hotel. Please tell us the next bus and its boarding point.</span></blockquote>
+            <p class="guide-place">Hotel<span lang="ja">精進レークホテル</span><span lang="ja">〒401-0336 山梨県南都留郡富士河口湖町精進255</span></p>
+            <div class="guide-warning">Do not take a bus to the Mount Fuji 5th Station. Your destination is the Lake Shoji area west of Kawaguchiko.</div>
+          </div>
+        </section>
+
+        <section class="border-step" id="shoji-step-6">
+          <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Ride the bus to the Lake Shoji area</h3><p>Confirm the stop with the driver when boarding</p></div></header>
+          <div class="border-step-body">
+            <p>Tell the driver where you are staying. The correct stop depends on the bus:</p>
+            <ul><li>If the bus serves <strong>Shoji Lake Hotel-mae / 精進レイクホテル前</strong>, leave there.</li><li>If you take the Blue Line, leave at <strong>Shoji / 精進</strong>.</li></ul>
+            <h4>Show the driver</h4>
+            <blockquote class="guide-phrase"><span lang="ja">精進レークホテルに行きます。一番近い停留所に着いたら教えてください。</span><span>We are going to Shoji Lake Hotel. Please tell us when we reach the nearest bus stop.</span></blockquote>
+            <h4>If staff direct you to the Blue Line</h4>
+            <blockquote class="guide-phrase"><span lang="ja">精進で降ります。着いたら教えてください。</span><span>We will get off at Shoji. Please tell us when we arrive.</span></blockquote>
+            <p>Keep the fare or payment method ready and follow the driver’s instructions for boarding and payment.</p>
+          </div>
+        </section>
+
+        <section class="border-step" id="shoji-step-7">
+          <header class="border-step-head"><span class="border-step-number">07</span><div><h3>Walk from the bus stop to the hotel</h3><p>The hotel is beside Lake Shoji</p></div></header>
+          <div class="border-step-body">
+            <p>From <strong>Shoji Lake Hotel-mae</strong>, the hotel is directly beside the stop. From <strong>Shoji</strong>, follow the lakeside road for the short walk to the hotel.</p>
+            <p class="guide-place">Shoji Lake Hotel<span lang="ja">精進レークホテル</span><span>255 Shoji, Fujikawaguchiko, Yamanashi 401-0336</span><span lang="ja">〒401-0336 山梨県南都留郡富士河口湖町精進255</span></p>
+            <h4>Ask anyone nearby</h4>
+            <blockquote class="guide-phrase"><span lang="ja">精進レークホテルはどちらですか？</span><span>Which way is Shoji Lake Hotel?</span></blockquote>
+            <p><a href="https://www.google.com/maps/search/?api=1&amp;query=Shoji%20Lake%20Hotel%20255%20Shoji%20Fujikawaguchiko" target="_blank" rel="noopener noreferrer">Open the hotel in Google Maps</a></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="shoji-step-8">
+          <header class="border-step-head"><span class="border-step-number">08</span><div><h3>Check in at Shoji Lake Hotel</h3><p>Show the booking name and passport at reception</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Give reception the booking name.</li><li>Provide passports if requested.</li><li>Confirm breakfast, dinner and bathing arrangements.</li><li>Ask reception about tomorrow’s bus before settling into the room.</li></ol>
+            <h4>At reception</h4>
+            <blockquote class="guide-phrase"><span lang="ja">本日、宿泊予約をしています。チェックインをお願いします。</span><span>We have a reservation for tonight. We would like to check in.</span></blockquote>
+            <h4>Ask about the next journey</h4>
+            <blockquote class="guide-phrase"><span lang="ja">明日、京都へ行きます。河口湖駅か新富士駅へ行くバスを教えてください。</span><span>Tomorrow we are travelling to Kyoto. Please tell us which bus goes to Kawaguchiko Station or Shin-Fuji Station.</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step">
+          <header class="border-step-head"><span class="border-step-number">PLAN</span><div><h3>The route decisions to remember</h3><p>Use the next suitable service rather than a fixed clock time</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>From</th><th>Transport</th><th>Direction</th><th>Leave at</th></tr></thead><tbody><tr><td>Shimbashi</td><td>JR Yamanote Line</td><td>Shibuya / Shinjuku</td><td>Shinjuku</td></tr><tr><td>Shinjuku</td><td>FUJI EXCURSION or Chuo Line</td><td>Kawaguchiko or Otsuki</td><td>Kawaguchiko or Otsuki</td></tr><tr><td>Otsuki</td><td>Fujikyu Railway</td><td>Kawaguchiko</td><td>Kawaguchiko</td></tr><tr><td>Kawaguchiko</td><td>Fujikyu bus</td><td>Shoji / Motosuko area</td><td>Shoji Lake Hotel-mae or Shoji</td></tr></tbody></table></div>
+          </div>
+        </section>
+
+        <section class="guide-sources">
+          <h3>Official route sources</h3>
+          <ul><li><a href="https://www.yotel.com/en/hotels/yotel-tokyo-ginza" target="_blank" rel="noopener noreferrer">YOTEL Tokyo Ginza location and Shimbashi access</a></li><li><a href="https://e.fujikyu-railway.jp/fujikaiyuu/" target="_blank" rel="noopener noreferrer">FUJI EXCURSION route and ticket information</a></li><li><a href="https://www.jreast.co.jp/e/routemaps/pdf/routemaps_timetable.pdf" target="_blank" rel="noopener noreferrer">JR East Kawaguchiko train guide</a></li><li><a href="https://www.fujikyubus.co.jp/shuyu" target="_blank" rel="noopener noreferrer">Fujikyu sightseeing bus routes and current service information</a></li><li><a href="https://shojilake.jp/access/" target="_blank" rel="noopener noreferrer">Shoji Lake Hotel official access page</a></li></ul>
+        </section>
+      </div>
+    </div>
+    <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
+  </dialog>
+
   <footer><p>Pack light. Book early. Leave room for the unexpected.</p><small>01–15 August 2026</small></footer>
 
   <script>
@@ -2062,7 +2197,7 @@
         shenzhen: { id: 'shenzhen', emoji: '🏙️', location: 'Shenzhen', name: 'The Langham, Shenzhen', address: '7888 Shennan Boulevard, Futian District, Shenzhen 518040, China', localLanguage: 'Simplified Chinese', localLang: 'zh-Hans', localName: '深圳东海朗廷酒店', localAddress: '中国广东省深圳市福田区深南大道7888号', checkIn: '2026-08-01', checkOut: '2026-08-04', dates: '1–4 August · 3 nights' },
         hongKong: { id: 'hong-kong-airport', emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', localLanguage: 'Traditional Chinese', localLang: 'zh-Hant', localName: '香港銀樾美憬閣精選酒店', localAddress: '香港東涌達東路16號', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night', borderGuide: true },
         tokyo: { id: 'tokyo-ginza', emoji: '🗼', location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'YOTEL 東京 銀座', localAddress: '〒105-0004 東京都港区新橋1丁目7-7', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
-        fuji: { id: 'fuji', emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '精進レークホテル', localAddress: '〒401-0336 山梨県南都留郡富士河口湖町精進255', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night' },
+        fuji: { id: 'fuji', emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '精進レークホテル', localAddress: '〒401-0336 山梨県南都留郡富士河口湖町精進255', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night', shojiGuide: true },
         kyoto: { id: 'kyoto', emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0846, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ノーガホテル 清水 京都', localAddress: '〒605-0846 京都府京都市東山区五条橋東4丁目450番1号', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights' },
         osaka: { id: 'osaka', emoji: '🏯', location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ダブルツリーbyヒルトン大阪城', localAddress: '〒540-0008 大阪府大阪市中央区大手前1丁目1番1号', checkIn: '2026-08-13', checkOut: '2026-08-14', dates: '13–14 August · 1 night' },
         narita: { id: 'narita', emoji: '✈️', location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '成田東武ホテルエアポート', localAddress: '〒286-0106 千葉県成田市取香320-1', checkIn: '2026-08-14', checkOut: '2026-08-15', dates: '14–15 August · 1 night' }
@@ -2167,8 +2302,8 @@
           ]
         },
         {
-          id: 'day-9', day: 9, date: '2026-08-09', weekday: 'SUN', region: 'fuji', location: 'Fuji', localLocation: '富士山', title: 'Mt Fuji views → overnight', localName: '富士山の景色 → 一泊', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Shoji Lake Hotel', weatherCity: 'Fujikawaguchiko', hotel: stays.fuji,
-          transit: { id: 'tokyo-fuji-transfer', order: 0, mode: 'Transfer', route: 'Tokyo → Fuji Five Lakes', detail: 'Rail and bus · check live route', localName: '東京駅 → 富士五湖', localAddress: stays.fuji.localAddress, localLanguage: 'Japanese', localLang: 'ja', address: stays.fuji.address },
+          id: 'day-9', day: 9, date: '2026-08-09', weekday: 'SUN', region: 'fuji', location: 'Fuji', localLocation: '富士山', title: 'Mt Fuji views → overnight', localName: '富士山の景色 → 一泊', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Shoji Lake Hotel', weatherCity: 'Fujikawaguchiko', hotel: stays.fuji, shojiGuide: true,
+          transit: { id: 'tokyo-fuji-transfer', order: 0, mode: 'Transfer', route: 'YOTEL Ginza → Shoji Lake Hotel', detail: 'Shimbashi · Shinjuku · Kawaguchiko · Fujikyu bus', localName: 'YOTEL 東京 銀座 → 精進レークホテル', localAddress: stays.fuji.localAddress, localLanguage: 'Japanese', localLang: 'ja', address: stays.fuji.address },
           activities: [
             { id: 'fuji-five-lakes', order: 1, title: 'Mt Fuji views around the Five Lakes area', localName: '富士五湖周辺から富士山を眺める', localAddress: '山梨県南都留郡富士河口湖町', localLanguage: 'Japanese', localLang: 'ja', address: 'Fuji Five Lakes, Yamanashi, Japan' },
             { id: 'fuji-onsen', order: 2, title: 'Choose a Fuji-area stay with an onsen for the night', localName: '温泉のある富士エリアの宿に宿泊', localAddress: stays.fuji.localAddress, localLanguage: 'Japanese', localLang: 'ja', address: stays.fuji.address },
@@ -2723,7 +2858,8 @@
         const actions = document.createElement('div');
         actions.className = 'day-actions';
         const borderGuideAction = plan.borderGuide ? `<button class="day-action" type="button" data-open-border-guide>${actionIcons.borderGuide}<span>Border guide</span></button>` : '';
-        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
+        const shojiGuideAction = plan.shojiGuide ? `<button class="day-action" type="button" data-open-shoji-guide>${actionIcons.borderGuide}<span>Shoji guide</span></button>` : '';
+        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
         card.append(actions);
       });
     }
@@ -2841,7 +2977,8 @@
       dialog.dataset.day = String(dayNumber);
       document.querySelector('#dayDialogTitle').textContent = `Day ${dayNumber} · ${day.title}`;
       const borderGuideAction = day.borderGuide ? `<button class="mini-action primary" type="button" data-open-border-guide>${actionIcons.borderGuide}<span>Open border guide</span></button>` : '';
-      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      const shojiGuideAction = day.shojiGuide ? `<button class="mini-action primary" type="button" data-open-shoji-guide>${actionIcons.borderGuide}<span>Open Shoji guide</span></button>` : '';
+      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
       syncLocalPlaceDisplays(hotel.id);
       activityTimeline(day, clock).forEach((activity) => syncLocalPlaceDisplays(activity.id));
       body.scrollTop = scrollTop;
@@ -2864,6 +3001,13 @@
     function openBorderGuide() {
       const dialog = document.querySelector('#borderGuideDialog');
       const body = document.querySelector('#borderGuideBody');
+      showModalDialog(dialog);
+      if (body) body.scrollTop = 0;
+    }
+
+    function openShojiGuide() {
+      const dialog = document.querySelector('#shojiGuideDialog');
+      const body = document.querySelector('#shojiGuideBody');
       showModalDialog(dialog);
       if (body) body.scrollTop = 0;
     }
@@ -2909,7 +3053,8 @@
         row.dataset.englishDetail = `${hotel.location} · ${hotel.dates}\n${hotel.address}`;
         const borderGuideIcon = typeof actionIcons === 'undefined' ? '' : actionIcons.borderGuide;
         const borderGuideAction = hotel.borderGuide ? `<button class="mini-action primary" type="button" data-open-border-guide>${borderGuideIcon}<span>Border guide</span></button>` : '';
-        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}${borderGuideAction}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
+        const shojiGuideAction = hotel.shojiGuide ? `<button class="mini-action primary" type="button" data-open-shoji-guide>${borderGuideIcon}<span>Shoji guide</span></button>` : '';
+        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}${borderGuideAction}${shojiGuideAction}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
         syncLocalPlaceDisplay(row, hotel);
         return row;
       }));
@@ -2921,6 +3066,8 @@
         if (dayButton) openDayView(Number(dayButton.dataset.dayView));
         const borderGuideButton = event.target.closest('[data-open-border-guide]');
         if (borderGuideButton) openBorderGuide();
+        const shojiGuideButton = event.target.closest('[data-open-shoji-guide]');
+        if (shojiGuideButton) openShojiGuide();
         const closeButton = event.target.closest('[data-close-dialog]');
         if (closeButton) document.querySelector(`#${closeButton.dataset.closeDialog}`).close();
       });
@@ -3193,6 +3340,7 @@
       const nextMap = document.querySelector('#todayNextMap');
       nextMap.href = mapsUrl(focus?.address || day.mapQuery);
       document.querySelector('#todayBorderGuide').hidden = !day.borderGuide;
+      document.querySelector('#todayShojiGuide').hidden = !day.shojiGuide;
       const reservation = document.querySelector('#todayReservation');
       const focusLink = focus?.reservationLink || focus?.detailsLink;
       reservation.hidden = !focusLink;
