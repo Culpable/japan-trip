@@ -16,9 +16,9 @@ assert.ok(day, '9 August should exist in the itinerary');
 assert.equal(day.shojiGuide, true, 'Day 9 should expose the Shoji travel guide');
 assert.equal(day.hotel.shojiGuide, true, 'Shoji Lake Hotel should expose the travel guide');
 assert.equal(day.transit.route, 'YOTEL Ginza → Shoji Lake Hotel', 'the Day 9 route should name the real start and destination');
-assert.equal(day.transit.time, '11:00AM', 'the Day 9 transfer should start with the planned YOTEL departure');
-assert.equal(day.transit.leaveBy, '11:00AM', 'Today should tell the travellers when to leave YOTEL');
-assert.match(day.transit.detail, /Taxi.*KAIJI 23.*Otsuki.*Fujikyu local.*taxi/i, 'the transfer summary should include the selected route and both taxis');
+assert.equal(day.transit.time, '12:30PM', 'the Day 9 transfer should start with the planned YOTEL departure');
+assert.equal(day.transit.leaveBy, '12:30PM', 'Today should tell the travellers when to leave YOTEL');
+assert.match(day.transit.detail, /Taxi.*KAIJI 27.*Otsuki.*Thomas Land local.*taxi/i, 'the transfer summary should include the selected route and both taxis');
 
 const guideStart = html.indexOf('<dialog class="trip-dialog border-guide-dialog shoji-guide-dialog"');
 const guideEnd = html.indexOf('</dialog>', guideStart);
@@ -28,11 +28,11 @@ for (let step = 1; step <= 7; step += 1) {
   assert.match(guide, new RegExp(`id="shoji-step-${step}"`), `the complete guide should include step ${step}`);
 }
 
-assert.match(guide, /11:00AM.*12:30PM.*1:27PM.*1:55PM.*2:52PM/s, 'the guide should show the selected journey times in order');
-assert.match(guide, /YOTEL.*Taxi.*Shinjuku.*KAIJI 23.*Otsuki.*Fujikyu local.*Kawaguchiko.*Taxi.*Shoji Lake Hotel/is, 'the route overview should include every leg from YOTEL to the hotel');
+assert.match(guide, /12:30PM.*1:30PM.*2:30PM.*3:03PM.*4:09PM/s, 'the guide should show the selected journey times in order');
+assert.match(guide, /YOTEL.*Taxi.*Shinjuku.*KAIJI 27.*Otsuki.*Thomas Land local.*Kawaguchiko.*Taxi.*Shoji Lake Hotel/is, 'the route overview should include every leg from YOTEL to the hotel');
 assert.match(guide, /JR新宿駅南口までお願いします。/, 'the guide should include the Shinjuku taxi phrase in Japanese');
-assert.match(guide, /KAIJI 23.*12:30PM.*Otsuki.*1:27PM/s, 'the guide should identify the booked JR train and arrival time');
-assert.match(guide, /1:55PM.*Fujikyu.*2:52PM/s, 'the guide should identify the Fujikyu local connection');
+assert.match(guide, /KAIJI 27.*1:30PM.*Track 9.*Otsuki.*2:30PM/s, 'the guide should identify the booked JR train, platform, and arrival time');
+assert.match(guide, /3:03PM.*Thomas Land.*4:09PM/s, 'the guide should identify the Fujikyu local connection');
 assert.match(guide, /Suica.*¥1,170/s, 'the guide should explain the Fujikyu local fare and payment method');
 assert.match(guide, /¥6,000.*¥7,500/s, 'the guide should include the expected final taxi fare');
 assert.match(guide, /精進レークホテルまでお願いします。.*山梨県南都留郡富士河口湖町精進255/s, 'the guide should include the final taxi phrase and hotel address in Japanese');
@@ -48,8 +48,9 @@ assert.match(html, /function openShojiGuide\(\)/, 'all entry points should open 
 for (const url of [
   'https://www.yotel.com/en/hotels/yotel-tokyo-ginza',
   'https://www.eki-net.com/en/jreast-train-reservation/Top/Index',
-  'https://timetables.jreast.co.jp/en/2608/timetable/tt0866/0866050.html',
+  'https://timetables.jreast.co.jp/en/2608/train/060/063461.html',
   'https://e.fujikyu-railway.jp/station/timetable.php?no=1',
+  'https://www.fujikyu-railway.jp/en/train/thomas.php',
   'https://e.fujikyu-railway.jp/fare/',
   'https://shojilake.jp/access/'
 ]) {
