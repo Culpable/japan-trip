@@ -1552,6 +1552,14 @@
       .guide-table { min-width: 0; table-layout: fixed; font-size: .62rem; }
       .guide-table th, .guide-table td { padding: .5rem .3rem; overflow-wrap: anywhere; }
       .guide-table th { font-size: .5rem; }
+      /* Five narrow columns make the fixed Shoji route hard to scan on a phone. Present the
+         same table rows as labelled journey cards without changing the desktop summary. */
+      .shoji-route-summary, .shoji-route-summary tbody, .shoji-route-summary tr, .shoji-route-summary td { display: block; width: 100%; }
+      .shoji-route-summary thead { display: none; }
+      .shoji-route-summary tr { padding: .55rem .65rem; border-bottom: 1px solid #e7e1d6; }
+      .shoji-route-summary tr:last-child { border-bottom: 0; }
+      .shoji-route-summary td { display: grid; grid-template-columns: 5.4rem minmax(0, 1fr); gap: .55rem; padding: .2rem 0; border: 0; font-size: .7rem; overflow-wrap: normal; }
+      .shoji-route-summary td::before { content: attr(data-label); color: #244f67; font-size: .56rem; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
     }
     /* ---- Pre-trip countdown delight -------------------------------------------- */
     /* Scene warming: the dashboard glows warmer as the trip nears. --hype (0..1) is set
@@ -2059,101 +2067,87 @@
     <div class="dialog-head"><div><p>9 August · Tokyo to Lake Shoji</p><h2 id="shojiGuideTitle">YOTEL Ginza to Shoji Lake Hotel</h2></div><button class="dialog-close" type="button" data-close-dialog="shojiGuideDialog" aria-label="Close Shoji travel guide">×</button></div>
     <div class="dialog-body" id="shojiGuideBody">
       <section class="border-guide-hero">
-        <p><strong>Walk from YOTEL to Shimbashi Station, travel to Shinjuku, continue to Kawaguchiko by direct train or via Otsuki, then take a Fujikyu bus to Shoji Lake Hotel.</strong> This guide has no fixed departure times. Use the next suitable service at each step.</p>
-        <div class="border-alert">The final bus section has limited service. At Kawaguchiko Station, show the hotel name to the bus information desk before boarding.</div>
+        <p><strong>Leave YOTEL at 11:00AM by taxi, take KAIJI 23 from Shinjuku to Otsuki, change to the Fujikyu local for Kawaguchiko, then take a taxi to Shoji Lake Hotel.</strong> The planned arrival at Kawaguchiko is 2:52PM, with hotel arrival around 3:15–3:30PM.</p>
+        <div class="border-alert">The fixed rail connection is KAIJI 23 at 12:30PM, then the 1:55PM Fujikyu local. Keep the KAIJI reservation available and at least ¥3,600 on each Suica for the rail fares.</div>
         <div class="border-route" aria-label="Complete route from YOTEL to Shoji Lake Hotel">
-          <div class="border-route-stop"><strong>YOTEL Ginza</strong><span lang="ja">YOTEL 東京 銀座</span></div>
-          <div class="border-route-stop"><strong>Shimbashi</strong><span lang="ja">新橋駅</span></div>
-          <div class="border-route-stop"><strong>Shinjuku</strong><span lang="ja">新宿駅</span></div>
-          <div class="border-route-stop"><strong>Otsuki</strong><span lang="ja">大月駅 · if required</span></div>
-          <div class="border-route-stop"><strong>Kawaguchiko</strong><span lang="ja">河口湖駅</span></div>
-          <div class="border-route-stop"><strong>Shoji</strong><span lang="ja">精進</span></div>
+          <div class="border-route-stop"><strong>YOTEL Ginza</strong><span lang="ja">11:00AM · タクシー</span></div>
+          <div class="border-route-stop"><strong>Shinjuku</strong><span lang="ja">新宿駅南口</span></div>
+          <div class="border-route-stop"><strong>KAIJI 23</strong><span>12:30PM</span></div>
+          <div class="border-route-stop"><strong>Otsuki</strong><span lang="ja">1:27PM · 大月駅</span></div>
+          <div class="border-route-stop"><strong>Fujikyu local</strong><span>1:55–2:52PM</span></div>
+          <div class="border-route-stop"><strong>Kawaguchiko</strong><span lang="ja">河口湖駅 · タクシー</span></div>
           <div class="border-route-stop"><strong>Shoji Lake Hotel</strong><span lang="ja">精進レークホテル</span></div>
         </div>
       </section>
 
       <div class="border-guide-content">
         <section class="border-step" id="shoji-step-1">
-          <header class="border-step-head"><span class="border-step-number">01</span><div><h3>Check out and walk to Shimbashi Station</h3><p>Start from YOTEL Tokyo Ginza with all luggage</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">01</span><div><h3>Leave YOTEL at 11:00AM by taxi</h3><p>Go directly to JR Shinjuku Station South Exit</p></div></header>
           <div class="border-step-body">
             <h4>Starting point</h4>
             <p class="guide-place">YOTEL Tokyo Ginza<span lang="ja">YOTEL 東京 銀座</span><span lang="ja">〒105-0004 東京都港区新橋1丁目7-7</span></p>
-            <ol><li>Check the room, safe and charging points before leaving.</li><li>Walk to <strong>Shimbashi Station / 新橋駅</strong>.</li><li>Follow signs for the <strong>JR Lines / JR線</strong>.</li></ol>
-            <h4>Ask hotel staff</h4>
-            <blockquote class="guide-phrase"><span lang="ja">新橋駅のJR線の入口はどちらですか？</span><span>Which way is the JR entrance at Shimbashi Station?</span></blockquote>
+            <ol><li>Check out with all luggage before 11:00AM.</li><li>Ask reception to call a taxi, or use the taxi rank or app.</li><li>Set the destination to <strong>JR Shinjuku Station South Exit / JR新宿駅南口</strong>.</li><li>Aim to arrive by 11:30–11:45AM. This leaves time to find the platform and buy anything still required.</li></ol>
+            <h4>Show the taxi driver</h4>
+            <blockquote class="guide-phrase"><span lang="ja">JR新宿駅南口までお願いします。</span><span>Please take us to the South Exit of JR Shinjuku Station.</span></blockquote>
+            <p><a href="https://www.google.com/maps/dir/?api=1&amp;origin=YOTEL%20Tokyo%20Ginza&amp;destination=JR%20Shinjuku%20Station%20South%20Exit&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Open the YOTEL to Shinjuku taxi route</a></p>
           </div>
         </section>
 
         <section class="border-step" id="shoji-step-2">
-          <header class="border-step-head"><span class="border-step-number">02</span><div><h3>Travel from Shimbashi to Shinjuku</h3><p>Use the JR Yamanote Line toward Shibuya and Shinjuku</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">02</span><div><h3>Enter JR Shinjuku and find KAIJI 23</h3><p>12:30PM departure · Chuo Line limited express · Track 10</p></div></header>
           <div class="border-step-body">
-            <div class="guide-train"><div><span>Board at</span><strong>Shimbashi<br><span lang="ja">新橋</span></strong></div><div><span>Line</span><strong>JR Yamanote Line<br><span lang="ja">山手線</span></strong></div><div><span>Direction</span><strong>Shibuya / Shinjuku<br><span lang="ja">渋谷・新宿方面</span></strong></div><div><span>Leave at</span><strong>Shinjuku<br><span lang="ja">新宿</span></strong></div></div>
-            <p>Stay on the train until <strong>Shinjuku Station</strong>. Keep your luggage close and allow extra time to move through the large station.</p>
+            <div class="guide-train"><div><span>Train</span><strong>KAIJI 23<br><span lang="ja">特急かいじ23号</span></strong></div><div><span>Departure</span><strong>12:30PM<br>Shinjuku</strong></div><div><span>Platform</span><strong>Track 10<br><span lang="ja">10番線</span></strong></div><div><span>Leave at</span><strong>Otsuki<br><span lang="ja">大月</span></strong></div></div>
+            <ol><li>Enter through the JR ticket gates. If the reservation is a limited-express e-ticket only, tap Suica for the base fare.</li><li>Follow signs for <strong>Chuo Line Limited Express / 中央線特急</strong>.</li><li>Check the departure board for <strong>KAIJI 23 / かいじ23号</strong>, 12:30PM, toward Kofu.</li><li>Use the booked car and seat. The timetable lists Track 10, but follow the live station board if it changes.</li></ol>
+            <h4>If the KAIJI ticket still needs to be completed</h4>
+            <p>Use JR-EAST Train Reservation or a reserved-seat ticket machine. Search <strong>Shinjuku → Otsuki</strong>, 9 August, 12:30PM, two adults, <strong>KAIJI 23</strong>, ordinary reserved seat. Expect about <strong>¥2,400 per person</strong> including the JR base fare.</p>
+            <p><a href="https://www.eki-net.com/en/jreast-train-reservation/Top/Index" target="_blank" rel="noopener noreferrer">Open JR-EAST Train Reservation</a></p>
             <h4>Ask JR staff</h4>
-            <blockquote class="guide-phrase"><span lang="ja">新宿駅まで行きたいです。渋谷・新宿方面の山手線はどのホームですか？</span><span>We want to go to Shinjuku Station. Which platform is the Yamanote Line toward Shibuya and Shinjuku?</span></blockquote>
-            <div class="guide-warning">Do not take the Yamanote Line in the Tokyo and Ueno direction. That route travels the long way around the loop.</div>
+            <blockquote class="guide-phrase"><span lang="ja">12時30分発の特急かいじ23号で大月駅まで行きます。10番線はどちらですか？</span><span>We are taking the 12:30 KAIJI 23 limited express to Otsuki. Where is Track 10?</span></blockquote>
+            <div class="guide-warning">KAIJI 23 continues beyond Otsuki. Set an alarm and leave at Otsuki; do not stay aboard toward Kofu.</div>
           </div>
         </section>
 
         <section class="border-step" id="shoji-step-3">
-          <header class="border-step-head"><span class="border-step-number">03</span><div><h3>Choose the next train to Kawaguchiko</h3><p>Direct FUJI EXCURSION or a connection at Otsuki</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">03</span><div><h3>Ride KAIJI 23 to Otsuki</h3><p>12:30PM from Shinjuku · 1:27PM at Otsuki</p></div></header>
           <div class="border-step-body">
-            <p>At Shinjuku, follow signs for the <strong>JR Chuo Line limited express platforms / 中央線特急</strong>. Ask staff which option leaves next:</p>
-            <ol><li><strong>Best option:</strong> FUJI EXCURSION / 富士回遊 directly to Kawaguchiko. It requires a reserved seat.</li><li><strong>Flexible option:</strong> a Chuo Line train to Otsuki, then the Fujikyu Railway to Kawaguchiko.</li></ol>
-            <h4>Ask at the JR ticket office or a staffed gate</h4>
-            <blockquote class="guide-phrase"><span lang="ja">河口湖駅まで行きたいです。次に乗れる富士回遊の指定席はありますか？なければ、大月駅で乗り換える行き方を教えてください。</span><span>We want to go to Kawaguchiko Station. Are reserved seats available on the next FUJI EXCURSION? If not, please show us the route that changes at Otsuki.</span></blockquote>
-            <div class="guide-warning">FUJI EXCURSION is reserved-seat only. Do not board it without the required base fare and reserved-seat limited express ticket.</div>
+            <div class="guide-train"><div><span>From</span><strong>Shinjuku<br>12:30PM</strong></div><div><span>Train</span><strong>KAIJI 23<br>Reserved seat</strong></div><div><span>Journey</span><strong>57 minutes</strong></div><div><span>To</span><strong>Otsuki<br>1:27PM</strong></div></div>
+            <ol><li>Board the car shown in the reservation.</li><li>Place large luggage securely without blocking the aisle.</li><li>Keep the reservation details available for inspection.</li><li>Prepare to leave after Hachioji. Otsuki is the next listed stop after Hachioji.</li></ol>
+            <p class="guide-place">Leave at Otsuki Station<span lang="ja">大月駅</span><span>Scheduled arrival 1:27PM</span></p>
           </div>
         </section>
 
         <section class="border-step" id="shoji-step-4">
-          <header class="border-step-head"><span class="border-step-number">04</span><div><h3>Change at Otsuki if required</h3><p>Skip this step if your train runs directly to Kawaguchiko</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">04</span><div><h3>Change to Fujikyu Railway at Otsuki</h3><p>28-minute connection · follow 富士急行線 signs</p></div></header>
           <div class="border-step-body">
-            <p>If you are not on a direct FUJI EXCURSION service, leave at <strong>Otsuki Station / 大月駅</strong>.</p>
-            <ol><li>Follow signs for the <strong>Fujikyu Railway / 富士急行線</strong>.</li><li>Buy any additional Fujikyu fare or ticket that your original ticket does not cover.</li><li>Board a train for <strong>Kawaguchiko / 河口湖</strong>.</li><li>Stay aboard to the final stop.</li></ol>
+            <ol><li>Leave KAIJI 23 with all luggage at 1:27PM.</li><li>Follow signs for <strong>Fujikyu Railway / 富士急行線</strong>.</li><li>Use the transfer gate. Tap Suica as directed to finish the JR section and start the Fujikyu section.</li><li>Check the display for the <strong>1:55PM local train to Kawaguchiko / 河口湖</strong>.</li><li>Be on the Fujikyu platform before 1:50PM.</li></ol>
             <h4>Ask station staff</h4>
-            <blockquote class="guide-phrase"><span lang="ja">河口湖駅へ行く富士急行線はどこですか？この切符で乗れますか？</span><span>Where is the Fujikyu Railway train to Kawaguchiko Station? Can we use this ticket?</span></blockquote>
-            <div class="guide-warning">Check that the destination display says 河口湖. Do not leave the train at Fujisan or Fuji-Q Highland.</div>
+            <blockquote class="guide-phrase"><span lang="ja">13時55分発、河口湖行きの富士急行線の普通列車はどのホームですか？Suicaを使います。</span><span>Which platform is the 1:55PM Fujikyu local train for Kawaguchiko? We are using Suica.</span></blockquote>
+            <div class="guide-warning">The 1:55PM train is a local service. You do not need another seat reservation. Do not wait for a limited express.</div>
           </div>
         </section>
 
         <section class="border-step" id="shoji-step-5">
-          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Find the correct bus at Kawaguchiko</h3><p>Ask for the next Fujikyu bus serving the hotel</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Take the Fujikyu local to Kawaguchiko</h3><p>1:55PM from Otsuki · 2:52PM at Kawaguchiko</p></div></header>
           <div class="border-step-body">
-            <ol><li>Leave Kawaguchiko Station with all luggage.</li><li>Go to the bus information desk or a staffed boarding area.</li><li>Show the hotel name and ask for the next suitable bus.</li><li>Depending on the service, staff may direct you to a local bus or the Narusawa, Shojiko and Motosuko Blue Line.</li></ol>
-            <h4>Show the bus information desk</h4>
-            <blockquote class="guide-phrase"><span lang="ja">精進レークホテルに行きたいです。次に乗れるバスと乗り場を教えてください。</span><span>We want to go to Shoji Lake Hotel. Please tell us the next bus and its boarding point.</span></blockquote>
-            <p class="guide-place">Hotel<span lang="ja">精進レークホテル</span><span lang="ja">〒401-0336 山梨県南都留郡富士河口湖町精進255</span></p>
-            <div class="guide-warning">Do not take a bus to the Mount Fuji 5th Station. Your destination is the Lake Shoji area west of Kawaguchiko.</div>
+            <div class="guide-train"><div><span>From</span><strong>Otsuki<br>1:55PM</strong></div><div><span>Train</span><strong>Fujikyu local<br><span lang="ja">富士急行線 普通</span></strong></div><div><span>Fare</span><strong>¥1,170 ticket<br>about ¥1,161 Suica</strong></div><div><span>To</span><strong>Kawaguchiko<br>2:52PM</strong></div></div>
+            <ol><li>Board the local train displaying <strong>Kawaguchiko / 河口湖</strong>.</li><li>No seat reservation is required. Sit in any available seat.</li><li>Stay aboard through Fujisan and Fuji-Q Highland.</li><li>Leave at the final stop, Kawaguchiko Station, at 2:52PM.</li><li>Tap Suica at the exit gate.</li></ol>
+            <div class="guide-warning">Do not leave at Fujisan / 富士山 or Fuji-Q Highland / 富士急ハイランド. Kawaguchiko / 河口湖 is the final stop.</div>
           </div>
         </section>
 
         <section class="border-step" id="shoji-step-6">
-          <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Ride the bus to the Lake Shoji area</h3><p>Confirm the stop with the driver when boarding</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Take a taxi from Kawaguchiko to the hotel</h3><p>Final leg · about 20–30 minutes · about ¥6,000–¥7,500 per taxi</p></div></header>
           <div class="border-step-body">
-            <p>Tell the driver where you are staying. The correct stop depends on the bus:</p>
-            <ul><li>If the bus serves <strong>Shoji Lake Hotel-mae / 精進レイクホテル前</strong>, leave there.</li><li>If you take the Blue Line, leave at <strong>Shoji / 精進</strong>.</li></ul>
-            <h4>Show the driver</h4>
-            <blockquote class="guide-phrase"><span lang="ja">精進レークホテルに行きます。一番近い停留所に着いたら教えてください。</span><span>We are going to Shoji Lake Hotel. Please tell us when we reach the nearest bus stop.</span></blockquote>
-            <h4>If staff direct you to the Blue Line</h4>
-            <blockquote class="guide-phrase"><span lang="ja">精進で降ります。着いたら教えてください。</span><span>We will get off at Shoji. Please tell us when we arrive.</span></blockquote>
-            <p>Keep the fare or payment method ready and follow the driver’s instructions for boarding and payment.</p>
+            <ol><li>Leave Kawaguchiko Station with all luggage.</li><li>Go to the taxi rank directly outside the station.</li><li>Show the driver the hotel name and full Japanese address below.</li><li>Confirm card payment before departure if you do not have enough cash.</li><li>Expected hotel arrival is about 3:15–3:30PM.</li></ol>
+            <p class="guide-place">Shoji Lake Hotel<span lang="ja">精進レークホテル</span><span>255 Shoji, Fujikawaguchiko, Yamanashi 401-0336</span><span lang="ja">〒401-0336 山梨県南都留郡富士河口湖町精進255</span></p>
+            <h4>Show the taxi driver</h4>
+            <blockquote class="guide-phrase"><span lang="ja">精進レークホテルまでお願いします。住所は山梨県南都留郡富士河口湖町精進255です。</span><span>Please take us to Shoji Lake Hotel. The address is 255 Shoji, Fujikawaguchiko, Yamanashi.</span></blockquote>
+            <p><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Kawaguchiko%20Station&amp;destination=Shoji%20Lake%20Hotel%20255%20Shoji%20Fujikawaguchiko&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Open the Kawaguchiko to hotel taxi route</a></p>
           </div>
         </section>
 
         <section class="border-step" id="shoji-step-7">
-          <header class="border-step-head"><span class="border-step-number">07</span><div><h3>Walk from the bus stop to the hotel</h3><p>The hotel is beside Lake Shoji</p></div></header>
-          <div class="border-step-body">
-            <p>From <strong>Shoji Lake Hotel-mae</strong>, the hotel is directly beside the stop. From <strong>Shoji</strong>, follow the lakeside road for the short walk to the hotel.</p>
-            <p class="guide-place">Shoji Lake Hotel<span lang="ja">精進レークホテル</span><span>255 Shoji, Fujikawaguchiko, Yamanashi 401-0336</span><span lang="ja">〒401-0336 山梨県南都留郡富士河口湖町精進255</span></p>
-            <h4>Ask anyone nearby</h4>
-            <blockquote class="guide-phrase"><span lang="ja">精進レークホテルはどちらですか？</span><span>Which way is Shoji Lake Hotel?</span></blockquote>
-            <p><a href="https://www.google.com/maps/search/?api=1&amp;query=Shoji%20Lake%20Hotel%20255%20Shoji%20Fujikawaguchiko" target="_blank" rel="noopener noreferrer">Open the hotel in Google Maps</a></p>
-          </div>
-        </section>
-
-        <section class="border-step" id="shoji-step-8">
-          <header class="border-step-head"><span class="border-step-number">08</span><div><h3>Check in at Shoji Lake Hotel</h3><p>Show the booking name and passport at reception</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">07</span><div><h3>Check in at Shoji Lake Hotel</h3><p>Expected arrival 3:15–3:30PM</p></div></header>
           <div class="border-step-body">
             <ol><li>Give reception the booking name.</li><li>Provide passports if requested.</li><li>Confirm breakfast, dinner and bathing arrangements.</li><li>Ask reception about tomorrow’s bus before settling into the room.</li></ol>
             <h4>At reception</h4>
@@ -2164,15 +2158,16 @@
         </section>
 
         <section class="border-step">
-          <header class="border-step-head"><span class="border-step-number">PLAN</span><div><h3>The route decisions to remember</h3><p>Use the next suitable service rather than a fixed clock time</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">PLAN</span><div><h3>The complete route at a glance</h3><p>About 4½ hours from YOTEL to Shoji Lake Hotel</p></div></header>
           <div class="border-step-body">
-            <div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>From</th><th>Transport</th><th>Direction</th><th>Leave at</th></tr></thead><tbody><tr><td>Shimbashi</td><td>JR Yamanote Line</td><td>Shibuya / Shinjuku</td><td>Shinjuku</td></tr><tr><td>Shinjuku</td><td>FUJI EXCURSION or Chuo Line</td><td>Kawaguchiko or Otsuki</td><td>Kawaguchiko or Otsuki</td></tr><tr><td>Otsuki</td><td>Fujikyu Railway</td><td>Kawaguchiko</td><td>Kawaguchiko</td></tr><tr><td>Kawaguchiko</td><td>Fujikyu bus</td><td>Shoji / Motosuko area</td><td>Shoji Lake Hotel-mae or Shoji</td></tr></tbody></table></div>
+            <div class="guide-table-wrap"><table class="guide-table shoji-route-summary"><thead><tr><th>Start</th><th>Transport</th><th>Time</th><th>Finish</th><th>Expected cost</th></tr></thead><tbody><tr><td data-label="Start">YOTEL Ginza</td><td data-label="Transport">Taxi</td><td data-label="Time">Leave 11:00AM</td><td data-label="Finish">JR Shinjuku South Exit</td><td data-label="Cost">Metered fare</td></tr><tr><td data-label="Start">Shinjuku</td><td data-label="Transport">KAIJI 23 reserved seat</td><td data-label="Time">12:30–1:27PM</td><td data-label="Finish">Otsuki</td><td data-label="Cost">About ¥2,400 each</td></tr><tr><td data-label="Start">Otsuki</td><td data-label="Transport">Fujikyu local</td><td data-label="Time">1:55–2:52PM</td><td data-label="Finish">Kawaguchiko</td><td data-label="Cost">¥1,170 ticket or about ¥1,161 Suica each</td></tr><tr><td data-label="Start">Kawaguchiko</td><td data-label="Transport">Taxi</td><td data-label="Time">About 20–30 minutes</td><td data-label="Finish">Shoji Lake Hotel</td><td data-label="Cost">About ¥6,000–¥7,500 per taxi</td></tr></tbody></table></div>
+            <p><strong>Rail total:</strong> about ¥3,600 per person. <strong>Two travellers plus the final taxi:</strong> about ¥13,200–¥14,700, before the metered YOTEL-to-Shinjuku taxi.</p>
           </div>
         </section>
 
         <section class="guide-sources">
           <h3>Official route sources</h3>
-          <ul><li><a href="https://www.yotel.com/en/hotels/yotel-tokyo-ginza" target="_blank" rel="noopener noreferrer">YOTEL Tokyo Ginza location and Shimbashi access</a></li><li><a href="https://e.fujikyu-railway.jp/fujikaiyuu/" target="_blank" rel="noopener noreferrer">FUJI EXCURSION route and ticket information</a></li><li><a href="https://www.jreast.co.jp/e/routemaps/pdf/routemaps_timetable.pdf" target="_blank" rel="noopener noreferrer">JR East Kawaguchiko train guide</a></li><li><a href="https://www.fujikyubus.co.jp/shuyu" target="_blank" rel="noopener noreferrer">Fujikyu sightseeing bus routes and current service information</a></li><li><a href="https://shojilake.jp/access/" target="_blank" rel="noopener noreferrer">Shoji Lake Hotel official access page</a></li></ul>
+          <ul><li><a href="https://www.yotel.com/en/hotels/yotel-tokyo-ginza" target="_blank" rel="noopener noreferrer">YOTEL Tokyo Ginza location</a></li><li><a href="https://www.eki-net.com/en/jreast-train-reservation/Top/Index" target="_blank" rel="noopener noreferrer">JR-EAST Train Reservation</a></li><li><a href="https://timetables.jreast.co.jp/en/2608/timetable/tt0866/0866050.html" target="_blank" rel="noopener noreferrer">JR East Shinjuku limited express timetable</a></li><li><a href="https://e.fujikyu-railway.jp/station/timetable.php?no=1" target="_blank" rel="noopener noreferrer">Fujikyu Otsuki timetable</a></li><li><a href="https://e.fujikyu-railway.jp/fare/" target="_blank" rel="noopener noreferrer">Fujikyu fares</a></li><li><a href="https://shojilake.jp/access/" target="_blank" rel="noopener noreferrer">Shoji Lake Hotel official access page</a></li></ul>
         </section>
       </div>
     </div>
@@ -2303,7 +2298,7 @@
         },
         {
           id: 'day-9', day: 9, date: '2026-08-09', weekday: 'SUN', region: 'fuji', location: 'Fuji', localLocation: '富士山', title: 'Mt Fuji views → overnight', localName: '富士山の景色 → 一泊', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Shoji Lake Hotel', weatherCity: 'Fujikawaguchiko', hotel: stays.fuji, shojiGuide: true,
-          transit: { id: 'tokyo-fuji-transfer', order: 0, mode: 'Transfer', route: 'YOTEL Ginza → Shoji Lake Hotel', detail: 'Shimbashi · Shinjuku · Kawaguchiko · Fujikyu bus', localName: 'YOTEL 東京 銀座 → 精進レークホテル', localAddress: stays.fuji.localAddress, localLanguage: 'Japanese', localLang: 'ja', address: stays.fuji.address },
+          transit: { id: 'tokyo-fuji-transfer', order: 0, mode: 'Transfer', route: 'YOTEL Ginza → Shoji Lake Hotel', detail: 'Taxi · KAIJI 23 · Otsuki · Fujikyu local · final taxi', localName: 'YOTEL 東京 銀座 → 精進レークホテル', localAddress: '11:00出発 · タクシー · 特急かいじ23号 · 大月駅 · 富士急行線 · タクシー · 精進レークホテル', localLanguage: 'Japanese', localLang: 'ja', time: '11:00AM', instant: '2026-08-09T11:00:00+09:00', durationMinutes: 270, leaveBy: '11:00AM', address: stays.fuji.address },
           activities: [
             { id: 'fuji-five-lakes', order: 1, title: 'Mt Fuji views around the Five Lakes area', localName: '富士五湖周辺から富士山を眺める', localAddress: '山梨県南都留郡富士河口湖町', localLanguage: 'Japanese', localLang: 'ja', address: 'Fuji Five Lakes, Yamanashi, Japan' },
             { id: 'fuji-onsen', order: 2, title: 'Choose a Fuji-area stay with an onsen for the night', localName: '温泉のある富士エリアの宿に宿泊', localAddress: stays.fuji.localAddress, localLanguage: 'Japanese', localLang: 'ja', address: stays.fuji.address },
