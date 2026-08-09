@@ -24,8 +24,8 @@ assert.match(
 );
 assert.equal(
   (html.match(/class="dialog-companion-dock" data-companion-dock/g) || []).length,
-  4,
-  'all four modal dialogs should provide reserved companion space'
+  5,
+  'all five modal dialogs should provide reserved companion space'
 );
 assert.match(
   html,

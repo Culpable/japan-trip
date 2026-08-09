@@ -1289,6 +1289,28 @@
     .shoji-guide-dialog .guide-place,
     .shoji-guide-dialog .guide-train div,
     .shoji-guide-dialog .guide-table th { background: #e9f2f6; }
+    /* Kyoto transfers keep the field-guide layout, with an indigo rail palette that
+       matches the Kyoto section and makes this route easy to distinguish at a glance. */
+    .kyoto-transfer-dialog .border-guide-hero { background: #403b82; }
+    .kyoto-transfer-dialog .border-step-number { background: #403b82; }
+    .kyoto-transfer-dialog .guide-place,
+    .kyoto-transfer-dialog .guide-train strong,
+    .kyoto-transfer-dialog .guide-table th { color: #403b82; }
+    .kyoto-transfer-dialog .guide-place,
+    .kyoto-transfer-dialog .guide-train div,
+    .kyoto-transfer-dialog .guide-table th { background: #eeedfb; }
+    .ticket-proof { margin: .8rem 0; overflow: hidden; border: 1px solid #b9ccd6; border-radius: 14px; background: #f3f8fa; }
+    .ticket-proof summary { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .35rem .75rem; align-items: center; padding: .8rem 3rem .8rem .9rem; color: #244f67; cursor: pointer; list-style: none; }
+    .ticket-proof summary::-webkit-details-marker { display: none; }
+    .ticket-proof summary::after { content: "+"; position: absolute; right: .9rem; top: 50%; display: grid; width: 26px; height: 26px; place-items: center; border-radius: 50%; background: #244f67; color: #fff; font-size: 1rem; font-weight: 900; transform: translateY(-50%); }
+    .ticket-proof[open] summary::after { content: "−"; }
+    .ticket-proof summary strong { font: 900 .82rem/1.2 "Nunito Sans", sans-serif; }
+    .ticket-proof summary span { padding: .3rem .48rem; border-radius: 999px; background: #dbeaf0; font-size: .61rem; font-weight: 900; white-space: nowrap; }
+    .ticket-proof-body { display: grid; gap: .75rem; padding: 0 .8rem .8rem; border-top: 1px solid #d5e2e7; }
+    .ticket-proof-note { margin: .8rem 0 0; padding: .68rem .75rem; border-radius: 11px; background: #fff3cf; color: #5a3912; font-size: .72rem; font-weight: 800; line-height: 1.45; }
+    .ticket-proof-image { display: block; overflow: hidden; border: 1px solid #c9d6dc; border-radius: 11px; background: #fff; }
+    .ticket-proof-image img { display: block; width: 100%; height: auto; }
+    .ticket-proof-hint { margin: 0; color: #697981; font-size: .65rem; font-weight: 800; text-align: center; }
     .offline-badge { display: none; position: fixed; left: calc(.75rem + env(safe-area-inset-left, 0px)); bottom: calc(.75rem + env(safe-area-inset-bottom, 0px)); z-index: 40; padding: .55rem .7rem; border-radius: 999px; background: #242522; color: #fff; font-size: .68rem; font-weight: 900; box-shadow: 0 5px 18px rgba(36,37,34,.2); }
     body.is-offline .offline-badge { display: block; }
 
@@ -1554,12 +1576,13 @@
       .guide-table th { font-size: .5rem; }
       /* Five narrow columns make the fixed Shoji route hard to scan on a phone. Present the
          same table rows as labelled journey cards without changing the desktop summary. */
-      .shoji-route-summary, .shoji-route-summary tbody, .shoji-route-summary tr, .shoji-route-summary td { display: block; width: 100%; }
-      .shoji-route-summary thead { display: none; }
-      .shoji-route-summary tr { padding: .55rem .65rem; border-bottom: 1px solid #e7e1d6; }
-      .shoji-route-summary tr:last-child { border-bottom: 0; }
-      .shoji-route-summary td { display: grid; grid-template-columns: 5.4rem minmax(0, 1fr); gap: .55rem; padding: .2rem 0; border: 0; font-size: .7rem; overflow-wrap: normal; }
-      .shoji-route-summary td::before { content: attr(data-label); color: #244f67; font-size: .56rem; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
+      .shoji-route-summary, .shoji-route-summary tbody, .shoji-route-summary tr, .shoji-route-summary td,
+      .journey-route-summary, .journey-route-summary tbody, .journey-route-summary tr, .journey-route-summary td { display: block; width: 100%; }
+      .shoji-route-summary thead, .journey-route-summary thead { display: none; }
+      .shoji-route-summary tr, .journey-route-summary tr { padding: .55rem .65rem; border-bottom: 1px solid #e7e1d6; }
+      .shoji-route-summary tr:last-child, .journey-route-summary tr:last-child { border-bottom: 0; }
+      .shoji-route-summary td, .journey-route-summary td { display: grid; grid-template-columns: 5.4rem minmax(0, 1fr); gap: .55rem; padding: .2rem 0; border: 0; font-size: .7rem; overflow-wrap: normal; }
+      .shoji-route-summary td::before, .journey-route-summary td::before { content: attr(data-label); color: #403b82; font-size: .56rem; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
     }
     /* ---- Pre-trip countdown delight -------------------------------------------- */
     /* Scene warming: the dashboard glows warmer as the trip nears. --hype (0..1) is set
@@ -1800,6 +1823,7 @@
             <button class="day-action primary" id="todayOpenRunSheet" type="button"><span>Open full run sheet</span></button>
             <button class="day-action" id="todayBorderGuide" type="button" data-open-border-guide hidden><span>Border guide</span></button>
             <button class="day-action" id="todayShojiGuide" type="button" data-open-shoji-guide hidden><span>Shoji travel guide</span></button>
+            <button class="day-action" id="todayKyotoTransferGuide" type="button" data-open-kyoto-transfer-guide hidden><span>Kyoto travel guide</span></button>
             <a class="day-action" id="todayNextMap" href="#" target="_blank" rel="noopener noreferrer"><span>Open map</span></a>
             <a class="day-action" id="todayReservation" href="#" target="_blank" rel="noopener noreferrer" hidden><span>Reservation</span></a>
             <button class="day-action local-name-action" id="todayNextLocal" type="button" aria-pressed="false" hidden><span>Show local name</span></button>
@@ -2097,10 +2121,18 @@
           <header class="border-step-head"><span class="border-step-number">02</span><div><h3>Enter JR Shinjuku and find KAIJI 27</h3><p>1:30PM departure · Chuo Line limited express · Track 9</p></div></header>
           <div class="border-step-body">
             <div class="guide-train"><div><span>Train</span><strong>KAIJI 27<br><span lang="ja">特急かいじ27号</span></strong></div><div><span>Departure</span><strong>1:30PM<br>Shinjuku</strong></div><div><span>Platform</span><strong>Track 9<br><span lang="ja">9番線</span></strong></div><div><span>Leave at</span><strong>Otsuki<br><span lang="ja">大月</span></strong></div></div>
-            <ol><li>Enter through the JR ticket gates. If the reservation is a limited-express e-ticket only, tap Suica for the base fare.</li><li>Follow signs for <strong>Chuo Line Limited Express / 中央線特急</strong>.</li><li>Check the departure board for <strong>KAIJI 27 / かいじ27号</strong>, 1:30PM, toward Kofu.</li><li>Use the booked car and seat. The official timetable lists Track 9, but follow the live station board if it changes.</li></ol>
-            <h4>If the KAIJI ticket still needs to be completed</h4>
-            <p>Use JR-EAST Train Reservation or a reserved-seat ticket machine. Search <strong>Shinjuku → Otsuki</strong>, 9 August, 1:30PM, two adults, <strong>KAIJI 27</strong>, ordinary reserved seat. The reserved-seat e-ticket is ¥1,020 per person; the separate JR base fare can be paid with Suica. Expect about <strong>¥2,400 per person</strong> in total.</p>
-            <p><a href="https://www.eki-net.com/en/jreast-train-reservation/Top/Index" target="_blank" rel="noopener noreferrer">Open JR-EAST Train Reservation</a></p>
+            <ol><li>Enter through the JR ticket gates and tap Suica for the base fare. The booked e-ticket covers the limited-express reserved seat.</li><li>Follow signs for <strong>Chuo Line Limited Express / 中央線特急</strong>.</li><li>Check the departure board for <strong>KAIJI 27 / かいじ27号</strong>, 1:30PM, toward Kofu.</li><li>Use the booked car and seat. The official timetable lists Track 9, but follow the live station board if it changes.</li></ol>
+            <h4>Booked ticket</h4>
+            <p><strong>KAIJI 27</strong> from Shinjuku to Otsuki is confirmed with <strong>ordinary reserved seats for two adults</strong>. Keep the booking confirmation ready, check the car and seat numbers, and use those seats when boarding.</p>
+            <details class="ticket-proof">
+              <summary><strong>Show ticket confirmation</strong><span>Car 7 · 16A + 16B</span></summary>
+              <div class="ticket-proof-body">
+                <p class="ticket-proof-note">If JR staff ask, show this reservation-details page. Each traveller still taps their own Suica at the gate for the separate basic fare.</p>
+                <a class="ticket-proof-image" href="./assets/kaiji-27-reservation.png" target="_blank" rel="noopener"><img src="./assets/kaiji-27-reservation.png" alt="JR East reservation details for KAIJI 27 from Shinjuku at 1:30PM to Otsuki at 2:30PM for two adults" loading="lazy"></a>
+                <a class="ticket-proof-image" href="./assets/kaiji-27-seats.png" target="_blank" rel="noopener"><img src="./assets/kaiji-27-seats.png" alt="JR East payment confirmation and reserved seats in Car 7, seats 16A and 16B" loading="lazy"></a>
+                <p class="ticket-proof-hint">Tap either image to open it at full size.</p>
+              </div>
+            </details>
             <h4>Ask JR staff</h4>
             <blockquote class="guide-phrase"><span lang="ja">13時30分発の特急かいじ27号で大月駅まで行きます。9番線はどちらですか？</span><span>We are taking the 1:30 KAIJI 27 limited express to Otsuki. Where is Track 9?</span></blockquote>
             <div class="guide-warning">KAIJI 27 continues beyond Otsuki. Set an alarm and leave at Otsuki; do not stay aboard toward Kofu.</div>
@@ -2174,6 +2206,117 @@
     <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
   </dialog>
 
+  <dialog class="trip-dialog border-guide-dialog kyoto-transfer-dialog" id="kyotoTransferGuideDialog" aria-labelledby="kyotoTransferGuideTitle">
+    <div class="dialog-head"><div><p>10 August · Lake Shoji to Kyoto</p><h2 id="kyotoTransferGuideTitle">Shoji Lake Hotel to NOHGA Hotel Kiyomizu Kyoto</h2></div><button class="dialog-close" type="button" data-close-dialog="kyotoTransferGuideDialog" aria-label="Close Kyoto travel guide">×</button></div>
+    <div class="dialog-body" id="kyotoTransferGuideBody">
+      <section class="border-guide-hero">
+        <p><strong>Leave Shoji Lake Hotel at 10:00AM in a pre-booked taxi, take the direct 11:07AM Kodama 815 from Shin-Fuji to Kyoto, then take a taxi from Kyoto Station to NOHGA Hotel Kiyomizu Kyoto.</strong> The train arrives at 1:34PM. Expected hotel arrival is about 1:50–2:00PM.</p>
+        <div class="border-alert">The fixed train is Kodama 815 at 11:07AM. This guide does not assume a reserved or non-reserved ticket. Follow the matching ticket path at Shin-Fuji Station.</div>
+        <div class="border-route" aria-label="Complete route from Shoji Lake Hotel to NOHGA Hotel Kiyomizu Kyoto">
+          <div class="border-route-stop"><strong>Shoji Lake Hotel</strong><span lang="ja">10:00AM · 精進レークホテル</span></div>
+          <div class="border-route-stop"><strong>Taxi</strong><span lang="ja">予約タクシー</span></div>
+          <div class="border-route-stop"><strong>Shin-Fuji</strong><span lang="ja">新富士駅</span></div>
+          <div class="border-route-stop"><strong>Kodama 815</strong><span>11:07AM</span></div>
+          <div class="border-route-stop"><strong>Kyoto</strong><span lang="ja">1:34PM · 京都駅</span></div>
+          <div class="border-route-stop"><strong>Taxi</strong><span lang="ja">タクシー乗り場</span></div>
+          <div class="border-route-stop"><strong>NOHGA Hotel</strong><span lang="ja">ノーガホテル 清水 京都</span></div>
+        </div>
+      </section>
+
+      <div class="border-guide-content">
+        <section class="border-step" id="kyoto-transfer-step-1">
+          <header class="border-step-head"><span class="border-step-number">01</span><div><h3>Pre-book the 10:00AM taxi with hotel reception</h3><p>Book it before the morning of departure for the Shinkansen entrance at Shin-Fuji Station</p></div></header>
+          <div class="border-step-body">
+            <p class="guide-place">Starting point: Shoji Lake Hotel<span lang="ja">精進レークホテル</span><span lang="ja">〒401-0336 山梨県南都留郡富士河口湖町精進255</span></p>
+            <ol><li>Ask reception to book a taxi for <strong>10:00AM on Monday 10 August</strong>.</li><li>Set the destination to the <strong>Shinkansen entrance at Shin-Fuji Station / 新富士駅 新幹線改札口</strong>.</li><li>Ask reception to confirm the expected fare and whether the driver accepts a card.</li><li>Check out, use the bathroom and have all luggage ready in the lobby by 9:55AM.</li></ol>
+            <h4>Show hotel reception</h4>
+            <blockquote class="guide-phrase"><span lang="ja">明日10時に、新富士駅の新幹線改札口まで行くタクシーを予約してください。</span><span>Please book us a taxi for 10:00 tomorrow to the Shinkansen entrance at Shin-Fuji Station.</span></blockquote>
+            <div class="guide-warning">Say Shin-Fuji Station / 新富士駅. It is not Kawaguchiko Station / 河口湖駅 and not Fuji Station / 富士駅.</div>
+          </div>
+        </section>
+
+        <section class="border-step" id="kyoto-transfer-step-2">
+          <header class="border-step-head"><span class="border-step-number">02</span><div><h3>Take the 10:00AM taxi to Shin-Fuji Station</h3><p>Allow about 45–55 minutes · expected taxi fare ¥14,000–¥18,000</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Leave Shoji Lake Hotel at <strong>10:00AM</strong>.</li><li>Show the driver the phrase below and the station name.</li><li>Keep the train details ready: <strong>Kodama 815, 11:07AM, Kyoto</strong>.</li><li>Aim to reach the Shinkansen entrance around 10:45–10:55AM.</li></ol>
+            <p class="guide-place">Destination: Shin-Fuji Station<span lang="ja">新富士駅</span><span lang="ja">新幹線改札口</span></p>
+            <h4>Show the taxi driver</h4>
+            <blockquote class="guide-phrase"><span lang="ja">新富士駅の新幹線改札口までお願いします。11時7分発のこだま815号に乗ります。</span><span>Please take us to the Shinkansen entrance at Shin-Fuji Station. We are taking Kodama 815 at 11:07.</span></blockquote>
+            <p><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Shoji%20Lake%20Hotel&amp;destination=Shin-Fuji%20Station%2C%20Shizuoka&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Open the hotel to Shin-Fuji taxi route</a></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="kyoto-transfer-step-3">
+          <header class="border-step-head"><span class="border-step-number">03</span><div><h3>At Shin-Fuji, use the ticket path that matches what you have</h3><p>Do not assume reserved or non-reserved · both can use Kodama 815</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-train"><div><span>Train</span><strong>Kodama 815<br><span lang="ja">こだま815号</span></strong></div><div><span>Departure</span><strong>11:07AM<br>Shin-Fuji</strong></div><div><span>Arrival</span><strong>1:34PM<br>Kyoto</strong></div><div><span>Journey</span><strong>2h 27m<br>No transfer</strong></div></div>
+            <h4>If you have a reserved seat</h4>
+            <ol><li>Open the SmartEX booking and check the car and seat numbers.</li><li>Use the QR code, linked IC card or collected paper ticket shown in the booking instructions.</li><li>Keep the seat details ready for boarding.</li></ol>
+            <h4>If you do not have a reserved seat</h4>
+            <ol><li>Use an English Shinkansen ticket machine or staffed counter.</li><li>Buy a one-way <strong>Shin-Fuji to Kyoto ordinary non-reserved ticket</strong> for 10 August.</li><li>Do not rely on simply tapping an ordinary Suica for the full Shinkansen journey.</li><li>Allow about ¥10,560 per adult. A reserved ordinary seat is about ¥10,890 per adult if available.</li></ol>
+            <h4>Show station staff if you need a ticket</h4>
+            <blockquote class="guide-phrase"><span lang="ja">京都まで、11時7分発のこだま815号に乗りたいです。指定席または自由席の切符を2人分お願いします。</span><span>We want to take the 11:07 Kodama 815 to Kyoto. Please give us two tickets, reserved if available or non-reserved.</span></blockquote>
+            <div class="guide-warning">You need the correct Shinkansen fare and express ticket. An ordinary Suica tap by itself is not enough for Shin-Fuji to Kyoto.</div>
+          </div>
+        </section>
+
+        <section class="border-step" id="kyoto-transfer-step-4">
+          <header class="border-step-head"><span class="border-step-number">04</span><div><h3>Find and board Kodama 815</h3><p>11:07AM · toward Shin-Osaka · leave at Kyoto</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Follow the blue <strong>Shinkansen / 新幹線</strong> signs through the Shinkansen gates.</li><li>Check the live board for <strong>Kodama 815 / こだま815号</strong>, 11:07AM, toward <strong>Shin-Osaka / 新大阪</strong>.</li><li>Follow the live board to the platform. Do not use a platform number from an old timetable.</li><li><strong>Reserved:</strong> queue at the marker for the booked car, then use the booked seat.</li><li><strong>Non-reserved:</strong> use the live board to identify the non-reserved cars, then queue at one of their platform markers. Seats are first come, first served.</li><li>Board Kodama 815 and keep all tickets until after leaving Kyoto Station.</li></ol>
+            <h4>Ask station staff</h4>
+            <blockquote class="guide-phrase"><span lang="ja">11時7分発のこだま815号で京都まで行きます。乗り場はどこですか？</span><span>We are taking the 11:07 Kodama 815 to Kyoto. Where is the platform?</span></blockquote>
+            <div class="guide-warning">Kyoto is an intermediate stop. Do not stay aboard toward Shin-Osaka.</div>
+          </div>
+        </section>
+
+        <section class="border-step" id="kyoto-transfer-step-5">
+          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Ride direct to Kyoto Station</h3><p>11:07AM–1:34PM · one train · no transfer</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Stay on Kodama 815 all the way to <strong>Kyoto / 京都</strong>.</li><li>Keep luggage secure and the aisle clear.</li><li>Set an alarm for <strong>1:20PM</strong> and gather luggage before arrival.</li><li>Leave the train at Kyoto Station at <strong>1:34PM</strong>.</li><li>Follow exit signs and pass through the Shinkansen ticket gates.</li></ol>
+            <p class="guide-place">Leave at Kyoto Station<span lang="ja">京都駅</span><span>Scheduled arrival 1:34PM</span></p>
+            <h4>If you miss the 11:07AM train</h4>
+            <p>The next direct option is <strong>Kodama 819, 12:08–2:34PM</strong>, from the same Shin-Fuji Station to the same Kyoto Station. If you hold a reserved ticket, change it before 11:07AM. Ask staff before using it on another train.</p>
+          </div>
+        </section>
+
+        <section class="border-step" id="kyoto-transfer-step-6">
+          <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Take a taxi from Kyoto Station to NOHGA Hotel</h3><p>About 10–15 minutes · expected fare ¥1,500–¥2,000</p></div></header>
+          <div class="border-step-body">
+            <ol><li>After the Shinkansen gates, follow signs for a staffed <strong>taxi rank / タクシーのりば</strong>.</li><li>Join the official taxi queue. You do not need to negotiate the fare.</li><li>Show the driver the hotel name and complete Japanese address below.</li><li>Confirm card payment before departure if you do not have enough cash.</li><li>Expected hotel arrival is about <strong>1:50–2:00PM</strong>, depending on traffic.</li></ol>
+            <p class="guide-place">NOHGA HOTEL KIYOMIZU KYOTO<span lang="ja">ノーガホテル 清水 京都</span><span lang="ja">〒605-0846 京都府京都市東山区五条橋東4丁目450番1号</span></p>
+            <h4>Show the taxi driver</h4>
+            <blockquote class="guide-phrase"><span lang="ja">ノーガホテル清水京都までお願いします。住所は京都市東山区五条橋東4丁目450番1号です。</span><span>Please take us to NOHGA Hotel Kiyomizu Kyoto. The address is 4-450-1 Gojobashi Higashi, Higashiyama Ward, Kyoto.</span></blockquote>
+            <p><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Kyoto%20Station&amp;destination=NOHGA%20HOTEL%20KIYOMIZU%20KYOTO&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Open the Kyoto Station to hotel taxi route</a></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="kyoto-transfer-step-7">
+          <header class="border-step-head"><span class="border-step-number">07</span><div><h3>Arrive at NOHGA Hotel Kiyomizu Kyoto</h3><p>Expected arrival 1:50–2:00PM</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Give reception the booking name and passports.</li><li>If the room is not ready, ask reception to store the luggage.</li><li>Confirm the check-in time and collect the luggage later.</li><li>Continue with the Kyoto afternoon plan when ready.</li></ol>
+            <h4>At reception</h4>
+            <blockquote class="guide-phrase"><span lang="ja">本日から3泊の予約をしています。チェックイン前でしたら、荷物を預かっていただけますか？</span><span>We have a reservation for three nights from today. If it is before check-in, could you store our luggage?</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step">
+          <header class="border-step-head"><span class="border-step-number">PLAN</span><div><h3>The complete route at a glance</h3><p>About 3 hours 50 minutes from Shoji Lake Hotel to NOHGA Hotel</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-table-wrap"><table class="guide-table journey-route-summary"><thead><tr><th>Start</th><th>Transport</th><th>Time</th><th>Finish</th><th>Expected cost</th></tr></thead><tbody><tr><td data-label="Start">Shoji Lake Hotel</td><td data-label="Transport">Pre-booked taxi</td><td data-label="Time">10:00AM · 45–55 min</td><td data-label="Finish">Shin-Fuji Station</td><td data-label="Cost">¥14,000–¥18,000 per taxi</td></tr><tr><td data-label="Start">Shin-Fuji</td><td data-label="Transport">Kodama 815</td><td data-label="Time">11:07AM–1:34PM</td><td data-label="Finish">Kyoto Station</td><td data-label="Cost">About ¥10,560 non-reserved or ¥10,890 reserved each</td></tr><tr><td data-label="Start">Kyoto Station</td><td data-label="Transport">Taxi</td><td data-label="Time">About 10–15 minutes</td><td data-label="Finish">NOHGA Hotel</td><td data-label="Cost">¥1,500–¥2,000 per taxi</td></tr></tbody></table></div>
+            <p><strong>Estimated total for two travellers:</strong> about ¥36,620–¥41,120 with non-reserved seats, or about ¥37,280–¥41,780 with reserved ordinary seats.</p>
+          </div>
+        </section>
+
+        <section class="guide-sources">
+          <h3>Official route sources</h3>
+          <ul><li><a href="https://shojilake.jp/access/" target="_blank" rel="noopener noreferrer">Shoji Lake Hotel access</a></li><li><a href="https://smart-ex.jp/en/" target="_blank" rel="noopener noreferrer">SmartEX Shinkansen tickets</a></li><li><a href="https://image.jr.cyberstation.ne.jp/index_en.html" target="_blank" rel="noopener noreferrer">JR Cyber Station seat availability</a></li><li><a href="https://global.jr-central.co.jp/en/info/timetable/" target="_blank" rel="noopener noreferrer">JR Central timetable</a></li><li><a href="https://global.jr-central.co.jp/en/tickets/use/" target="_blank" rel="noopener noreferrer">JR Central ticket use</a></li><li><a href="https://www.nohgahotel.com/kiyomizu/en/access/" target="_blank" rel="noopener noreferrer">NOHGA Hotel Kiyomizu Kyoto access</a></li></ul>
+        </section>
+      </div>
+    </div>
+    <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
+  </dialog>
+
   <footer><p>Pack light. Book early. Leave room for the unexpected.</p><small>01–15 August 2026</small></footer>
 
   <script>
@@ -2193,7 +2336,7 @@
         hongKong: { id: 'hong-kong-airport', emoji: '🌆', location: 'Hong Kong airport', name: 'The Silveri Hotel Hong Kong - MGallery', address: '16 Tat Tung Road, Tung Chung, Hong Kong, China', localLanguage: 'Traditional Chinese', localLang: 'zh-Hant', localName: '香港銀樾美憬閣精選酒店', localAddress: '香港東涌達東路16號', checkIn: '2026-08-04', checkOut: '2026-08-05', dates: '4–5 August · 1 night', borderGuide: true },
         tokyo: { id: 'tokyo-ginza', emoji: '🗼', location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'YOTEL 東京 銀座', localAddress: '〒105-0004 東京都港区新橋1丁目7-7', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
         fuji: { id: 'fuji', emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '精進レークホテル', localAddress: '〒401-0336 山梨県南都留郡富士河口湖町精進255', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night', shojiGuide: true },
-        kyoto: { id: 'kyoto', emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0846, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ノーガホテル 清水 京都', localAddress: '〒605-0846 京都府京都市東山区五条橋東4丁目450番1号', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights' },
+        kyoto: { id: 'kyoto', emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0846, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ノーガホテル 清水 京都', localAddress: '〒605-0846 京都府京都市東山区五条橋東4丁目450番1号', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights', kyotoTransferGuide: true },
         osaka: { id: 'osaka', emoji: '🏯', location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ダブルツリーbyヒルトン大阪城', localAddress: '〒540-0008 大阪府大阪市中央区大手前1丁目1番1号', checkIn: '2026-08-13', checkOut: '2026-08-14', dates: '13–14 August · 1 night' },
         narita: { id: 'narita', emoji: '✈️', location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '成田東武ホテルエアポート', localAddress: '〒286-0106 千葉県成田市取香320-1', checkIn: '2026-08-14', checkOut: '2026-08-15', dates: '14–15 August · 1 night' }
       };
@@ -2307,10 +2450,10 @@
           notes: []
         },
         {
-          id: 'day-10', day: 10, date: '2026-08-10', weekday: 'MON', region: 'kyoto', location: 'Kyoto', localLocation: '京都', title: 'Start Kyoto: Shinkansen & Gion', localName: '京都初日：新幹線と祇園', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'NOHGA Hotel Kiyomizu Kyoto', weatherCity: 'Kyoto', hotel: stays.kyoto,
-          transit: { id: 'fuji-kyoto-transfer', order: 0, mode: 'Transfer', route: 'Shoji Lake → Kyoto', detail: 'Bus and Shinkansen · allow a half day', localName: '精進湖 → 京都駅', localAddress: '京都府京都市下京区東塩小路釜殿町', localLanguage: 'Japanese', localLang: 'ja', durationMinutes: 300, address: 'Kyoto Station, Japan' },
+          id: 'day-10', day: 10, date: '2026-08-10', weekday: 'MON', region: 'kyoto', location: 'Kyoto', localLocation: '京都', title: 'Start Kyoto: Shinkansen & Gion', localName: '京都初日：新幹線と祇園', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'NOHGA Hotel Kiyomizu Kyoto', weatherCity: 'Kyoto', hotel: stays.kyoto, kyotoTransferGuide: true,
+          transit: { id: 'fuji-kyoto-transfer', order: 0, mode: 'Transfer', route: 'Shoji Lake Hotel → NOHGA Hotel Kiyomizu Kyoto', detail: '10:00AM taxi · Kodama 815 at 11:07AM · Kyoto taxi', localName: '精進レークホテル → ノーガホテル 清水 京都', localAddress: '10時出発 · タクシー · 11時7分発こだま815号 · 京都駅 · タクシー', localLanguage: 'Japanese', localLang: 'ja', time: '10:00AM', instant: '2026-08-10T10:00:00+09:00', durationMinutes: 240, leaveBy: '10:00AM', address: stays.kyoto.address },
           activities: [
-            { id: 'fuji-facing-seat', order: 1, title: 'Reserve a Fuji-facing seat where the route allows', localName: '富士山側の座席を予約する', localLanguage: 'Japanese', localLang: 'ja' },
+            { id: 'kodama-815', order: 1, title: 'Take direct Kodama 815 from Shin-Fuji to Kyoto', localName: '新富士駅からこだま815号で京都駅へ', localAddress: '新富士駅 11時7分発 → 京都駅 13時34分着', localLanguage: 'Japanese', localLang: 'ja', time: '11:07AM', instant: '2026-08-10T11:07:00+09:00', durationMinutes: 147, address: 'Shin-Fuji Station, Shizuoka, Japan' },
             { id: 'nishiki-market', order: 2, title: 'Check in and wander Nishiki Market', localName: 'ホテルにチェックインして錦市場を散策', localAddress: '京都府京都市中京区中魚屋町', localLanguage: 'Japanese', localLang: 'ja', address: 'Nishiki Market, Kyoto, Japan' },
             { id: 'gion-dusk', order: 3, title: 'Explore Gion at dusk and the stone-paved lanes', localName: '夕暮れの祇園と石畳の路地を散策', localAddress: '京都府京都市東山区祇園町', localLanguage: 'Japanese', localLang: 'ja', address: 'Gion, Kyoto, Japan' }
           ],
@@ -2854,7 +2997,8 @@
         actions.className = 'day-actions';
         const borderGuideAction = plan.borderGuide ? `<button class="day-action" type="button" data-open-border-guide>${actionIcons.borderGuide}<span>Border guide</span></button>` : '';
         const shojiGuideAction = plan.shojiGuide ? `<button class="day-action" type="button" data-open-shoji-guide>${actionIcons.borderGuide}<span>Shoji guide</span></button>` : '';
-        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
+        const kyotoTransferGuideAction = plan.kyotoTransferGuide ? `<button class="day-action" type="button" data-open-kyoto-transfer-guide>${actionIcons.borderGuide}<span>Kyoto guide</span></button>` : '';
+        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
         card.append(actions);
       });
     }
@@ -2973,7 +3117,8 @@
       document.querySelector('#dayDialogTitle').textContent = `Day ${dayNumber} · ${day.title}`;
       const borderGuideAction = day.borderGuide ? `<button class="mini-action primary" type="button" data-open-border-guide>${actionIcons.borderGuide}<span>Open border guide</span></button>` : '';
       const shojiGuideAction = day.shojiGuide ? `<button class="mini-action primary" type="button" data-open-shoji-guide>${actionIcons.borderGuide}<span>Open Shoji guide</span></button>` : '';
-      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      const kyotoTransferGuideAction = day.kyotoTransferGuide ? `<button class="mini-action primary" type="button" data-open-kyoto-transfer-guide>${actionIcons.borderGuide}<span>Open Kyoto travel guide</span></button>` : '';
+      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
       syncLocalPlaceDisplays(hotel.id);
       activityTimeline(day, clock).forEach((activity) => syncLocalPlaceDisplays(activity.id));
       body.scrollTop = scrollTop;
@@ -3003,6 +3148,13 @@
     function openShojiGuide() {
       const dialog = document.querySelector('#shojiGuideDialog');
       const body = document.querySelector('#shojiGuideBody');
+      showModalDialog(dialog);
+      if (body) body.scrollTop = 0;
+    }
+
+    function openKyotoTransferGuide() {
+      const dialog = document.querySelector('#kyotoTransferGuideDialog');
+      const body = document.querySelector('#kyotoTransferGuideBody');
       showModalDialog(dialog);
       if (body) body.scrollTop = 0;
     }
@@ -3049,7 +3201,8 @@
         const borderGuideIcon = typeof actionIcons === 'undefined' ? '' : actionIcons.borderGuide;
         const borderGuideAction = hotel.borderGuide ? `<button class="mini-action primary" type="button" data-open-border-guide>${borderGuideIcon}<span>Border guide</span></button>` : '';
         const shojiGuideAction = hotel.shojiGuide ? `<button class="mini-action primary" type="button" data-open-shoji-guide>${borderGuideIcon}<span>Shoji guide</span></button>` : '';
-        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}${borderGuideAction}${shojiGuideAction}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
+        const kyotoTransferGuideAction = hotel.kyotoTransferGuide ? `<button class="mini-action primary" type="button" data-open-kyoto-transfer-guide>${borderGuideIcon}<span>Arrival guide</span></button>` : '';
+        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
         syncLocalPlaceDisplay(row, hotel);
         return row;
       }));
@@ -3063,6 +3216,8 @@
         if (borderGuideButton) openBorderGuide();
         const shojiGuideButton = event.target.closest('[data-open-shoji-guide]');
         if (shojiGuideButton) openShojiGuide();
+        const kyotoTransferGuideButton = event.target.closest('[data-open-kyoto-transfer-guide]');
+        if (kyotoTransferGuideButton) openKyotoTransferGuide();
         const closeButton = event.target.closest('[data-close-dialog]');
         if (closeButton) document.querySelector(`#${closeButton.dataset.closeDialog}`).close();
       });
@@ -3336,6 +3491,7 @@
       nextMap.href = mapsUrl(focus?.address || day.mapQuery);
       document.querySelector('#todayBorderGuide').hidden = !day.borderGuide;
       document.querySelector('#todayShojiGuide').hidden = !day.shojiGuide;
+      document.querySelector('#todayKyotoTransferGuide').hidden = !day.kyotoTransferGuide;
       const reservation = document.querySelector('#todayReservation');
       const focusLink = focus?.reservationLink || focus?.detailsLink;
       reservation.hidden = !focusLink;

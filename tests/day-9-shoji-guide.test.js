@@ -32,6 +32,12 @@ assert.match(guide, /12:30PM.*1:30PM.*2:30PM.*3:03PM.*4:09PM/s, 'the guide shoul
 assert.match(guide, /YOTEL.*Taxi.*Shinjuku.*KAIJI 27.*Otsuki.*Thomas Land local.*Kawaguchiko.*Taxi.*Shoji Lake Hotel/is, 'the route overview should include every leg from YOTEL to the hotel');
 assert.match(guide, /JR新宿駅南口までお願いします。/, 'the guide should include the Shinjuku taxi phrase in Japanese');
 assert.match(guide, /KAIJI 27.*1:30PM.*Track 9.*Otsuki.*2:30PM/s, 'the guide should identify the booked JR train, platform, and arrival time');
+assert.match(guide, /Booked ticket.*KAIJI 27.*ordinary reserved seats.*two adults/s, 'the guide should treat the KAIJI 27 reservation as confirmed');
+const stepTwo = guide.slice(guide.indexOf('id="shoji-step-2"'), guide.indexOf('id="shoji-step-3"'));
+assert.doesNotMatch(stepTwo, /If the KAIJI ticket|If the reservation|still needs to be completed|Open JR-EAST Train Reservation/, 'the booked KAIJI section should not present conditional ticket-booking instructions');
+assert.match(stepTwo, /<details class="ticket-proof">.*Show ticket confirmation.*Car 7.*16A.*16B/s, 'the booked KAIJI section should include a click-to-show ticket confirmation');
+assert.match(stepTwo, /assets\/kaiji-27-reservation\.png.*assets\/kaiji-27-seats\.png/s, 'the ticket confirmation should include the reservation and seat images');
+assert.match(stepTwo, /Each traveller still taps their own Suica/, 'the ticket confirmation should explain the separate basic fare');
 assert.match(guide, /3:03PM.*Thomas Land.*4:09PM/s, 'the guide should identify the Fujikyu local connection');
 assert.match(guide, /Suica.*¥1,170/s, 'the guide should explain the Fujikyu local fare and payment method');
 assert.match(guide, /¥6,000.*¥7,500/s, 'the guide should include the expected final taxi fare');
