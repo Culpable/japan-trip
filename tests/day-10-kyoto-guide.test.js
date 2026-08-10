@@ -18,13 +18,13 @@ assert.equal(day.hotel.kyotoTransferGuide, true, 'NOHGA Hotel should expose the 
 assert.equal(day.transit.route, 'Shoji Lake Hotel → NOHGA Hotel Kiyomizu Kyoto', 'the route should name both hotels');
 assert.equal(day.transit.time, '10:00AM', 'the transfer should begin at the planned hotel departure');
 assert.equal(day.transit.leaveBy, '10:00AM', 'Today should tell the travellers to leave at 10:00AM');
-assert.match(day.transit.detail, /10:00AM Uber.*booked Kodama 817.*Shizuoka.*booked Hikari 709.*Kyoto taxi/i, 'the summary should include the Uber, both booked trains and the Kyoto taxi');
-assert.match(day.activities[0].title, /booked Kodama 817.*Shin-Fuji.*Shizuoka/i, 'the first rail activity should name the booked Kodama and stations');
-assert.equal(day.activities[0].time, '11:37AM', 'the first rail activity should use the booked departure');
-assert.equal(day.activities[0].booking.statusLabel, 'Car 14 · Seats 5-D and 5-E', 'the booking wallet should include the reserved seats without sensitive booking data');
-assert.match(day.activities[1].title, /Shizuoka.*booked Hikari 709.*Kyoto/i, 'the second rail activity should name the booked Hikari and stations');
-assert.equal(day.activities[1].time, '12:07PM', 'the second rail activity should use the booked departure');
-assert.match(JSON.stringify(day.notes), /Kodama 817.*Hikari 709.*Car 14.*5-D aisle.*5-E window.*separate QR per traveller/i, 'the day notes should confirm the complete rail booking and QR-only plan');
+assert.match(day.transit.detail, /10:00AM Uber.*booked Kodama 819.*Shizuoka stop.*Kyoto taxi/i, 'the summary should include the Uber, booked through train and Kyoto taxi');
+assert.match(day.activities[0].title, /booked Kodama 819.*Shin-Fuji.*Kyoto/i, 'the rail activity should name the booked through train and stations');
+assert.equal(day.activities[0].time, '12:08PM', 'the rail activity should use the updated departure');
+assert.equal(day.activities[0].booking.statusLabel, 'Car 14 · 8-D/8-E, then Car 13 · 3-A/3-B', 'the booking wallet should include both seat assignments without sensitive booking data');
+assert.match(day.activities[1].title, /change seats.*Shizuoka.*Kodama 819/i, 'the second rail activity should explain the seat change during the Shizuoka stop');
+assert.equal(day.activities[1].time, '12:18PM', 'the seat-change activity should use the Shizuoka arrival time');
+assert.match(JSON.stringify(day.notes), /Kodama 819.*Car 14.*8-D.*8-E.*Car 13.*3-A.*3-B.*separate QR per traveller/i, 'the day notes should confirm the through train, both seat assignments and QR-only plan');
 
 const guideStart = html.indexOf('<dialog class="trip-dialog border-guide-dialog kyoto-transfer-dialog"');
 const guideEnd = html.indexOf('</dialog>', guideStart);
@@ -34,27 +34,27 @@ for (let step = 1; step <= 8; step += 1) {
   assert.match(guide, new RegExp(`id="kyoto-transfer-step-${step}"`), `the guide should include step ${step}`);
 }
 
-assert.match(guide, /Shoji Lake Hotel.*10:00AM.*Shin-Fuji.*Kodama 817.*11:37AM.*Shizuoka.*Hikari 709.*12:07PM.*Kyoto.*1:37PM.*NOHGA Hotel/is, 'the overview should include every stop and fixed time in order');
+assert.match(guide, /Shoji Lake Hotel.*10:00AM.*Shin-Fuji.*Kodama 819.*12:08PM.*Shizuoka.*12:18.*12:21PM.*Kyoto.*2:34PM.*NOHGA Hotel/is, 'the overview should include every stop and updated fixed time in order');
 assert.match(guide, /Uber.*10:00AM.*1 hour 10 minutes/is, 'the guide should show the confirmed Uber plan and travel allowance');
-assert.match(guide, /新富士駅の新幹線改札口までお願いします。11時37分発のこだま817号に乗ります。/, 'the guide should include the Shin-Fuji taxi-driver phrase');
+assert.match(guide, /新富士駅の新幹線改札口までお願いします。12時08分発のこだま819号に乗ります。/, 'the guide should include the updated Shin-Fuji taxi-driver phrase');
 assert.match(guide, /not Kawaguchiko Station.*not Fuji Station/i, 'the guide should distinguish Shin-Fuji from the two similarly named stations');
-assert.match(guide, /Both trains and both ordinary reserved seats are confirmed/i, 'the guide should confirm both booked reserved seats');
-assert.match(guide, /Kodama 817.*Shizuoka.*19-minute connection.*Hikari 709/is, 'the guide should explain the booked connection');
-assert.match(guide, /Car 14.*Seat 5-D.*aisle.*Seat 5-E.*window/is, 'the guide should show both assigned seats');
-assert.match(guide, /one separate QR ticket per traveller.*Each QR covers both trains/is, 'the guide should explain the two QR tickets');
+assert.match(guide, /through train and all four ordinary reserved seats are confirmed/i, 'the guide should confirm the booked through train and reserved seats');
+assert.match(guide, /Kodama 819.*same train.*Shizuoka.*3-minute stop/is, 'the guide should explain that Kodama 819 continues through Shizuoka');
+assert.match(guide, /Car 14.*Seat 8-D.*aisle.*Seat 8-E.*window.*Car 13.*Seat 3-A.*window.*Seat 3-B.*middle/is, 'the guide should show both seat assignments in order');
+assert.match(guide, /one separate QR ticket per traveller.*Each QR covers the complete journey/is, 'the guide should explain the two QR tickets');
 assert.match(guide, /Shin-Fuji Shinkansen gate.*scan the first traveller’s QR.*Scan the second traveller’s QR.*Seat Information/is, 'the guide should explain QR entry and the gate slip');
 assert.match(guide, /Do not scan.*Shizuoka/is, 'the guide should state that the transfer needs no QR scan');
 assert.match(guide, /Kyoto Shinkansen exit.*scan each traveller’s same QR ticket/is, 'the guide should explain QR exit at Kyoto');
-assert.match(guide, /新富士から京都まで、こだま817号とひかり709号の指定席を予約しています。/, 'the station phrase should confirm both reserved trains');
-assert.match(guide, /11:37AM.*11:48AM/is, 'the guide should show the Kodama journey times');
-assert.match(guide, /same station.*19-minute connection/is, 'the guide should make the Shizuoka transfer clear');
-assert.match(guide, /12:07PM.*1:37PM/is, 'the guide should show the Hikari journey times');
-assert.match(guide, /12時07分発のひかり709号で京都まで行きます。乗り場はどこですか？/, 'the guide should include the Shizuoka platform phrase');
+assert.match(guide, /新富士から京都まで、こだま819号の指定席を予約しています。/, 'the station phrase should confirm the reserved through train');
+assert.match(guide, /12:08PM.*12:18PM/is, 'the guide should show the first Kodama segment times');
+assert.match(guide, /same train.*3-minute stop/is, 'the guide should make the Shizuoka seat change clear');
+assert.match(guide, /12:21PM.*2:34PM/is, 'the guide should show the second Kodama segment times');
+assert.match(guide, /静岡駅で同じこだま819号の13号車3-Aと3-Bに席を移ります。/, 'the guide should include the Shizuoka seat-change phrase');
 assert.match(guide, /ノーガホテル清水京都までお願いします。.*京都市東山区五条橋東4丁目450番1号/s, 'the guide should include the Kyoto taxi phrase and hotel address');
-assert.match(guide, /Booked QR ticket.*Same QR ticket.*No QR scan is needed at Shizuoka/is, 'the guide should confirm the QR-only rail payment flow');
+assert.match(guide, /Booked QR ticket.*Same through train.*No QR scan is needed at Shizuoka/is, 'the guide should confirm the QR-only rail payment flow');
 assert.match(guide, /¥1,500–¥2,000/, 'the guide should include the Kyoto taxi cost');
-assert.match(guide, /Expected arrival 1:55–2:05PM/, 'the guide should show the confirmed hotel arrival window');
-assert.doesNotMatch(guide, /Kodama 815|11:07AM|1:34PM|non-reserved ticket|If you have a reserved seat/i, 'the guide should not retain the superseded direct-train instructions');
+assert.match(guide, /Expected arrival 2:50–3:00PM/, 'the guide should show the updated hotel arrival window');
+assert.doesNotMatch(guide, /Kodama 815|Kodama 817|Hikari 709|11:07AM|11:37AM|12:07PM|1:34PM|1:37PM|Seat 5-D|Seat 5-E|non-reserved ticket|If you have a reserved seat/i, 'the guide should not retain superseded train, time or seat instructions');
 assert.doesNotMatch(guide, /Suica|linked IC|pickup code|paper ticket/i, 'the QR-only guide should not instruct the travellers to use another boarding method');
 
 assert.match(html, /id="todayKyotoTransferGuide"[^>]*data-open-kyoto-transfer-guide/, 'Today should include the Kyoto transfer action');
