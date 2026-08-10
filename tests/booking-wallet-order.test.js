@@ -66,7 +66,7 @@ function verifySameDayBookingCompletion() {
 
   assert.deepEqual(
     walletNames(bookingWallet.rows),
-    ['teamLab Planets', 'SHIBUYA SKY', 'Ninja Restaurant', 'Kimono Miyabi Kyoto', 'USJ Express Pass + Super Nintendo World', 'Dior Café'],
+    ['teamLab Planets', 'SHIBUYA SKY', 'Ninja Restaurant', 'Kodama 817 + Hikari 709', 'Kimono Miyabi Kyoto', 'USJ Express Pass + Super Nintendo World', 'Dior Café'],
     'upcoming bookings should be shown first and elapsed bookings should move to the end'
   );
   const shibuyaSky = bookingWallet.rows.find((row) => row.dataset.localPlace === 'shibuya-sky');
@@ -84,13 +84,16 @@ function verifyNextBookingPromotion() {
   };
   vm.runInContext('renderWallets(clock)', context);
 
-  assert.equal(walletNames(bookingWallet.rows)[0], 'Kimono Miyabi Kyoto', 'the next confirmed booking should appear first');
-  assert.equal(walletNames(bookingWallet.rows)[1], 'USJ Express Pass + Super Nintendo World', 'the later USJ booking should remain with upcoming bookings');
+  assert.equal(walletNames(bookingWallet.rows)[0], 'Kodama 817 + Hikari 709', 'the booked Kyoto rail connection should appear first');
+  assert.equal(walletNames(bookingWallet.rows)[1], 'Kimono Miyabi Kyoto', 'the next confirmed activity booking should follow the rail connection');
+  assert.equal(walletNames(bookingWallet.rows)[2], 'USJ Express Pass + Super Nintendo World', 'the later USJ booking should remain with upcoming bookings');
   assert.match(bookingWallet.rows[0].className, /\blocal-place\b/);
   assert.doesNotMatch(bookingWallet.rows[0].className, /\bis-past\b/);
   assert.match(bookingWallet.rows[1].className, /\blocal-place\b/);
   assert.doesNotMatch(bookingWallet.rows[1].className, /\bis-past\b/);
-  assert.ok(bookingWallet.rows.slice(2).every((row) => row.className.includes('is-past')), 'completed bookings should follow upcoming bookings');
+  assert.match(bookingWallet.rows[2].className, /\blocal-place\b/);
+  assert.doesNotMatch(bookingWallet.rows[2].className, /\bis-past\b/);
+  assert.ok(bookingWallet.rows.slice(3).every((row) => row.className.includes('is-past')), 'completed bookings should follow upcoming bookings');
 }
 
 verifySameDayBookingCompletion();
