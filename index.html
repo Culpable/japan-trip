@@ -1229,6 +1229,56 @@
     .quick-list li { padding: .6rem 0; border-top: 1px solid #dedbd3; font-size: .85rem; line-height: 1.45; }
     .quick-list li::before { content: "·"; margin-right: .5rem; color: #a44324; }
 
+    /* The USJ modal reads like a compact park pass: a high-contrast ticket header followed by
+       one chronological route. Colour bands mark each park area without imitating park artwork. */
+    .usj-pass-dialog { width: min(840px, calc(100% - 1.25rem)); max-height: min(90dvh, 860px); }
+    .usj-pass-dialog .dialog-body { padding: 0; background: #efede6; }
+    .usj-pass-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 1.35rem;
+      background: #20231f;
+      color: #fff;
+    }
+    .usj-pass-hero::after {
+      content: "";
+      position: absolute;
+      right: -52px;
+      top: -62px;
+      width: 190px;
+      height: 190px;
+      border: 28px solid rgba(255, 210, 62, .14);
+      border-radius: 50%;
+      box-shadow: 0 0 0 24px rgba(42, 126, 211, .1);
+      pointer-events: none;
+    }
+    .usj-pass-heading { position: relative; z-index: 1; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1rem; align-items: center; }
+    .usj-pass-number { display: grid; width: 74px; height: 74px; place-items: center; border-radius: 18px; background: #e54832; box-shadow: 6px 6px 0 #ffd23e; font: 900 1.55rem/1 "Nunito Sans", sans-serif; }
+    .usj-pass-heading p { margin: 0; color: #ffd23e; font-size: .64rem; font-weight: 900; letter-spacing: .11em; text-transform: uppercase; }
+    .usj-pass-heading h3 { margin: .28rem 0 0; max-width: 28ch; font: 900 1.45rem/1.12 "Nunito Sans", sans-serif; }
+    .usj-pass-meta { position: relative; z-index: 1; display: grid; grid-template-columns: 1.2fr .8fr .8fr; gap: .55rem; margin-top: 1.15rem; }
+    .usj-pass-meta div { padding: .72rem .78rem; border: 1px solid rgba(255,255,255,.16); border-radius: 12px; background: rgba(255,255,255,.08); }
+    .usj-pass-meta span, .usj-pass-meta strong { display: block; }
+    .usj-pass-meta span { color: #bfc6bd; font-size: .56rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .usj-pass-meta strong { margin-top: .2rem; color: #fff; font-size: .78rem; line-height: 1.35; }
+    .usj-pass-content { display: grid; gap: 1rem; padding: 1rem; }
+    .usj-route-note { padding: .85rem .95rem; border-left: 5px solid #e54832; border-radius: 0 13px 13px 0; background: #fff; color: #4b4b46; font-size: .8rem; font-weight: 800; line-height: 1.5; box-shadow: var(--shadow-border); }
+    .usj-route-note strong { color: #20231f; }
+    .usj-schedule { display: grid; gap: .55rem; margin: 0; padding: 0; list-style: none; }
+    .usj-schedule-item { display: grid; grid-template-columns: 94px minmax(0, 1fr) auto; gap: .85rem; align-items: center; padding: .85rem .9rem; border-left: 6px solid var(--zone); border-radius: 14px; background: #fff; box-shadow: var(--shadow-border); }
+    .usj-schedule-item.is-wizard { --zone: #7c5ab3; }
+    .usj-schedule-item.is-nintendo { --zone: #e54832; }
+    .usj-schedule-item.is-minion { --zone: #e7b920; }
+    .usj-schedule-time { color: #20231f; font: 900 .92rem/1.2 "Nunito Sans", sans-serif; }
+    .usj-schedule-copy strong, .usj-schedule-copy span { display: block; }
+    .usj-schedule-copy strong { color: #242522; font-size: .88rem; line-height: 1.3; }
+    .usj-schedule-copy span { margin-top: .2rem; color: #74756f; font-size: .68rem; font-weight: 800; line-height: 1.35; }
+    .usj-zone-badge { padding: .38rem .5rem; border-radius: 999px; background: color-mix(in srgb, var(--zone) 14%, white); color: color-mix(in srgb, var(--zone) 78%, #242522); font-size: .54rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+    .usj-pass-notes { padding: .95rem; border-radius: 15px; background: #20231f; color: #eef0eb; }
+    .usj-pass-notes h3 { margin: 0; color: #ffd23e; font: 900 .88rem/1.2 "Nunito Sans", sans-serif; }
+    .usj-pass-notes ul { margin: .65rem 0 0; padding-left: 1.1rem; font-size: .76rem; font-weight: 700; line-height: 1.5; }
+    .usj-pass-notes li + li { margin-top: .35rem; }
+
     /* The border guide is a compact field manual, not another itinerary card. The dark route
        overview gives the long instructions one clear anchor while the numbered paper-like
        sections keep bilingual phrases and station changes easy to scan with luggage in hand. */
@@ -1550,6 +1600,19 @@
       .next-booking-actions { grid-column: 2; justify-content: flex-start; }
       .wallet-actions { justify-content: flex-start; }
       .wallet-badge { width: fit-content; }
+      .usj-pass-dialog { width: calc(100% - .75rem); max-height: calc(100dvh - .5rem); border-radius: 18px; }
+      .usj-pass-dialog .dialog-head { padding: .85rem .9rem; }
+      .usj-pass-dialog .dialog-head h2 { font-size: 1.08rem; }
+      .usj-pass-hero { padding: 1rem; }
+      .usj-pass-heading { grid-template-columns: 58px minmax(0, 1fr); gap: .8rem; }
+      .usj-pass-number { width: 56px; height: 56px; border-radius: 14px; box-shadow: 4px 4px 0 #ffd23e; font-size: 1.15rem; }
+      .usj-pass-heading h3 { font-size: 1.08rem; }
+      .usj-pass-meta { grid-template-columns: 1fr 1fr; }
+      .usj-pass-meta div:first-child { grid-column: 1 / -1; }
+      .usj-schedule-item { grid-template-columns: 1fr auto; gap: .35rem .65rem; }
+      .usj-schedule-time { grid-column: 1; }
+      .usj-schedule-copy { grid-column: 1 / -1; grid-row: 2; }
+      .usj-zone-badge { grid-column: 2; grid-row: 1; }
       body.is-in-trip .hero { width: calc(100% - 1rem); }
       body.is-in-trip .hero .eyebrow { display: none; }
       body.is-in-trip .live-greeting { margin-top: .35rem; }
@@ -1824,6 +1887,7 @@
             <button class="day-action" id="todayBorderGuide" type="button" data-open-border-guide hidden><span>Border guide</span></button>
             <button class="day-action" id="todayShojiGuide" type="button" data-open-shoji-guide hidden><span>Shoji travel guide</span></button>
             <button class="day-action" id="todayKyotoTransferGuide" type="button" data-open-kyoto-transfer-guide hidden><span>Kyoto travel guide</span></button>
+            <button class="day-action" id="todayUsjGuide" type="button" data-open-usj-guide hidden><span>USJ Express Pass</span></button>
             <a class="day-action" id="todayNextMap" href="#" target="_blank" rel="noopener noreferrer"><span>Open map</span></a>
             <a class="day-action" id="todayReservation" href="#" target="_blank" rel="noopener noreferrer" hidden><span>Reservation</span></a>
             <button class="day-action local-name-action" id="todayNextLocal" type="button" aria-pressed="false" hidden><span>Show local name</span></button>
@@ -1939,6 +2003,39 @@
         <p class="dialog-footer-note">Signed in on this device. Lock to require the password again.</p>
         <button class="mini-action lock-action" id="lockSite" type="button"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg><span>Lock this device</span></button>
       </section>
+    </div>
+    <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
+  </dialog>
+
+  <dialog class="trip-dialog usj-pass-dialog" id="usjPassDialog" aria-labelledby="usjPassTitle">
+    <div class="dialog-head"><div><p>13 August · Universal Studios Japan</p><h2 id="usjPassTitle">USJ Express Pass schedule</h2></div><button class="dialog-close" type="button" data-close-dialog="usjPassDialog" aria-label="Close USJ Express Pass guide">×</button></div>
+    <div class="dialog-body" id="usjPassBody">
+      <section class="usj-pass-hero">
+        <div class="usj-pass-heading">
+          <span class="usj-pass-number" aria-hidden="true">PASS 8</span>
+          <div><p>Universal Studios Japan Express Pass</p><h3>Universal Express Pass 8 - Minecart &amp; Fantasy Special</h3></div>
+        </div>
+        <div class="usj-pass-meta">
+          <div><span>Date</span><strong>Thursday 13 August 2026</strong></div>
+          <div><span>Guests</span><strong>2 people</strong></div>
+          <div><span>Status</span><strong>Booked</strong></div>
+        </div>
+      </section>
+      <div class="usj-pass-content">
+        <div class="usj-route-note"><strong>Follow the times in order.</strong> The 2:00–3:00PM SUPER NINTENDO WORLD Area Entry contains the Mario Kart and Yoshi windows. Mine Cart Madness starts at 3:00PM immediately after that entry hour.</div>
+        <ol class="usj-schedule" aria-label="Booked USJ Express Pass ride schedule">
+          <li class="usj-schedule-item is-wizard"><time class="usj-schedule-time" datetime="2026-08-13T11:50:00+09:00">11:50–12:20</time><div class="usj-schedule-copy"><strong>Flight of the Hippogriff</strong><span lang="ja">フライト・オブ・ザ・ヒッポグリフ™</span></div><span class="usj-zone-badge">Harry Potter</span></li>
+          <li class="usj-schedule-item is-nintendo"><time class="usj-schedule-time" datetime="2026-08-13T14:00:00+09:00">14:00–15:00</time><div class="usj-schedule-copy"><strong>SUPER NINTENDO WORLD Area Entry</strong><span lang="ja">スーパー・ニンテンドー・ワールド™ エリア入場</span></div><span class="usj-zone-badge">Area entry</span></li>
+          <li class="usj-schedule-item is-nintendo"><time class="usj-schedule-time" datetime="2026-08-13T14:00:00+09:00">14:00–14:30</time><div class="usj-schedule-copy"><strong>Mario Kart: Koopa's Challenge</strong><span lang="ja">マリオカート ～クッパの挑戦状～™</span></div><span class="usj-zone-badge">Nintendo</span></li>
+          <li class="usj-schedule-item is-nintendo"><time class="usj-schedule-time" datetime="2026-08-13T14:30:00+09:00">14:30–15:00</time><div class="usj-schedule-copy"><strong>Yoshi's Adventure</strong><span lang="ja">ヨッシー・アドベンチャー™</span></div><span class="usj-zone-badge">Nintendo</span></li>
+          <li class="usj-schedule-item is-nintendo"><time class="usj-schedule-time" datetime="2026-08-13T15:00:00+09:00">15:00–15:30</time><div class="usj-schedule-copy"><strong>Mine Cart Madness™</strong><span lang="ja">ドンキーコングのクレイジー・トロッコ™</span></div><span class="usj-zone-badge">Donkey Kong</span></li>
+          <li class="usj-schedule-item is-minion"><time class="usj-schedule-time" datetime="2026-08-13T16:20:00+09:00">16:20–16:50</time><div class="usj-schedule-copy"><strong>Illumination’s Villain-Con Minion Blast</strong><span lang="ja">ミニオン・ハチャメチャ・ミッション ～大悪党への道～</span></div><span class="usj-zone-badge">Minion Park</span></li>
+        </ol>
+        <section class="usj-pass-notes">
+          <h3>Simple day plan</h3>
+          <ul><li>Have both travellers’ park admission and Express Passes ready before the first ride.</li><li>Be near Flight of the Hippogriff before 11:50AM.</li><li>Move to SUPER NINTENDO WORLD before 2:00PM and stay in the area through Mine Cart Madness.</li><li>After Mine Cart Madness, allow 50 minutes to reach Minion Park for the 4:20PM window.</li></ul>
+        </section>
+      </div>
     </div>
     <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
   </dialog>
@@ -2492,15 +2589,15 @@
           notes: []
         },
         {
-          id: 'day-13', day: 13, date: '2026-08-13', weekday: 'THU', region: 'osaka', location: 'Osaka', localLocation: '大阪', title: 'Universal Studios & Osaka night', localName: 'ユニバーサル・スタジオと大阪の夜', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'DoubleTree by Hilton Osaka Castle', weatherCity: 'Osaka', hotel: stays.osaka,
+          id: 'day-13', day: 13, date: '2026-08-13', weekday: 'THU', region: 'osaka', location: 'Osaka', localLocation: '大阪', title: 'Universal Studios & Osaka night', localName: 'ユニバーサル・スタジオと大阪の夜', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'DoubleTree by Hilton Osaka Castle', weatherCity: 'Osaka', hotel: stays.osaka, usjGuide: true,
           transit: { id: 'osaka-usj-transit', order: 0, mode: 'Rail', route: 'Osaka → Universal City → Dotonbori', detail: 'JR and Osaka Metro · check live route', localName: '大阪駅 → ユニバーサルシティ駅 → なんば駅', localLanguage: 'Japanese', localLang: 'ja' },
           activities: [
-            { id: 'universal-studios', order: 1, title: 'Universal Studios Japan and Super Nintendo World', localName: 'ユニバーサル・スタジオ・ジャパンとスーパー・ニンテンドー・ワールド', localAddress: '〒554-0031 大阪府大阪市此花区桜島2丁目1-33', localLanguage: 'Japanese', localLang: 'ja', address: 'Universal Studios Japan, Osaka, Japan', booking: { emoji: '🎢', name: 'USJ Express Pass + Super Nintendo World', shortName: 'USJ Express Pass', displayDate: 'Thursday 13 August', statusLabel: 'Express Pass booked' } },
+            { id: 'universal-studios', order: 1, title: 'Universal Studios Japan and Super Nintendo World', localName: 'ユニバーサル・スタジオ・ジャパンとスーパー・ニンテンドー・ワールド', localAddress: '〒554-0031 大阪府大阪市此花区桜島2丁目1-33', localLanguage: 'Japanese', localLang: 'ja', address: 'Universal Studios Japan, Osaka, Japan', time: '11:50AM', instant: '2026-08-13T11:50:00+09:00', durationMinutes: 300, usjGuide: true, booking: { emoji: '🎢', name: 'USJ Express Pass + Super Nintendo World', shortName: 'USJ Express Pass', displayDate: 'Thursday 13 August', statusLabel: 'Express Pass 8 · 2 people' } },
             { id: 'umeda-sky', order: 2, title: 'Umeda Sky Building at night if energy allows', localName: '余力があれば夜の梅田スカイビルへ', localAddress: '〒531-6039 大阪府大阪市北区大淀中1丁目1-88', localLanguage: 'Japanese', localLang: 'ja', address: 'Umeda Sky Building, Osaka, Japan' },
             { id: 'don-quijote-wheel', order: 3, title: 'Ride the Don Quijote Ferris wheel', localName: 'ドン・キホーテ道頓堀店の観覧車に乗る', localAddress: '〒542-0084 大阪府大阪市中央区宗右衛門町7-13', localLanguage: 'Japanese', localLang: 'ja' },
             { id: 'dotonbori-food', order: 4, title: 'Dotonbori street food and takoyaki crawl', localName: '道頓堀で食べ歩きとたこ焼き巡り', localAddress: '大阪府大阪市中央区道頓堀', localLanguage: 'Japanese', localLang: 'ja', address: 'Dotonbori, Osaka, Japan' }
           ],
-          notes: [{ kind: 'confirmed', text: 'USJ Express Pass + Super Nintendo World · Thursday 13 August 2026' }]
+          notes: [{ kind: 'confirmed', text: 'USJ Express Pass 8 - Minecart & Fantasy Special · 2 people · first ride window 11:50AM' }]
         },
         {
           id: 'day-14', day: 14, date: '2026-08-14', weekday: 'FRI', region: 'osaka', location: 'Osaka & Koyasan', localLocation: '大阪・高野山', title: 'Koyasan day trip → return to Tokyo', localName: '高野山日帰り旅行 → 東京へ戻る', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Narita Tobu Hotel Airport', weatherCity: 'Narita', hotel: stays.narita,
@@ -2541,7 +2638,8 @@
         localName: activity.localName,
         localAddress: activity.localAddress,
         localLanguage: activity.localLanguage,
-        localLang: activity.localLang
+        localLang: activity.localLang,
+        usjGuide: activity.usjGuide
       })));
     const hotels = [...new Map(tripData.map((day) => [day.hotel.id, day.hotel])).values()];
     const localPlaces = [
@@ -2746,7 +2844,8 @@
       maps: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg>',
       weather: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>',
       language: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h8M9 3v2M4 9c3.5 0 6.5-1.7 8-4M6 6c1.2 2.3 3.1 4.1 5.5 5.2M14 21l4-10 4 10M15.5 17h5"/></svg>',
-      borderGuide: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h3a3 3 0 0 0 3-3V9a3 3 0 0 1 3-3h1"/><path d="m15 3 4 3-4 3"/></svg>'
+      borderGuide: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h3a3 3 0 0 0 3-3V9a3 3 0 0 1 3-3h1"/><path d="m15 3 4 3-4 3"/></svg>',
+      pass: '<svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h13A2.5 2.5 0 0 1 21 7.5V9a3 3 0 0 0 0 6v1.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 16.5V15a3 3 0 0 0 0-6Z"/><path d="M9 8v8M15 8v8"/></svg>'
     };
 
     function dateKeyInZone(date, timeZone) {
@@ -3005,7 +3104,8 @@
         const borderGuideAction = plan.borderGuide ? `<button class="day-action" type="button" data-open-border-guide>${actionIcons.borderGuide}<span>Border guide</span></button>` : '';
         const shojiGuideAction = plan.shojiGuide ? `<button class="day-action" type="button" data-open-shoji-guide>${actionIcons.borderGuide}<span>Shoji guide</span></button>` : '';
         const kyotoTransferGuideAction = plan.kyotoTransferGuide ? `<button class="day-action" type="button" data-open-kyoto-transfer-guide>${actionIcons.borderGuide}<span>Kyoto guide</span></button>` : '';
-        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
+        const usjGuideAction = plan.usjGuide ? `<button class="day-action" type="button" data-open-usj-guide>${actionIcons.pass}<span>USJ pass</span></button>` : '';
+        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${usjGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
         card.append(actions);
       });
     }
@@ -3107,8 +3207,9 @@
         const mapQuery = activity.address || activity.mapQuery;
         const reservationAction = activity.reservationLink ? `<a class="mini-action primary" href="${activity.reservationLink}" target="_blank" rel="noopener noreferrer"><span>Reservation</span></a>` : '';
         const detailsAction = activity.detailsLink ? `<a class="mini-action primary" href="${activity.detailsLink}" target="_blank" rel="noopener noreferrer"><span>${activity.detailsLabel || 'Open details'}</span></a>` : '';
-        const mapAction = mapQuery ? `<a class="mini-action${activity.reservationLink || activity.detailsLink ? '' : ' primary'}" href="${mapsUrl(mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a>` : '';
-        const actions = `${localPlaceAction(activity, '', true)}${reservationAction}${detailsAction}${mapAction}`;
+        const usjGuideAction = activity.usjGuide ? `<button class="mini-action primary" type="button" data-open-usj-guide>${actionIcons.pass}<span>Express Pass</span></button>` : '';
+        const mapAction = mapQuery ? `<a class="mini-action${activity.reservationLink || activity.detailsLink || activity.usjGuide ? '' : ' primary'}" href="${mapsUrl(mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a>` : '';
+        const actions = `${localPlaceAction(activity, '', true)}${reservationAction}${detailsAction}${usjGuideAction}${mapAction}`;
         const expanded = activity.state === 'current' || activity.state === 'next';
         return `<article class="run-sheet-item local-place" data-local-place="${activity.id}" data-english-name="${title}" data-english-detail="${metadata}" data-state="${activity.state}" data-expanded="${expanded}"><div class="run-sheet-time">${activity.time || 'Flexible'}</div><div class="run-sheet-content"><h3 data-local-name>${title}</h3>${metadata || activity.localAddress ? `<p class="run-sheet-meta" data-local-detail>${metadata}</p>` : ''}<span class="run-sheet-status">${labels[activity.state]}</span><div class="run-sheet-actions">${actions}</div></div></article>`;
       }).join('')}</div>`;
@@ -3125,7 +3226,8 @@
       const borderGuideAction = day.borderGuide ? `<button class="mini-action primary" type="button" data-open-border-guide>${actionIcons.borderGuide}<span>Open border guide</span></button>` : '';
       const shojiGuideAction = day.shojiGuide ? `<button class="mini-action primary" type="button" data-open-shoji-guide>${actionIcons.borderGuide}<span>Open Shoji guide</span></button>` : '';
       const kyotoTransferGuideAction = day.kyotoTransferGuide ? `<button class="mini-action primary" type="button" data-open-kyoto-transfer-guide>${actionIcons.borderGuide}<span>Open Kyoto travel guide</span></button>` : '';
-      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      const usjGuideAction = day.usjGuide ? `<button class="mini-action primary" type="button" data-open-usj-guide>${actionIcons.pass}<span>Open USJ Express Pass</span></button>` : '';
+      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${usjGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
       syncLocalPlaceDisplays(hotel.id);
       activityTimeline(day, clock).forEach((activity) => syncLocalPlaceDisplays(activity.id));
       body.scrollTop = scrollTop;
@@ -3166,6 +3268,13 @@
       if (body) body.scrollTop = 0;
     }
 
+    function openUsjGuide() {
+      const dialog = document.querySelector('#usjPassDialog');
+      const body = document.querySelector('#usjPassBody');
+      showModalDialog(dialog);
+      if (body) body.scrollTop = 0;
+    }
+
     function bookingHasElapsed(booking, clock) {
       return booking.instant ? clock.now >= new Date(booking.instant) : booking.date < clock.currentDate;
     }
@@ -3193,7 +3302,9 @@
         // the hotel rows. Bookings with a reservation link keep an "Open" action beside the map.
         const mapAction = booking.address ? `<a class="mini-action" href="${mapsUrl(booking.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a>` : '';
         const openAction = booking.link ? `<a class="mini-action" href="${booking.link}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span>Reservation</span></a>` : '';
-        const actions = `<div class="wallet-actions">${localPlaceAction(booking)}${openAction}${mapAction}</div>`;
+        const passGuideIcon = typeof actionIcons === 'undefined' ? '' : actionIcons.pass;
+        const usjGuideAction = booking.usjGuide ? `<button class="mini-action primary" type="button" data-open-usj-guide>${passGuideIcon}<span>Express Pass</span></button>` : '';
+        const actions = `<div class="wallet-actions">${localPlaceAction(booking)}${usjGuideAction}${openAction}${mapAction}</div>`;
         row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div>${actions}`;
         syncLocalPlaceDisplay(row, localPlaceIndex.get(booking.id));
         return row;
@@ -3225,6 +3336,8 @@
         if (shojiGuideButton) openShojiGuide();
         const kyotoTransferGuideButton = event.target.closest('[data-open-kyoto-transfer-guide]');
         if (kyotoTransferGuideButton) openKyotoTransferGuide();
+        const usjGuideButton = event.target.closest('[data-open-usj-guide]');
+        if (usjGuideButton) openUsjGuide();
         const closeButton = event.target.closest('[data-close-dialog]');
         if (closeButton) document.querySelector(`#${closeButton.dataset.closeDialog}`).close();
       });
@@ -3499,6 +3612,7 @@
       document.querySelector('#todayBorderGuide').hidden = !day.borderGuide;
       document.querySelector('#todayShojiGuide').hidden = !day.shojiGuide;
       document.querySelector('#todayKyotoTransferGuide').hidden = !day.kyotoTransferGuide;
+      document.querySelector('#todayUsjGuide').hidden = !day.usjGuide;
       const reservation = document.querySelector('#todayReservation');
       const focusLink = focus?.reservationLink || focus?.detailsLink;
       reservation.hidden = !focusLink;
