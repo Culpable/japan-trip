@@ -24,8 +24,8 @@ assert.match(
 );
 assert.equal(
   (html.match(/class="dialog-companion-dock" data-companion-dock/g) || []).length,
-  8,
-  'all eight modal dialogs should provide reserved companion space'
+  9,
+  'all nine modal dialogs should provide reserved companion space'
 );
 assert.match(
   html,
@@ -46,6 +46,11 @@ assert.match(
   html,
   /@media \(max-width: 520px\)[\s\S]*?\.osaka-transfer-dialog \.border-route\s*\{[^}]*grid-template-columns:\s*1fr/s,
   'the six-stop Osaka route should stack into readable cards on phones'
+);
+assert.match(
+  html,
+  /@media \(max-width: 520px\)[\s\S]*?\.narita-transfer-dialog \.border-route\s*\{[^}]*grid-template-columns:\s*1fr/s,
+  'the eight-stop Narita route should stack into readable cards on phones'
 );
 assert.match(
   html,

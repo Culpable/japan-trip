@@ -1308,6 +1308,7 @@
     .border-route { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: stretch; gap: .45rem; margin-top: 1rem; }
     .kyoto-transfer-dialog .border-route { grid-template-columns: repeat(8, minmax(0, 1fr)); }
     .osaka-transfer-dialog .border-route { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .narita-transfer-dialog .border-route { grid-template-columns: repeat(8, minmax(0, 1fr)); }
     .border-route-stop { position: relative; min-width: 0; padding: .65rem .55rem; border-radius: 12px; background: rgba(255, 255, 255, .1); }
     .border-route-stop:not(:last-child)::after { content: "→"; position: absolute; right: -.42rem; top: 50%; z-index: 1; transform: translateY(-50%); color: #ffd66f; font-weight: 900; }
     .border-route-stop strong, .border-route-stop span { display: block; }
@@ -1406,6 +1407,16 @@
     .osaka-transfer-dialog .guide-place,
     .osaka-transfer-dialog .guide-train div,
     .osaka-transfer-dialog .guide-table th { background: #f8e9e2; }
+    /* The Osaka-to-Narita transfer uses an airport teal palette. It keeps the long
+       cross-country journey visually separate from the warm Osaka arrival guide. */
+    .narita-transfer-dialog .border-guide-hero { background: #145867; }
+    .narita-transfer-dialog .border-step-number { background: #145867; }
+    .narita-transfer-dialog .guide-place,
+    .narita-transfer-dialog .guide-train strong,
+    .narita-transfer-dialog .guide-table th { color: #145867; }
+    .narita-transfer-dialog .guide-place,
+    .narita-transfer-dialog .guide-train div,
+    .narita-transfer-dialog .guide-table th { background: #e6f2f3; }
     /* The final-flight field guide uses an aviation-blue palette. It shares the proven
        long-form guide layout while keeping terminals, transfer signs and lounge names easy
        to distinguish from the rail and border guides. */
@@ -1747,6 +1758,7 @@
       .border-route { grid-template-columns: 1fr; }
       .kyoto-transfer-dialog .border-route { grid-template-columns: 1fr; }
       .osaka-transfer-dialog .border-route { grid-template-columns: 1fr; }
+      .narita-transfer-dialog .border-route { grid-template-columns: 1fr; }
       .flight-guide-dialog .border-route { grid-template-columns: 1fr; }
       .border-route-stop { padding: .58rem .7rem; }
       .border-route-stop:not(:last-child)::after { content: "↓"; right: 1rem; top: auto; bottom: -.55rem; transform: none; }
@@ -2008,6 +2020,7 @@
             <button class="day-action" id="todayShojiGuide" type="button" data-open-shoji-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Shoji travel guide</span></button>
             <button class="day-action" id="todayKyotoTransferGuide" type="button" data-open-kyoto-transfer-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Kyoto travel guide</span></button>
             <button class="day-action" id="todayOsakaTransferGuide" type="button" data-open-osaka-transfer-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Osaka travel guide</span></button>
+            <button class="day-action" id="todayNaritaTransferGuide" type="button" data-open-narita-transfer-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Narita travel guide</span></button>
             <button class="day-action" id="todayUsjGuide" type="button" data-open-usj-guide hidden><span class="action-icon-slot" data-action-icon="pass" aria-hidden="true"></span><span>USJ Express Pass</span></button>
             <button class="day-action" id="todayFlightGuide" type="button" data-open-flight-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Flight &amp; lounge guide</span></button>
             <a class="day-action" id="todayNextMap" href="#" target="_blank" rel="noopener noreferrer"><span class="action-icon-slot" data-action-icon="maps" aria-hidden="true"></span><span>Open map</span></a>
@@ -2064,6 +2077,7 @@
           <button class="day-action" id="tomorrowShojiGuide" type="button" data-open-shoji-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Shoji travel guide</span></button>
           <button class="day-action" id="tomorrowKyotoTransferGuide" type="button" data-open-kyoto-transfer-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Kyoto travel guide</span></button>
           <button class="day-action" id="tomorrowOsakaTransferGuide" type="button" data-open-osaka-transfer-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Osaka travel guide</span></button>
+          <button class="day-action" id="tomorrowNaritaTransferGuide" type="button" data-open-narita-transfer-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Narita travel guide</span></button>
           <button class="day-action" id="tomorrowUsjGuide" type="button" data-open-usj-guide hidden><span class="action-icon-slot" data-action-icon="pass" aria-hidden="true"></span><span>USJ Express Pass</span></button>
           <button class="day-action" id="tomorrowFlightGuide" type="button" data-open-flight-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Flight &amp; lounge guide</span></button>
           <a class="day-action" id="tomorrowMap" href="#" target="_blank" rel="noopener noreferrer"><span class="action-icon-slot" data-action-icon="maps" aria-hidden="true"></span><span>Open tomorrow’s map</span></a>
@@ -2756,6 +2770,118 @@
     <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
   </dialog>
 
+  <dialog class="trip-dialog border-guide-dialog narita-transfer-dialog" id="naritaTransferGuideDialog" aria-labelledby="naritaTransferGuideTitle">
+    <div class="dialog-head"><div><p>14 August · Osaka to Narita</p><h2 id="naritaTransferGuideTitle">DoubleTree Osaka Castle to Narita Tobu Hotel Airport</h2></div><button class="dialog-close" type="button" data-close-dialog="naritaTransferGuideDialog" aria-label="Close Narita travel guide">×</button></div>
+    <div class="dialog-body" id="naritaTransferGuideBody">
+      <section class="border-guide-hero">
+        <p><strong>Leave DoubleTree at 2:00PM and use the luggage-friendly rail route.</strong> Take a taxi to Shin-Osaka, ride one direct reserved Nozomi to Tokyo, transfer to a separately reserved Narita Express for Airport Terminal 2·3, then use the free hotel shuttle from Terminal 2 Bus Stop 25. The exact trains still depend on available seats.</p>
+        <div class="border-alert">Friday 14 August is in the Obon peak period. All Nozomi seats are reserved, so choose and reserve the Shin-Osaka to Tokyo train before travel. The Narita Express also needs its own separate reserved ticket.</div>
+        <div class="border-route" aria-label="Complete route from DoubleTree by Hilton Osaka Castle to Narita Tobu Hotel Airport">
+          <div class="border-route-stop"><strong>DoubleTree</strong><span lang="ja">2:00PM · ダブルツリー</span></div>
+          <div class="border-route-stop"><strong>Taxi</strong><span lang="ja">新大阪駅まで</span></div>
+          <div class="border-route-stop"><strong>Shin-Osaka</strong><span lang="ja">新大阪駅 · 新幹線</span></div>
+          <div class="border-route-stop"><strong>Nozomi</strong><span lang="ja">のぞみ · 東京行き</span></div>
+          <div class="border-route-stop"><strong>Tokyo</strong><span lang="ja">東京駅 · 乗り換え</span></div>
+          <div class="border-route-stop"><strong>Narita Express</strong><span lang="ja">成田エクスプレス</span></div>
+          <div class="border-route-stop"><strong>Airport Terminal 2·3</strong><span lang="ja">空港第2ビル駅</span></div>
+          <div class="border-route-stop"><strong>Narita Tobu</strong><span lang="ja">25番バス停 · 無料送迎</span></div>
+        </div>
+      </section>
+
+      <div class="border-guide-content">
+        <section class="border-step" id="narita-transfer-step-1">
+          <header class="border-step-head"><span class="border-step-number">01</span><div><h3>Collect the bags and leave DoubleTree</h3><p>Be in the lobby by 1:50PM · taxi away at 2:00PM</p></div></header>
+          <div class="border-step-body">
+            <p class="guide-place">Starting point: DoubleTree by Hilton Osaka Castle<span lang="ja">ダブルツリーbyヒルトン大阪城</span><span lang="ja">〒540-0008 大阪府大阪市中央区大手前1丁目1番1号</span></p>
+            <ol><li>Complete check-out before the day’s activities and ask the hotel to store every bag.</li><li>Return to the lobby and collect the luggage by <strong>1:50PM</strong>.</li><li>Ask reception to call a taxi large enough for two travellers and all luggage.</li><li>Leave the hotel at <strong>2:00PM</strong>.</li></ol>
+            <div class="guide-warning">The Shinkansen and Narita Express seats are separate reservations. Keep both confirmations easy to open before leaving the hotel.</div>
+          </div>
+        </section>
+
+        <section class="border-step" id="narita-transfer-step-2">
+          <header class="border-step-head"><span class="border-step-number">02</span><div><h3>Take a taxi to Shin-Osaka Station</h3><p>Allow about 25–40 minutes · traffic can add time</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Confirm the destination is <strong>Shin-Osaka Station / 新大阪駅</strong>.</li><li>Ask for the Shinkansen entrance near an elevator.</li><li>Before the taxi leaves, check the seat and boot for every bag.</li><li>Open the Shin-Osaka station map while unloading.</li></ol>
+            <h4>Show the taxi driver</h4>
+            <blockquote class="guide-phrase"><span lang="ja">新大阪駅の新幹線中央口までお願いします。大きな荷物があるので、エレベーターに近い場所で降ろしてください。</span><span>Please take us to the Shinkansen Central Gate at Shin-Osaka Station. We have large luggage, so please drop us near an elevator.</span></blockquote>
+            <p><a href="https://www.google.com/maps/dir/?api=1&amp;origin=DoubleTree%20by%20Hilton%20Osaka%20Castle&amp;destination=Shin-Osaka%20Station&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Open the DoubleTree to Shin-Osaka taxi route</a></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="narita-transfer-step-3">
+          <header class="border-step-head"><span class="border-step-number">03</span><div><h3>Use the reserved Nozomi ticket at Shin-Osaka</h3><p>Direct to Tokyo · allow at least 15 minutes inside the station</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-train"><div><span>Board at</span><strong>Shin-Osaka<br><span lang="ja">新大阪駅</span></strong></div><div class="guide-train-service"><span>Train / service</span><strong>Nozomi<br><span lang="ja">のぞみ・東京行き</span></strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Tokyo Station<br><span lang="ja">東京駅</span></strong></div><div><span>Journey</span><strong>About 2h 25m–2h 35m</strong></div></div>
+            <ol><li>Before travel, reserve one direct <strong>Nozomi from Shin-Osaka to Tokyo</strong> through SmartEX.</li><li>Because this is Obon, Nozomi has <strong>all seats reserved</strong>. Do not arrive expecting a non-reserved Nozomi car.</li><li>At the gate, use the QR or IC method attached to the SmartEX reservation.</li><li>Check the departure board for the train number, platform, car and seats.</li><li>Buy drinks and food only after the platform and boarding time are confirmed.</li></ol>
+            <h4>If station help is needed</h4>
+            <blockquote class="guide-phrase"><span lang="ja">東京駅までの、予約している「のぞみ」の乗り場を教えてください。</span><span>Please show us the platform for our reserved Nozomi to Tokyo Station.</span></blockquote>
+            <p><a href="https://smart-ex.jp/en/" target="_blank" rel="noopener noreferrer">Open SmartEX</a></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="narita-transfer-step-4">
+          <header class="border-step-head"><span class="border-step-number">04</span><div><h3>Ride the Nozomi to Tokyo Station</h3><p>One direct Shinkansen · no transfer before Tokyo</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Board the reserved car and place the luggage in the space shown on the booking.</li><li>Keep the SmartEX ticket method available for the Tokyo gate.</li><li>Ignore stops before Tokyo. <strong>Tokyo Station is where you get off.</strong></li><li>At Tokyo, follow signs for the Shinkansen exit and then for the Narita Express.</li></ol>
+            <div class="guide-warning">The train may show Tokyo as its final destination. Do not get off early at Shinagawa for this plan, because the guide and Narita Express connection start at Tokyo Station.</div>
+          </div>
+        </section>
+
+        <section class="border-step" id="narita-transfer-step-5">
+          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Change to the Narita Express at Tokyo</h3><p>Allow 25–35 minutes with luggage · separate ticket</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Finish the SmartEX journey at the Shinkansen gate.</li><li>Follow the red-and-black <strong>N’EX / Narita Express</strong> signs toward the underground Sobu Line platforms.</li><li>Use the separately booked Narita Express reserved ticket. A Suica tap alone does not include the limited-express reservation.</li><li>If the ticket has not been collected, use a JR East reserved-seat machine or staffed counter before going to the platform.</li><li>Confirm the train goes to Narita Airport and that both travellers have assigned seats.</li></ol>
+            <h4>Ask JR East staff</h4>
+            <blockquote class="guide-phrase"><span lang="ja">成田エクスプレスで空港第2ビル駅まで行きたいです。予約した指定席の乗り場を教えてください。</span><span>We want to take the Narita Express to Airport Terminal 2·3 Station. Please show us the platform for our reserved seats.</span></blockquote>
+            <p><a href="https://www.eki-net.com/en/jreast-train-reservation/Top/Index" target="_blank" rel="noopener noreferrer">Open JR-EAST Train Reservation</a></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="narita-transfer-step-6">
+          <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Take the Narita Express to Airport Terminal 2·3</h3><p>About 55–65 minutes from Tokyo · do not continue to Terminal 1</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-train"><div><span>Board at</span><strong>Tokyo Station<br><span lang="ja">東京駅</span></strong></div><div class="guide-train-service"><span>Train / service</span><strong>Narita Express<br><span lang="ja">成田エクスプレス</span></strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Airport Terminal 2·3<br><span lang="ja">空港第2ビル駅</span></strong></div><div><span>Ticket</span><strong>Separate reserved seat</strong></div></div>
+            <ol><li>Board the reserved car and seats printed on the Narita Express ticket.</li><li>Listen for <strong>Narita Airport Terminal 2·3 / Airport Terminal 2</strong>.</li><li>Get off at <strong>Airport Terminal 2·3 Station / 空港第2ビル駅</strong>.</li><li>Do not stay aboard to Narita Airport Terminal 1.</li><li>Use the JR exit gates and follow signs to Terminal 2 Arrivals, Level 1.</li></ol>
+          </div>
+        </section>
+
+        <section class="border-step" id="narita-transfer-step-7">
+          <header class="border-step-head"><span class="border-step-number">07</span><div><h3>Use Terminal 2 Bus Stop 25</h3><p>Free Narita Tobu shuttle · about 5–15 minutes</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Go to the Terminal 2 arrival floor on Level 1.</li><li>Exit the building and find <strong>Bus Stop 25 / 25番バス停</strong>.</li><li>Check the current hotel shuttle PDF before waiting. In the evening, buses normally leave Terminal 2 at <strong>:10, :30 and :50</strong> each hour.</li><li>Confirm the bus says <strong>Narita Tobu Hotel Airport / 成田東武ホテルエアポート</strong>.</li><li>Load the luggage into the bus hold and make sure it is removed at the hotel.</li></ol>
+            <h4>Ask airport staff</h4>
+            <blockquote class="guide-phrase"><span lang="ja">成田東武ホテルエアポートの無料シャトルバス乗り場は、1階25番で合っていますか？</span><span>Is Level 1 Bus Stop 25 the correct place for the free Narita Tobu Hotel Airport shuttle?</span></blockquote>
+            <p><a href="https://www.tobuhotel.co.jp/narita/access/pdf/bus_tt_img_airport_03.pdf" target="_blank" rel="noopener noreferrer">Open the official hotel shuttle timetable</a></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="narita-transfer-step-8">
+          <header class="border-step-head"><span class="border-step-number">08</span><div><h3>Check in at Narita Tobu Hotel Airport</h3><p>Expected arrival roughly 7:15–8:00PM</p></div></header>
+          <div class="border-step-body">
+            <p class="guide-place">Narita Tobu Hotel Airport<span lang="ja">成田東武ホテルエアポート</span><span lang="ja">〒286-0106 千葉県成田市取香320-1</span></p>
+            <ol><li>Give reception the booking name and both passports.</li><li>Confirm the next morning’s free shuttle to Narita Airport Terminal 1.</li><li>Ask where to wait and how early to queue with luggage.</li><li>Prepare passports and flight documents before sleeping.</li></ol>
+            <h4>At reception</h4>
+            <blockquote class="guide-phrase"><span lang="ja">本日1泊の予約をしています。明日の成田空港第1ターミナル行きシャトルバスの乗り場も確認したいです。</span><span>We have a reservation for one night. We would also like to confirm where to catch tomorrow’s shuttle to Narita Airport Terminal 1.</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step">
+          <header class="border-step-head"><span class="border-step-number">PLAN</span><div><h3>The complete route at a glance</h3><p>About 5¼–6 hours, depending on the booked connections</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-table-wrap"><table class="guide-table journey-route-summary"><thead><tr><th>Start</th><th>Transport</th><th>Time</th><th>Finish</th><th>Payment</th></tr></thead><tbody><tr><td data-label="Start">DoubleTree</td><td data-label="Transport">Taxi</td><td data-label="Time">Leave 2:00PM · about 25–40 min</td><td data-label="Finish">Shin-Osaka</td><td data-label="Payment">Taxi fare</td></tr><tr><td data-label="Start">Shin-Osaka</td><td data-label="Transport">Direct Nozomi</td><td data-label="Time">About 2h 25m–2h 35m</td><td data-label="Finish">Tokyo Station</td><td data-label="Payment">Reserved SmartEX ticket</td></tr><tr><td data-label="Start">Tokyo Station</td><td data-label="Transport">Narita Express</td><td data-label="Time">About 55–65 min</td><td data-label="Finish">Airport Terminal 2·3</td><td data-label="Payment">Separate reserved ticket</td></tr><tr><td data-label="Start">Terminal 2</td><td data-label="Transport">Free hotel shuttle</td><td data-label="Time">About 5–15 min</td><td data-label="Finish">Narita Tobu Hotel</td><td data-label="Payment">Free</td></tr></tbody></table></div>
+            <p><strong>Booking status:</strong> the route is selected, but the exact Nozomi and Narita Express services are not recorded in the itinerary. Reserve both before travel. Choose a Nozomi that leaves enough time after the 2:00PM taxi departure, then choose a Narita Express at least 25–35 minutes after the Shinkansen reaches Tokyo.</p>
+          </div>
+        </section>
+
+        <section class="guide-sources">
+          <h3>Official route sources</h3>
+          <ul><li><a href="https://www.hilton.com/en-gb/hotels/osaocdi-doubletree-osaka-castle/hotel-location/" target="_blank" rel="noopener noreferrer">DoubleTree Osaka Castle location</a></li><li><a href="https://smart-ex.jp/en/" target="_blank" rel="noopener noreferrer">SmartEX Shinkansen reservations</a></li><li><a href="https://global.jr-central.co.jp/en/info/timetable/" target="_blank" rel="noopener noreferrer">JR Central Shinkansen timetable</a></li><li><a href="https://www.eki-net.com/en/jreast-train-reservation/Top/Index" target="_blank" rel="noopener noreferrer">JR-EAST Train Reservation</a></li><li><a href="https://www.jreast.co.jp/multi/en/nex/" target="_blank" rel="noopener noreferrer">JR East Narita Express guide</a></li><li><a href="https://www.tobuhotel.co.jp/narita/access/" target="_blank" rel="noopener noreferrer">Narita Tobu Hotel access</a></li><li><a href="https://www.tobuhotel.co.jp/narita/access/pdf/bus_tt_img_airport_03.pdf" target="_blank" rel="noopener noreferrer">Narita Tobu airport shuttle timetable</a></li></ul>
+        </section>
+      </div>
+    </div>
+    <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
+  </dialog>
+
   <footer><p>Pack light. Book early. Leave room for the unexpected.</p><small>01–15 August 2026</small></footer>
 
   <script>
@@ -2777,7 +2903,7 @@
         fuji: { id: 'fuji', emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '精進レークホテル', localAddress: '〒401-0336 山梨県南都留郡富士河口湖町精進255', checkIn: '2026-08-09', checkOut: '2026-08-10', checkoutTime: '10:00AM', dates: '9–10 August · 1 night', shojiGuide: true },
         kyoto: { id: 'kyoto', emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0846, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ノーガホテル 清水 京都', localAddress: '〒605-0846 京都府京都市東山区五条橋東4丁目450番1号', checkIn: '2026-08-10', checkOut: '2026-08-13', checkoutTime: '12:00PM', dates: '10–13 August · 3 nights', kyotoTransferGuide: true },
         osaka: { id: 'osaka', emoji: '🏯', location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ダブルツリーbyヒルトン大阪城', localAddress: '〒540-0008 大阪府大阪市中央区大手前1丁目1番1号', checkIn: '2026-08-13', checkOut: '2026-08-14', checkoutTime: '11:00AM', dates: '13–14 August · 1 night', osakaTransferGuide: true },
-        narita: { id: 'narita', emoji: '✈️', location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '成田東武ホテルエアポート', localAddress: '〒286-0106 千葉県成田市取香320-1', checkIn: '2026-08-14', checkOut: '2026-08-15', checkoutTime: '11:00AM', dates: '14–15 August · 1 night' }
+        narita: { id: 'narita', emoji: '✈️', location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '成田東武ホテルエアポート', localAddress: '〒286-0106 千葉県成田市取香320-1', checkIn: '2026-08-14', checkOut: '2026-08-15', checkoutTime: '11:00AM', dates: '14–15 August · 1 night', naritaTransferGuide: true }
       };
       return [
         {
@@ -2936,15 +3062,15 @@
           notes: [{ kind: 'confirmed', text: 'USJ Express Pass 8 - Minecart & Fantasy Special · 2 people · first ride window 11:50AM' }]
         },
         {
-          id: 'day-14', day: 14, date: '2026-08-14', weekday: 'FRI', region: 'osaka', location: 'Osaka & Koyasan', localLocation: '大阪・高野山', title: 'Koyasan day trip → return to Tokyo', localName: '高野山日帰り旅行 → 東京へ戻る', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Narita Tobu Hotel Airport', weatherCity: 'Narita', hotel: stays.narita,
-          transit: { id: 'koyasan-narita-transfer', order: 4, mode: 'Transfer', route: 'Koyasan → Narita', detail: 'Nankai, Shinkansen and airport transfer', localName: '高野山駅 → 成田駅', localAddress: stays.narita.localAddress, localLanguage: 'Japanese', localLang: 'ja', time: '2:00PM', leaveBy: '2:00PM', address: stays.narita.address },
+          id: 'day-14', day: 14, date: '2026-08-14', weekday: 'FRI', region: 'osaka', location: 'Osaka & Koyasan', localLocation: '大阪・高野山', title: 'Koyasan day trip → Narita airport hotel', localName: '高野山日帰り旅行 → 成田空港ホテル', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Narita Tobu Hotel Airport', weatherCity: 'Narita', hotel: stays.narita, naritaTransferGuide: true,
+          transit: { id: 'osaka-narita-transfer', order: 4, mode: 'Taxi + Rail + Shuttle', route: 'DoubleTree by Hilton Osaka Castle → Narita Tobu Hotel Airport', detail: '2:00PM taxi to Shin-Osaka · reserved Nozomi to Tokyo · separate reserved Narita Express to Airport Terminal 2·3 · free hotel shuttle', localName: 'ダブルツリーbyヒルトン大阪城 → 成田東武ホテルエアポート', localAddress: '14時出発 · タクシー · 新大阪駅 · のぞみ · 東京駅 · 成田エクスプレス · 空港第2ビル駅 · 25番バス停から無料送迎', localLanguage: 'Japanese', localLang: 'ja', time: '2:00PM', leaveBy: '2:00PM', instant: '2026-08-14T14:00:00+09:00', durationMinutes: 345, address: stays.narita.address },
           activities: [
             { id: 'koyasan-town', order: 1, title: 'Visit the sacred Buddhist mountain town', localName: '聖地・高野山を巡る', localAddress: '和歌山県伊都郡高野町高野山', localLanguage: 'Japanese', localLang: 'ja', address: 'Koyasan, Wakayama, Japan' },
             { id: 'okunoin', order: 2, title: 'Walk Okunoin Cemetery beneath the cedar forest', localName: '杉木立の奥之院墓地を歩く', localAddress: '〒648-0294 和歌山県伊都郡高野町高野山550', localLanguage: 'Japanese', localLang: 'ja', address: 'Okunoin Cemetery, Koyasan, Japan' },
             { id: 'kongobuji-pagoda', order: 3, title: 'See Kongobuji Temple and Konpon Daito pagoda', localName: '金剛峯寺と根本大塔を拝観', localAddress: '〒648-0294 和歌山県伊都郡高野町高野山132', localLanguage: 'Japanese', localLang: 'ja' },
-            { id: 'leave-koyasan', order: 3.5, title: 'Leave by 2:00PM and travel back to Tokyo to pack', localName: '午後2時までに出発し、東京へ戻って荷造り', localLanguage: 'Japanese', localLang: 'ja', time: '2:00PM', instant: '2026-08-14T14:00:00+09:00', leaveBy: '2:00PM' }
+            { id: 'leave-doubletree', order: 3.5, title: 'Collect the luggage at DoubleTree and leave for Narita', localName: 'ダブルツリーで荷物を受け取り、成田へ出発', localAddress: stays.osaka.localAddress, localLanguage: 'Japanese', localLang: 'ja', time: '2:00PM', instant: '2026-08-14T14:00:00+09:00', leaveBy: '2:00PM', address: stays.osaka.address }
           ],
-          notes: [{ kind: 'note', text: 'Nankai Koya Line from Osaka Namba plus cable car takes about 1.5 hours each way.' }]
+          notes: [{ kind: 'note', text: 'Nankai Koya Line from Osaka Namba plus cable car takes about 1.5 hours each way.' }, { kind: 'note', text: 'Narita transfer · reserve a direct Nozomi from Shin-Osaka to Tokyo and a separate Narita Express seat to Airport Terminal 2·3.' }]
         },
         {
           id: 'day-15', day: 15, date: '2026-08-15', weekday: 'SAT', region: 'osaka', location: 'Tokyo', localLocation: '東京', title: 'Tokyo → Perth via Ho Chi Minh City', localName: '東京 → ホーチミン市経由でパースへ', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Narita Airport Terminal 1', weatherCity: 'Narita', hotel: stays.narita, flightGuide: true,
@@ -3458,9 +3584,10 @@
         const shojiGuideAction = plan.shojiGuide ? `<button class="day-action" type="button" data-open-shoji-guide>${actionIcons.borderGuide}<span>Shoji guide</span></button>` : '';
         const kyotoTransferGuideAction = plan.kyotoTransferGuide ? `<button class="day-action" type="button" data-open-kyoto-transfer-guide>${actionIcons.borderGuide}<span>Kyoto guide</span></button>` : '';
         const osakaTransferGuideAction = plan.osakaTransferGuide ? `<button class="day-action" type="button" data-open-osaka-transfer-guide>${actionIcons.borderGuide}<span>Osaka guide</span></button>` : '';
+        const naritaTransferGuideAction = plan.naritaTransferGuide ? `<button class="day-action" type="button" data-open-narita-transfer-guide>${actionIcons.borderGuide}<span>Narita guide</span></button>` : '';
         const usjGuideAction = plan.usjGuide ? `<button class="day-action" type="button" data-open-usj-guide>${actionIcons.pass}<span>USJ pass</span></button>` : '';
         const flightGuideAction = plan.flightGuide ? `<button class="day-action" type="button" data-open-flight-guide>${actionIcons.borderGuide}<span>Flight &amp; lounges</span></button>` : '';
-        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${usjGuideAction}${flightGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
+        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${naritaTransferGuideAction}${usjGuideAction}${flightGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
         card.append(actions);
       });
     }
@@ -3583,10 +3710,11 @@
       const shojiGuideAction = day.shojiGuide ? `<button class="mini-action primary" type="button" data-open-shoji-guide>${actionIcons.borderGuide}<span>Open Shoji guide</span></button>` : '';
       const kyotoTransferGuideAction = day.kyotoTransferGuide ? `<button class="mini-action primary" type="button" data-open-kyoto-transfer-guide>${actionIcons.borderGuide}<span>Open Kyoto travel guide</span></button>` : '';
       const osakaTransferGuideAction = day.osakaTransferGuide ? `<button class="mini-action primary" type="button" data-open-osaka-transfer-guide>${actionIcons.borderGuide}<span>Open Osaka travel guide</span></button>` : '';
+      const naritaTransferGuideAction = day.naritaTransferGuide ? `<button class="mini-action primary" type="button" data-open-narita-transfer-guide>${actionIcons.borderGuide}<span>Open Narita travel guide</span></button>` : '';
       const usjGuideAction = day.usjGuide ? `<button class="mini-action primary" type="button" data-open-usj-guide>${actionIcons.pass}<span>Open USJ Express Pass</span></button>` : '';
       const flightGuideAction = day.flightGuide ? `<button class="mini-action primary" type="button" data-open-flight-guide>${actionIcons.borderGuide}<span>Open flight &amp; lounge guide</span></button>` : '';
       const checkoutInfo = hotel.checkoutTime ? `<p class="stay-checkout">${actionIcons.checkout}<span>Check-out · ${hotel.checkoutTime}</span></p>` : '';
-      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span>${checkoutInfo}</div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${usjGuideAction}${flightGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span>${checkoutInfo}</div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${naritaTransferGuideAction}${usjGuideAction}${flightGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
       syncLocalPlaceDisplays(hotel.id);
       activityTimeline(day, clock).forEach((activity) => syncLocalPlaceDisplays(activity.id));
       body.scrollTop = scrollTop;
@@ -3630,6 +3758,13 @@
     function openOsakaTransferGuide() {
       const dialog = document.querySelector('#osakaTransferGuideDialog');
       const body = document.querySelector('#osakaTransferGuideBody');
+      showModalDialog(dialog);
+      if (body) body.scrollTop = 0;
+    }
+
+    function openNaritaTransferGuide() {
+      const dialog = document.querySelector('#naritaTransferGuideDialog');
+      const body = document.querySelector('#naritaTransferGuideBody');
       showModalDialog(dialog);
       if (body) body.scrollTop = 0;
     }
@@ -3694,9 +3829,10 @@
         const shojiGuideAction = hotel.shojiGuide ? `<button class="mini-action primary" type="button" data-open-shoji-guide>${borderGuideIcon}<span>Shoji guide</span></button>` : '';
         const kyotoTransferGuideAction = hotel.kyotoTransferGuide ? `<button class="mini-action primary" type="button" data-open-kyoto-transfer-guide>${borderGuideIcon}<span>Arrival guide</span></button>` : '';
         const osakaTransferGuideAction = hotel.osakaTransferGuide ? `<button class="mini-action primary" type="button" data-open-osaka-transfer-guide>${borderGuideIcon}<span>Arrival guide</span></button>` : '';
+        const naritaTransferGuideAction = hotel.naritaTransferGuide ? `<button class="mini-action primary" type="button" data-open-narita-transfer-guide>${borderGuideIcon}<span>Arrival guide</span></button>` : '';
         const checkoutIcon = typeof actionIcons === 'undefined' ? '' : actionIcons.checkout;
         const checkoutInfo = hotel.checkoutTime ? `<p class="stay-checkout">${checkoutIcon}<span>Check-out · ${hotel.checkoutTime}</span></p>` : '';
-        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span>${checkoutInfo}</div><div class="wallet-actions">${localPlaceAction(hotel)}${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
+        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span>${checkoutInfo}</div><div class="wallet-actions">${localPlaceAction(hotel)}${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${naritaTransferGuideAction}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
         syncLocalPlaceDisplay(row, hotel);
         return row;
       }));
@@ -3714,6 +3850,8 @@
         if (kyotoTransferGuideButton) openKyotoTransferGuide();
         const osakaTransferGuideButton = event.target.closest('[data-open-osaka-transfer-guide]');
         if (osakaTransferGuideButton) openOsakaTransferGuide();
+        const naritaTransferGuideButton = event.target.closest('[data-open-narita-transfer-guide]');
+        if (naritaTransferGuideButton) openNaritaTransferGuide();
         const usjGuideButton = event.target.closest('[data-open-usj-guide]');
         if (usjGuideButton) openUsjGuide();
         const flightGuideButton = event.target.closest('[data-open-flight-guide]');
@@ -3997,6 +4135,7 @@
       document.querySelector('#tomorrowShojiGuide').hidden = !day.shojiGuide;
       document.querySelector('#tomorrowKyotoTransferGuide').hidden = !day.kyotoTransferGuide;
       document.querySelector('#tomorrowOsakaTransferGuide').hidden = !day.osakaTransferGuide;
+      document.querySelector('#tomorrowNaritaTransferGuide').hidden = !day.naritaTransferGuide;
       document.querySelector('#tomorrowUsjGuide').hidden = !day.usjGuide;
       document.querySelector('#tomorrowFlightGuide').hidden = !day.flightGuide;
       document.querySelector('#tomorrowMap').href = mapsUrl(day.mapQuery);
@@ -4042,6 +4181,7 @@
       document.querySelector('#todayShojiGuide').hidden = !day.shojiGuide;
       document.querySelector('#todayKyotoTransferGuide').hidden = !day.kyotoTransferGuide;
       document.querySelector('#todayOsakaTransferGuide').hidden = !day.osakaTransferGuide;
+      document.querySelector('#todayNaritaTransferGuide').hidden = !day.naritaTransferGuide;
       document.querySelector('#todayUsjGuide').hidden = !day.usjGuide;
       document.querySelector('#todayFlightGuide').hidden = !day.flightGuide;
       const reservation = document.querySelector('#todayReservation');
