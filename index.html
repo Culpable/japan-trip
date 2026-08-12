@@ -1406,6 +1406,20 @@
     .osaka-transfer-dialog .guide-place,
     .osaka-transfer-dialog .guide-train div,
     .osaka-transfer-dialog .guide-table th { background: #f8e9e2; }
+    /* The final-flight field guide uses an aviation-blue palette. It shares the proven
+       long-form guide layout while keeping terminals, transfer signs and lounge names easy
+       to distinguish from the rail and border guides. */
+    .flight-guide-dialog .border-guide-hero { background: #17365b; }
+    .flight-guide-dialog .border-step-number { background: #17365b; }
+    .flight-guide-dialog .border-route { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .flight-guide-dialog .guide-place,
+    .flight-guide-dialog .guide-train strong,
+    .flight-guide-dialog .guide-table th { color: #17365b; }
+    .flight-guide-dialog .guide-place,
+    .flight-guide-dialog .guide-train div,
+    .flight-guide-dialog .guide-table th { background: #e8f0f8; }
+    .flight-guide-dialog .guide-train div.transfer-do-not-follow { border: 1px solid #efc1b2; background: #fae4dc; color: #7e321e; }
+    .flight-guide-dialog .guide-train div.transfer-follow { border: 1px solid #b9ddd1; background: #e2f2ec; color: #144c40; }
     /* Keep the shared train/exit key intact after each guide applies its regional palette. */
     .border-guide-dialog .guide-train div.guide-train-service { background: #fff3cf; }
     .border-guide-dialog .guide-train .guide-train-service span { color: #8a570c; }
@@ -1733,6 +1747,7 @@
       .border-route { grid-template-columns: 1fr; }
       .kyoto-transfer-dialog .border-route { grid-template-columns: 1fr; }
       .osaka-transfer-dialog .border-route { grid-template-columns: 1fr; }
+      .flight-guide-dialog .border-route { grid-template-columns: 1fr; }
       .border-route-stop { padding: .58rem .7rem; }
       .border-route-stop:not(:last-child)::after { content: "↓"; right: 1rem; top: auto; bottom: -.55rem; transform: none; }
       .border-guide-content { padding: .7rem; }
@@ -1994,6 +2009,7 @@
             <button class="day-action" id="todayKyotoTransferGuide" type="button" data-open-kyoto-transfer-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Kyoto travel guide</span></button>
             <button class="day-action" id="todayOsakaTransferGuide" type="button" data-open-osaka-transfer-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Osaka travel guide</span></button>
             <button class="day-action" id="todayUsjGuide" type="button" data-open-usj-guide hidden><span class="action-icon-slot" data-action-icon="pass" aria-hidden="true"></span><span>USJ Express Pass</span></button>
+            <button class="day-action" id="todayFlightGuide" type="button" data-open-flight-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Flight &amp; lounge guide</span></button>
             <a class="day-action" id="todayNextMap" href="#" target="_blank" rel="noopener noreferrer"><span class="action-icon-slot" data-action-icon="maps" aria-hidden="true"></span><span>Open map</span></a>
             <a class="day-action" id="todayReservation" href="#" target="_blank" rel="noopener noreferrer" hidden><span class="action-icon-slot" data-action-icon="external" aria-hidden="true"></span><span>Reservation</span></a>
             <button class="day-action local-name-action" id="todayNextLocal" type="button" aria-pressed="false" hidden><span>Show local name</span></button>
@@ -2049,6 +2065,7 @@
           <button class="day-action" id="tomorrowKyotoTransferGuide" type="button" data-open-kyoto-transfer-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Kyoto travel guide</span></button>
           <button class="day-action" id="tomorrowOsakaTransferGuide" type="button" data-open-osaka-transfer-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Osaka travel guide</span></button>
           <button class="day-action" id="tomorrowUsjGuide" type="button" data-open-usj-guide hidden><span class="action-icon-slot" data-action-icon="pass" aria-hidden="true"></span><span>USJ Express Pass</span></button>
+          <button class="day-action" id="tomorrowFlightGuide" type="button" data-open-flight-guide hidden><span class="action-icon-slot" data-action-icon="borderGuide" aria-hidden="true"></span><span>Flight &amp; lounge guide</span></button>
           <a class="day-action" id="tomorrowMap" href="#" target="_blank" rel="noopener noreferrer"><span class="action-icon-slot" data-action-icon="maps" aria-hidden="true"></span><span>Open tomorrow’s map</span></a>
           <button class="day-action local-name-action" id="tomorrowTransitLocal" type="button" aria-pressed="false"><span>Show local name</span></button>
         </div>
@@ -2168,6 +2185,98 @@
         <section class="usj-pass-notes">
           <h3>Simple day plan</h3>
           <ul><li>Have both travellers’ park admission and Express Passes ready before the first ride.</li><li>Be near Flight of the Hippogriff before 11:50AM.</li><li>Move to SUPER NINTENDO WORLD before 2:00PM and stay in the area through Mine Cart Madness.</li><li>After Mine Cart Madness, allow 50 minutes to reach Minion Park for the 4:20PM window.</li></ul>
+        </section>
+      </div>
+    </div>
+    <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
+  </dialog>
+
+  <dialog class="trip-dialog border-guide-dialog flight-guide-dialog" id="flightGuideDialog" aria-labelledby="flightGuideTitle">
+    <div class="dialog-head"><div><p>15 August · Narita to Perth</p><h2 id="flightGuideTitle">Vietnam Airlines Business connection</h2></div><button class="dialog-close" type="button" data-close-dialog="flightGuideDialog" aria-label="Close flight and lounge guide">×</button></div>
+    <div class="dialog-body" id="flightGuideBody">
+      <section class="border-guide-hero">
+        <p><strong>Fly VN307 from Narita Terminal 1 to Ho Chi Minh City Terminal 2, then connect airside in the same terminal to VN791 for Perth.</strong> Both sectors are operated by Vietnam Airlines in Business Class. The Qantas booking channel does not remove the Vietnam Airlines Business lounge entitlement.</p>
+        <div class="border-alert">At Narita, collect both boarding passes and check that every bag tag says PER. At Ho Chi Minh City, follow International Transfer signs. Do not follow Arrivals, Immigration or Baggage Claim.</div>
+        <div class="border-route" aria-label="Complete flight route from Narita to Perth">
+          <div class="border-route-stop"><strong>Narita T1</strong><span>VN307 · 9:30AM JST</span></div>
+          <div class="border-route-stop"><strong>Ho Chi Minh T2</strong><span>Arrive 1:30PM ICT</span></div>
+          <div class="border-route-stop"><strong>International transfer</strong><span>1h 50m · airside in T2</span></div>
+          <div class="border-route-stop"><strong>Ho Chi Minh T2</strong><span>VN791 · 3:20PM ICT</span></div>
+          <div class="border-route-stop"><strong>Perth T1</strong><span>Arrive 10:30PM AWST</span></div>
+        </div>
+      </section>
+
+      <div class="border-guide-content">
+        <section class="border-step" id="flight-guide-step-1">
+          <header class="border-step-head"><span class="border-step-number">01</span><div><h3>Complete flight schedule</h3><p>All times are local to the airport shown</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-table-wrap"><table class="guide-table journey-route-summary"><thead><tr><th>Flight</th><th>From</th><th>To</th><th>Schedule</th><th>Flight time</th></tr></thead><tbody><tr><td data-label="Flight"><strong>VN307</strong></td><td data-label="From">Narita T1<br>Tokyo · Japan</td><td data-label="To">Tan Son Nhat T2<br>Ho Chi Minh City · Vietnam</td><td data-label="Schedule">9:30AM JST → 1:30PM ICT</td><td data-label="Flight time">About 6 hours</td></tr><tr><td data-label="Flight"><strong>VN791</strong></td><td data-label="From">Tan Son Nhat T2<br>Ho Chi Minh City · Vietnam</td><td data-label="To">Perth T1<br>Western Australia</td><td data-label="Schedule">3:20PM ICT → 10:30PM AWST</td><td data-label="Flight time">About 6h 10m</td></tr></tbody></table></div>
+            <p>The scheduled connection is <strong>1 hour 50 minutes</strong>. The complete journey is about <strong>14 hours</strong> from the Narita departure to the Perth arrival.</p>
+            <p class="guide-place">Narita International Airport Terminal 1<span lang="ja">成田国際空港 第1ターミナル</span><span>Narita, Chiba, Japan</span></p>
+            <p class="guide-place">Tan Son Nhat International Airport · International Terminal T2<span lang="vi">Sân bay quốc tế Tân Sơn Nhất · Nhà ga Quốc tế T2</span><span>Ho Chi Minh City, Vietnam</span></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="flight-guide-step-2">
+          <header class="border-step-head"><span class="border-step-number">02</span><div><h3>Check in at Narita Terminal 1</h3><p>Confirm the complete connection before leaving the desk</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Go to the <strong>Vietnam Airlines Business Class check-in</strong> area in the Terminal 1 international departure lobby.</li><li>Ask for boarding passes for <strong>VN307</strong> and <strong>VN791</strong>.</li><li>Check that every baggage receipt and tag shows the final destination code <strong>PER</strong>.</li><li>Ask the agent to confirm the assigned Business lounge and provide any lounge invitation card.</li><li>After check-in, continue through international security and departure formalities.</li></ol>
+            <h4>Ask about the luggage</h4>
+            <blockquote class="guide-phrase"><span lang="ja">荷物はパースまで預けられていますか？</span><span>Is our luggage checked through to Perth?</span></blockquote>
+            <h4>Ask about the second boarding pass</h4>
+            <blockquote class="guide-phrase"><span lang="ja">ホーチミン市からパースまでの搭乗券も発券されていますか？</span><span>Has the boarding pass from Ho Chi Minh City to Perth also been issued?</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step" id="flight-guide-step-3">
+          <header class="border-step-head"><span class="border-step-number">NRT</span><div><h3>Narita Premier Lounge</h3><p>Vietnam Airlines partner lounge after international security</p></div></header>
+          <div class="border-step-body">
+            <p>Vietnam Airlines lists <strong>NARITA PREMIER LOUNGE</strong> for eligible Business Class passengers departing Narita. The current airport directory places it here:</p>
+            <p class="guide-place">NARITA PREMIER LOUNGE<span lang="ja">ナリタプレミアラウンジ</span><span>Terminal 1 · No.1 Satellite · Level 4 · after international security</span><span lang="ja">第1ターミナル 第1サテライト 4階 保安検査後（国際線）</span></p>
+            <p>Use the lounge invitation or both Business Class boarding passes at reception. The check-in agent’s invitation and directions control if Vietnam Airlines changes the assigned partner lounge for your flight.</p>
+            <div class="guide-warning">Do not go to a Qantas or JAL lounge only because Qantas sold the ticket. These are VN-operated, VN-numbered flights, so the Vietnam Airlines lounge assignment applies unless your invitation says otherwise.</div>
+            <h4>Ask airport staff</h4>
+            <blockquote class="guide-phrase"><span lang="ja">ベトナム航空のビジネスクラスに搭乗します。ナリタプレミアラウンジはどこですか？</span><span>We are flying Vietnam Airlines Business Class. Where is Narita Premier Lounge?</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step" id="flight-guide-step-4">
+          <header class="border-step-head"><span class="border-step-number">SGN</span><div><h3>Connect inside Ho Chi Minh City Terminal 2</h3><p>International arrival to international departure</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Leave VN307 and look immediately for <strong>Transit / Transfer / Connecting Flights</strong> signs.</li><li>Show the VN791 boarding pass to the transfer staff.</li><li>Follow the international-transfer route and complete transfer security if staff direct you through it.</li><li>Check the departure screens for the current VN791 gate.</li><li>If VN307 is delayed, tell the first transfer agent that you are connecting to <strong>VN791 for Perth</strong>.</li></ol>
+            <div class="guide-train"><div class="transfer-follow"><span>Follow</span><strong>Transit / Transfer<br><span lang="vi">Quá cảnh / Nối chuyến</span></strong></div><div class="transfer-follow"><span>Follow</span><strong>International transfer<br><span lang="vi">Nối chuyến quốc tế</span></strong></div><div class="transfer-do-not-follow"><span>Do not follow</span><strong>Immigration / Entry<br><span lang="vi">Nhập cảnh</span></strong></div><div class="transfer-do-not-follow"><span>Do not follow</span><strong>Baggage claim<br><span lang="vi">Nhận hành lý</span></strong></div></div>
+            <p>Because this is one same-day international-to-international Vietnam Airlines connection, checked bags tagged <strong>PER</strong> should transfer automatically. You should not collect or recheck them. You should remain airside in T2 and should not need to enter Vietnam or obtain a Vietnam transit visa.</p>
+            <div class="guide-warning">If Narita issues only one boarding pass, a bag tag does not say PER, or staff direct you differently, stop at the Vietnam Airlines transfer desk and follow their instructions.</div>
+            <h4>Ask for international transfer</h4>
+            <blockquote class="guide-phrase"><span lang="vi">Chúng tôi nối chuyến quốc tế đến Perth trên chuyến VN791. Lối đi nối chuyến ở đâu?</span><span>We are connecting internationally to Perth on VN791. Where is international transfer?</span></blockquote>
+            <h4>Confirm the bags</h4>
+            <blockquote class="guide-phrase"><span lang="vi">Hành lý của chúng tôi có được chuyển thẳng đến Perth không?</span><span>Are our bags transferred through to Perth?</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step" id="flight-guide-step-5">
+          <header class="border-step-head"><span class="border-step-number">LOTUS</span><div><h3>Lotus Lounge 2 at Tan Son Nhat</h3><p>International Terminal T2 · airside departure area</p></div></header>
+          <div class="border-step-body">
+            <p>Vietnam Airlines Business Class passengers on VN-operated flights have complimentary lounge access. After completing the transfer route, use the lounge assigned by the transfer staff or shown on the invitation.</p>
+            <p class="guide-place">Lotus Lounge 2<span lang="vi">Phòng chờ Bông Sen 2</span><span>International Terminal T2 · Level 2 · near Departure Gate 18</span><span lang="vi">Nhà ga Quốc tế T2 · Tầng 2 · Gần Cửa khởi hành số 18</span></p>
+            <p>If staff assign a different Lotus lounge, follow their direction. The operating airline’s invitation is the final authority.</p>
+            <h4>Ask for the lounge</h4>
+            <blockquote class="guide-phrase"><span lang="vi">Phòng chờ Bông Sen 2, gần Cửa số 18, ở đâu?</span><span>Where is Lotus Lounge 2 near Gate 18?</span></blockquote>
+            <h4>Ask for the departure gate</h4>
+            <blockquote class="guide-phrase"><span lang="vi">Xin vui lòng chỉ đường đến Cửa khởi hành của chuyến VN791.</span><span>Please direct us to the departure gate for VN791.</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step" id="flight-guide-step-6">
+          <header class="border-step-head"><span class="border-step-number">VI</span><div><h3>Vietnamese signs to recognise</h3><p>Keep these labels available while moving through T2</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-table-wrap"><table class="guide-table"><thead><tr><th>Vietnamese</th><th>English</th><th>What to do</th></tr></thead><tbody><tr><td lang="vi"><strong>Quá cảnh / Nối chuyến</strong></td><td>Transit / Transfer</td><td>Follow</td></tr><tr><td lang="vi"><strong>Nối chuyến quốc tế</strong></td><td>International transfer</td><td>Follow</td></tr><tr><td lang="vi"><strong>Chuyến bay nối chuyến</strong></td><td>Connecting flight</td><td>Follow</td></tr><tr><td lang="vi"><strong>Cửa khởi hành</strong></td><td>Departure gate</td><td>Check VN791 on the screens</td></tr><tr><td lang="vi"><strong>Phòng chờ thương gia</strong></td><td>Business lounge</td><td>Ask after transfer</td></tr><tr><td lang="vi"><strong>Nhập cảnh</strong></td><td>Immigration / Entry</td><td>Do not follow for this connection</td></tr><tr><td lang="vi"><strong>Nhận hành lý</strong></td><td>Baggage claim</td><td>Do not follow if bags are tagged PER</td></tr></tbody></table></div>
+          </div>
+        </section>
+
+        <section class="guide-sources">
+          <h3>Official flight, transfer and lounge sources</h3>
+          <ul><li><a href="https://www.vietnamairlines.com/es/en/travel-information/airports-transit/transit-information" target="_blank" rel="noopener noreferrer">Vietnam Airlines connecting-flight instructions</a></li><li><a href="https://www.vietnamairlines.com/gb/en/help-desk/common-topics/Baggage/support-baggage-for-connecting-flights" target="_blank" rel="noopener noreferrer">Vietnam Airlines transfer-baggage rules</a></li><li><a href="https://www.vietnamairlines.com/in/en/travel-information/airports-transit/lotus-lounge" target="_blank" rel="noopener noreferrer">Vietnam Airlines Business and Lotus Lounge eligibility</a></li><li><a href="https://www.narita-airport.jp/en/service/lounge/airport/" target="_blank" rel="noopener noreferrer">Narita Airport airline lounge directory</a></li><li><a href="https://vietnamairport.vn/tansonnhatairport/tin-tuc/thong-tin-dich-vu-2/dich-vu-phong-cho-hang-thuong-gia" target="_blank" rel="noopener noreferrer">Tan Son Nhat Airport lounge locations</a></li></ul>
         </section>
       </div>
     </div>
@@ -2838,14 +2947,20 @@
           notes: [{ kind: 'note', text: 'Nankai Koya Line from Osaka Namba plus cable car takes about 1.5 hours each way.' }]
         },
         {
-          id: 'day-15', day: 15, date: '2026-08-15', weekday: 'SAT', region: 'osaka', location: 'Tokyo', localLocation: '東京', title: 'Tokyo → Perth via Ho Chi Minh City', localName: '東京 → ホーチミン市経由でパースへ', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Narita Airport Terminal 1', weatherCity: 'Narita', hotel: stays.narita,
-          transit: { id: 'vn307-vn791-flight', order: 2, mode: 'Flight', route: 'Narita T1 → Perth via Ho Chi Minh City', detail: 'VN 307/791 · 9:30AM–10:30PM', localName: '成田空港第1ターミナル → ホーチミン市 → パース', localAddress: '成田国際空港 第1ターミナル', localLanguage: 'Japanese', localLang: 'ja', time: '9:30AM', instant: '2026-08-15T09:30:00+09:00', durationMinutes: 840, leaveBy: '5:30AM', address: 'Narita International Airport Terminal 1' },
+          id: 'day-15', day: 15, date: '2026-08-15', weekday: 'SAT', region: 'osaka', location: 'Tokyo', localLocation: '東京', title: 'Tokyo → Perth via Ho Chi Minh City', localName: '東京 → ホーチミン市経由でパースへ', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Narita Airport Terminal 1', weatherCity: 'Narita', hotel: stays.narita, flightGuide: true,
+          transit: { id: 'vn307-vn791-flight', order: 2, mode: 'Business flight', route: 'Narita T1 → Ho Chi Minh City T2 → Perth T1', detail: 'VN307 · Narita T1 9:30AM JST → Ho Chi Minh City T2 1:30PM ICT · 1h 50m airside transfer · VN791 · T2 3:20PM ICT → Perth T1 10:30PM AWST', localName: '成田空港第1ターミナル → ホーチミン市タンソンニャット国際空港第2ターミナル → パース空港第1ターミナル', localAddress: '成田国際空港 第1ターミナル', localLanguage: 'Japanese', localLang: 'ja', time: '9:30AM', instant: '2026-08-15T09:30:00+09:00', durationMinutes: 840, leaveBy: '5:30AM', address: 'Narita International Airport Terminal 1', flightGuide: true },
           activities: [
             { id: 'leave-narita-hotel', order: 0, title: 'Leave the hotel by about 5:30AM', localName: '午前5時30分頃に成田東武ホテルエアポートを出発', localAddress: stays.narita.localAddress, localLanguage: 'Japanese', localLang: 'ja', time: '5:30AM', instant: '2026-08-15T05:30:00+09:00', durationMinutes: 30, address: stays.narita.address },
-            { id: 'narita-check-in', order: 1, title: 'Check in at Narita Terminal 1', localName: '成田空港第1ターミナルでチェックイン', localAddress: '成田国際空港 第1ターミナル', localLanguage: 'Japanese', localLang: 'ja', address: 'Narita International Airport Terminal 1' },
-            { id: 'flight-sectors', order: 3, title: 'Allow for the six-hour and six-hour-ten-minute flight sectors', localName: '6時間と6時間10分のフライトに備える', localLanguage: 'Japanese', localLang: 'ja' }
+            { id: 'narita-check-in', order: 1, title: 'Vietnam Airlines Business check-in · collect both boarding passes · confirm every bag tag says PER', localName: 'ベトナム航空ビジネスクラスでチェックイン · 2区間の搭乗券を受け取る · 荷物タグの最終目的地がPERか確認', localAddress: '成田国際空港 第1ターミナル 国際線出発ロビー', localLanguage: 'Japanese', localLang: 'ja', address: 'Narita International Airport Terminal 1' },
+            { id: 'flight-sectors', order: 3, title: 'VN307 to Ho Chi Minh City T2 · international transfer in T2 · VN791 to Perth T1', localName: 'VN307便でホーチミン市第2ターミナルへ · 第2ターミナル内で国際線乗り継ぎ · VN791便でパース第1ターミナルへ', localAddress: 'Sân bay quốc tế Tân Sơn Nhất · Nhà ga Quốc tế T2', localLanguage: 'Japanese and Vietnamese', localLang: 'und', flightGuide: true }
           ],
-          notes: [{ kind: 'note', text: 'The free T1–T2 shuttle takes about 15 minutes. Check-in opens roughly three hours before departure.' }]
+          notes: [
+            { kind: 'confirmed', text: 'Vietnam Airlines Business Class · booked through Qantas · VN307 and VN791 are both VN-operated and VN-numbered' },
+            { kind: 'note', text: 'Narita lounge · NARITA PREMIER LOUNGE · Terminal 1 No.1 Satellite Level 4 after international security · confirm the invitation at check-in' },
+            { kind: 'note', text: 'Ho Chi Minh City transfer · stay airside in International Terminal T2 · follow Nối chuyến quốc tế · bags tagged PER transfer through · do not follow Nhập cảnh or Nhận hành lý' },
+            { kind: 'note', text: 'Ho Chi Minh City lounge · Phòng chờ Bông Sen 2 / Lotus Lounge 2 · International Terminal T2 Level 2 near Departure Gate 18' },
+            { kind: 'note', text: 'The free Narita T1–T2 shuttle takes about 15 minutes. Check-in opens roughly three hours before departure.' }
+          ]
         }
       ];
     })();
@@ -3344,7 +3459,8 @@
         const kyotoTransferGuideAction = plan.kyotoTransferGuide ? `<button class="day-action" type="button" data-open-kyoto-transfer-guide>${actionIcons.borderGuide}<span>Kyoto guide</span></button>` : '';
         const osakaTransferGuideAction = plan.osakaTransferGuide ? `<button class="day-action" type="button" data-open-osaka-transfer-guide>${actionIcons.borderGuide}<span>Osaka guide</span></button>` : '';
         const usjGuideAction = plan.usjGuide ? `<button class="day-action" type="button" data-open-usj-guide>${actionIcons.pass}<span>USJ pass</span></button>` : '';
-        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${usjGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
+        const flightGuideAction = plan.flightGuide ? `<button class="day-action" type="button" data-open-flight-guide>${actionIcons.borderGuide}<span>Flight &amp; lounges</span></button>` : '';
+        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${usjGuideAction}${flightGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
         card.append(actions);
       });
     }
@@ -3447,8 +3563,9 @@
         const reservationAction = activity.reservationLink ? `<a class="mini-action primary" href="${activity.reservationLink}" target="_blank" rel="noopener noreferrer"><span>Reservation</span></a>` : '';
         const detailsAction = activity.detailsLink ? `<a class="mini-action primary" href="${activity.detailsLink}" target="_blank" rel="noopener noreferrer"><span>${activity.detailsLabel || 'Open details'}</span></a>` : '';
         const usjGuideAction = activity.usjGuide ? `<button class="mini-action primary" type="button" data-open-usj-guide>${actionIcons.pass}<span>Express Pass</span></button>` : '';
-        const mapAction = mapQuery ? `<a class="mini-action${activity.reservationLink || activity.detailsLink || activity.usjGuide ? '' : ' primary'}" href="${mapsUrl(mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a>` : '';
-        const actions = `${localPlaceAction(activity, '', true)}${reservationAction}${detailsAction}${usjGuideAction}${mapAction}`;
+        const flightGuideAction = activity.flightGuide ? `<button class="mini-action primary" type="button" data-open-flight-guide>${actionIcons.borderGuide}<span>Flight guide</span></button>` : '';
+        const mapAction = mapQuery ? `<a class="mini-action${activity.reservationLink || activity.detailsLink || activity.usjGuide || activity.flightGuide ? '' : ' primary'}" href="${mapsUrl(mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a>` : '';
+        const actions = `${localPlaceAction(activity, '', true)}${reservationAction}${detailsAction}${usjGuideAction}${flightGuideAction}${mapAction}`;
         const expanded = activity.state === 'current' || activity.state === 'next';
         return `<article class="run-sheet-item local-place" data-local-place="${activity.id}" data-english-name="${title}" data-english-detail="${metadata}" data-state="${activity.state}" data-expanded="${expanded}"><div class="run-sheet-time">${activity.time || 'Flexible'}</div><div class="run-sheet-content"><h3 data-local-name>${title}</h3>${metadata || activity.localAddress ? `<p class="run-sheet-meta" data-local-detail>${metadata}</p>` : ''}<span class="run-sheet-status">${labels[activity.state]}</span><div class="run-sheet-actions">${actions}</div></div></article>`;
       }).join('')}</div>`;
@@ -3467,8 +3584,9 @@
       const kyotoTransferGuideAction = day.kyotoTransferGuide ? `<button class="mini-action primary" type="button" data-open-kyoto-transfer-guide>${actionIcons.borderGuide}<span>Open Kyoto travel guide</span></button>` : '';
       const osakaTransferGuideAction = day.osakaTransferGuide ? `<button class="mini-action primary" type="button" data-open-osaka-transfer-guide>${actionIcons.borderGuide}<span>Open Osaka travel guide</span></button>` : '';
       const usjGuideAction = day.usjGuide ? `<button class="mini-action primary" type="button" data-open-usj-guide>${actionIcons.pass}<span>Open USJ Express Pass</span></button>` : '';
+      const flightGuideAction = day.flightGuide ? `<button class="mini-action primary" type="button" data-open-flight-guide>${actionIcons.borderGuide}<span>Open flight &amp; lounge guide</span></button>` : '';
       const checkoutInfo = hotel.checkoutTime ? `<p class="stay-checkout">${actionIcons.checkout}<span>Check-out · ${hotel.checkoutTime}</span></p>` : '';
-      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span>${checkoutInfo}</div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${usjGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span>${checkoutInfo}</div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${usjGuideAction}${flightGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
       syncLocalPlaceDisplays(hotel.id);
       activityTimeline(day, clock).forEach((activity) => syncLocalPlaceDisplays(activity.id));
       body.scrollTop = scrollTop;
@@ -3519,6 +3637,13 @@
     function openUsjGuide() {
       const dialog = document.querySelector('#usjPassDialog');
       const body = document.querySelector('#usjPassBody');
+      showModalDialog(dialog);
+      if (body) body.scrollTop = 0;
+    }
+
+    function openFlightGuide() {
+      const dialog = document.querySelector('#flightGuideDialog');
+      const body = document.querySelector('#flightGuideBody');
       showModalDialog(dialog);
       if (body) body.scrollTop = 0;
     }
@@ -3591,6 +3716,8 @@
         if (osakaTransferGuideButton) openOsakaTransferGuide();
         const usjGuideButton = event.target.closest('[data-open-usj-guide]');
         if (usjGuideButton) openUsjGuide();
+        const flightGuideButton = event.target.closest('[data-open-flight-guide]');
+        if (flightGuideButton) openFlightGuide();
         const closeButton = event.target.closest('[data-close-dialog]');
         if (closeButton) document.querySelector(`#${closeButton.dataset.closeDialog}`).close();
       });
@@ -3871,6 +3998,7 @@
       document.querySelector('#tomorrowKyotoTransferGuide').hidden = !day.kyotoTransferGuide;
       document.querySelector('#tomorrowOsakaTransferGuide').hidden = !day.osakaTransferGuide;
       document.querySelector('#tomorrowUsjGuide').hidden = !day.usjGuide;
+      document.querySelector('#tomorrowFlightGuide').hidden = !day.flightGuide;
       document.querySelector('#tomorrowMap').href = mapsUrl(day.mapQuery);
       document.querySelector('#tomorrowOpenRunSheet').onclick = () => openDayView(day.day);
 
@@ -3915,6 +4043,7 @@
       document.querySelector('#todayKyotoTransferGuide').hidden = !day.kyotoTransferGuide;
       document.querySelector('#todayOsakaTransferGuide').hidden = !day.osakaTransferGuide;
       document.querySelector('#todayUsjGuide').hidden = !day.usjGuide;
+      document.querySelector('#todayFlightGuide').hidden = !day.flightGuide;
       const reservation = document.querySelector('#todayReservation');
       const focusLink = focus?.reservationLink || focus?.detailsLink;
       reservation.hidden = !focusLink;
