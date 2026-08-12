@@ -16,9 +16,12 @@ assert.ok(day, '14 August should exist in the itinerary');
 assert.equal(day.naritaTransferGuide, true, 'Day 14 should expose the Narita transfer guide');
 assert.equal(day.hotel.naritaTransferGuide, true, 'Narita Tobu should expose its arrival guide');
 assert.equal(day.transit.route, 'DoubleTree by Hilton Osaka Castle → Narita Tobu Hotel Airport', 'the route should name both hotels');
-assert.equal(day.transit.time, '2:00PM', 'the transfer should retain the planned 2:00PM departure');
-assert.equal(day.transit.leaveBy, '2:00PM', 'Today should tell the travellers to leave DoubleTree by 2:00PM');
-assert.match(day.transit.detail, /taxi.*Shin-Osaka.*Nozomi.*Tokyo.*Narita Express.*Terminal 2.*shuttle/i, 'the summary should include every transfer leg');
+assert.equal(day.title, 'Osaka → Narita airport hotel', 'Day 14 should no longer advertise an impossible Koyasan day trip');
+assert.equal(day.transit.time, '11:05AM', 'the transfer should use the revised 11:05AM departure');
+assert.equal(day.transit.leaveBy, '11:05AM', 'Today should tell the travellers to leave DoubleTree by 11:05AM');
+assert.equal(day.transit.instant, '2026-08-14T11:05:00+09:00', 'the revised departure should be machine readable');
+assert.match(day.transit.detail, /taxi.*Shin-Osaka.*Nozomi.*Tokyo.*Narita Express.*Terminal 2.*shuttle.*taxi/i, 'the summary should include every transfer leg and both final options');
+assert.doesNotMatch(JSON.stringify(day.activities), /Koyasan|Okunoin|Kongobuji/i, 'the revised travel day should not retain the cancelled Koyasan activities');
 
 const guideStart = html.indexOf('<dialog class="trip-dialog border-guide-dialog narita-transfer-dialog"');
 const guideEnd = html.indexOf('</dialog>', guideStart);
@@ -28,15 +31,17 @@ for (let step = 1; step <= 8; step += 1) {
   assert.match(guide, new RegExp(`id="narita-transfer-step-${step}"`), `the guide should include step ${step}`);
 }
 
-assert.match(guide, /DoubleTree.*2:00PM.*taxi.*Shin-Osaka.*Nozomi.*Tokyo.*Narita Express.*Airport Terminal 2.*Bus Stop 25.*Narita Tobu/is, 'the route overview should show every leg in order');
+assert.match(guide, /DoubleTree.*11:05AM.*taxi.*Shin-Osaka.*Nozomi.*Tokyo.*Narita Express.*Airport Terminal 2.*Shuttle.*Taxi.*Narita Tobu/is, 'the route overview should show every leg and the final choice in order');
 assert.match(guide, /Obon.*Nozomi.*all seats.*reserved/is, 'the guide should explain the peak-period Nozomi reservation rule');
 assert.match(guide, /Narita Express.*separate.*reserved.*ticket/is, 'the guide should explain that the Narita Express needs a separate reservation');
 assert.match(guide, /guide-train-service[^>]*><span>Train \/ service<\/span><strong>Nozomi/is, 'the Nozomi service should have a dedicated visual highlight');
 assert.match(guide, /guide-train-stop[^>]*><span>Get off here<\/span><strong>Tokyo Station/is, 'the Tokyo exit station should have a separate visual highlight');
 assert.match(guide, /guide-train-service[^>]*><span>Train \/ service<\/span><strong>Narita Express/is, 'the Narita Express service should have a dedicated visual highlight');
 assert.match(guide, /guide-train-stop[^>]*><span>Get off here<\/span><strong>Airport Terminal 2·3/is, 'the airport exit station should have a separate visual highlight');
-assert.match(guide, /新大阪駅.*のぞみ.*東京駅.*成田エクスプレス.*空港第2ビル駅.*25番/is, 'the guide should include Japanese names for the critical stations and shuttle stop');
-assert.match(guide, /roughly 7:15–8:00PM/i, 'the guide should give a realistic hotel arrival window');
+assert.match(guide, /Free hotel shuttle.*Bus Stop 25.*No booking.*Taxi.*taxi rank.*No booking/is, 'the final step should compare the free shuttle and taxi options');
+assert.match(guide, /新大阪駅.*のぞみ.*東京駅.*成田エクスプレス.*空港第2ビル駅.*25番.*タクシー/is, 'the guide should include Japanese names for the critical stations and both final options');
+assert.match(guide, /roughly 4:10–5:00PM/i, 'the guide should give an earlier realistic hotel arrival window');
+assert.match(guide, /Open the Terminal 2 to Narita Tobu taxi route/i, 'the guide should include a direct taxi map');
 assert.doesNotMatch(guide, /TYO-NRT.*direct.*hotel/i, 'the guide must not imply the suspended direct hotel bus is operating');
 
 assert.match(html, /id="todayNaritaTransferGuide"[^>]*data-open-narita-transfer-guide/, 'Today should include a Narita guide action');

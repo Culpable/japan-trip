@@ -104,19 +104,19 @@ test('Day 11 earlier flexible stops stay complete after the kimono milestone fin
   );
 });
 
-test('Day 14 stores the 2:00PM DoubleTree departure as a machine-readable instant', () => {
+test('Day 14 stores the 11:05AM DoubleTree departure as a machine-readable instant', () => {
   const dayFourteen = JSON.parse(vm.runInContext('JSON.stringify(days[13])', context));
   const departure = dayFourteen.activities.find((activity) => activity.id === 'leave-doubletree');
 
   assert.equal(
     departure.instant,
-    '2026-08-14T14:00:00+09:00',
-    'the visible 2:00PM departure must have a machine-readable instant',
+    '2026-08-14T11:05:00+09:00',
+    'the visible 11:05AM departure must have a machine-readable instant',
   );
 });
 
-test('Day 14 at 1:00PM prioritises the 2:00PM DoubleTree departure', () => {
-  const timeline = timelineFor(13, '2026-08-14T13:00:00+09:00', '2026-08-14');
+test('Day 14 at 10:30AM prioritises the 11:05AM DoubleTree departure', () => {
+  const timeline = timelineFor(13, '2026-08-14T10:30:00+09:00', '2026-08-14');
   const focus = timeline.find((activity) => activity.state === 'current')
     || timeline.find((activity) => activity.state === 'next')
     || timeline.find((activity) => activity.state !== 'complete');
@@ -124,6 +124,6 @@ test('Day 14 at 1:00PM prioritises the 2:00PM DoubleTree departure', () => {
   assert.equal(
     focus?.id,
     'leave-doubletree',
-    'Today must prioritise the known 2:00PM departure instead of the first flexible stop',
+    'Today must prioritise the known 11:05AM departure',
   );
 });
