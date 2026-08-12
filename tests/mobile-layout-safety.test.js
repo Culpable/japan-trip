@@ -24,8 +24,8 @@ assert.match(
 );
 assert.equal(
   (html.match(/class="dialog-companion-dock" data-companion-dock/g) || []).length,
-  6,
-  'all six modal dialogs should provide reserved companion space'
+  7,
+  'all seven modal dialogs should provide reserved companion space'
 );
 assert.match(
   html,
@@ -41,6 +41,11 @@ assert.doesNotMatch(
   html,
   /\.dialog-body\s*\{[^}]*max-height:\s*calc\(100dvh - 86px\)/s,
   'mobile dialog height must not assume a fixed header height'
+);
+assert.match(
+  html,
+  /@media \(max-width: 520px\)[\s\S]*?\.osaka-transfer-dialog \.border-route\s*\{[^}]*grid-template-columns:\s*1fr/s,
+  'the six-stop Osaka route should stack into readable cards on phones'
 );
 assert.match(
   html,

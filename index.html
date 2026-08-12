@@ -1290,6 +1290,7 @@
     .border-alert { margin-top: 1rem; padding: .8rem .9rem; border: 1px solid rgba(255, 227, 145, .45); border-radius: 13px; background: rgba(255, 227, 145, .12); color: #fff4ce; font-size: .78rem; font-weight: 900; line-height: 1.45; }
     .border-route { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: stretch; gap: .45rem; margin-top: 1rem; }
     .kyoto-transfer-dialog .border-route { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+    .osaka-transfer-dialog .border-route { grid-template-columns: repeat(6, minmax(0, 1fr)); }
     .border-route-stop { position: relative; min-width: 0; padding: .65rem .55rem; border-radius: 12px; background: rgba(255, 255, 255, .1); }
     .border-route-stop:not(:last-child)::after { content: "→"; position: absolute; right: -.42rem; top: 50%; z-index: 1; transform: translateY(-50%); color: #ffd66f; font-weight: 900; }
     .border-route-stop strong, .border-route-stop span { display: block; }
@@ -1350,6 +1351,15 @@
     .kyoto-transfer-dialog .guide-place,
     .kyoto-transfer-dialog .guide-train div,
     .kyoto-transfer-dialog .guide-table th { background: #eeedfb; }
+    /* The Osaka transfer reuses the field-guide system with the warm Osaka palette. */
+    .osaka-transfer-dialog .border-guide-hero { background: #7b321e; }
+    .osaka-transfer-dialog .border-step-number { background: #7b321e; }
+    .osaka-transfer-dialog .guide-place,
+    .osaka-transfer-dialog .guide-train strong,
+    .osaka-transfer-dialog .guide-table th { color: #7b321e; }
+    .osaka-transfer-dialog .guide-place,
+    .osaka-transfer-dialog .guide-train div,
+    .osaka-transfer-dialog .guide-table th { background: #f8e9e2; }
     .ticket-proof { margin: .8rem 0; overflow: hidden; border: 1px solid #b9ccd6; border-radius: 14px; background: #f3f8fa; }
     .ticket-proof summary { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .35rem .75rem; align-items: center; padding: .8rem 3rem .8rem .9rem; color: #244f67; cursor: pointer; list-style: none; }
     .ticket-proof summary::-webkit-details-marker { display: none; }
@@ -1632,6 +1642,7 @@
       .border-guide-dialog .dialog-head h2 { font-size: 1.08rem; }
       .border-route { grid-template-columns: 1fr; }
       .kyoto-transfer-dialog .border-route { grid-template-columns: 1fr; }
+      .osaka-transfer-dialog .border-route { grid-template-columns: 1fr; }
       .border-route-stop { padding: .58rem .7rem; }
       .border-route-stop:not(:last-child)::after { content: "↓"; right: 1rem; top: auto; bottom: -.55rem; transform: none; }
       .border-guide-content { padding: .7rem; }
@@ -1889,6 +1900,7 @@
             <button class="day-action" id="todayBorderGuide" type="button" data-open-border-guide hidden><span>Border guide</span></button>
             <button class="day-action" id="todayShojiGuide" type="button" data-open-shoji-guide hidden><span>Shoji travel guide</span></button>
             <button class="day-action" id="todayKyotoTransferGuide" type="button" data-open-kyoto-transfer-guide hidden><span>Kyoto travel guide</span></button>
+            <button class="day-action" id="todayOsakaTransferGuide" type="button" data-open-osaka-transfer-guide hidden><span>Osaka travel guide</span></button>
             <button class="day-action" id="todayUsjGuide" type="button" data-open-usj-guide hidden><span>USJ Express Pass</span></button>
             <a class="day-action" id="todayNextMap" href="#" target="_blank" rel="noopener noreferrer"><span>Open map</span></a>
             <a class="day-action" id="todayReservation" href="#" target="_blank" rel="noopener noreferrer" hidden><span>Reservation</span></a>
@@ -2423,6 +2435,97 @@
     <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
   </dialog>
 
+  <dialog class="trip-dialog border-guide-dialog osaka-transfer-dialog" id="osakaTransferGuideDialog" aria-labelledby="osakaTransferGuideTitle">
+    <div class="dialog-head"><div><p>13 August · Kyoto to Osaka</p><h2 id="osakaTransferGuideTitle">NOHGA Hotel Kiyomizu Kyoto to DoubleTree Osaka Castle</h2></div><button class="dialog-close" type="button" data-close-dialog="osakaTransferGuideDialog" aria-label="Close Osaka travel guide">×</button></div>
+    <div class="dialog-body" id="osakaTransferGuideBody">
+      <section class="border-guide-hero">
+        <p><strong>Leave NOHGA Hotel at 8:25AM and take one direct train to Osaka.</strong> Take a taxi to Kiyomizu-Gojo, board the 8:42AM Keihan Semi-Express for Yodoyabashi from Platform 2, and stay on until Temmabashi at 10:00AM. Walk to DoubleTree for an expected arrival around 10:05–10:10AM.</p>
+        <div class="border-alert">Thursday 13 August uses Keihan’s Saturday/holiday timetable for the Obon period. This plan follows that special timetable. The selected journey is one direct train with no transfers.</div>
+        <div class="border-route" aria-label="Complete route from NOHGA Hotel Kiyomizu Kyoto to DoubleTree by Hilton Osaka Castle">
+          <div class="border-route-stop"><strong>NOHGA Hotel</strong><span lang="ja">8:25AM · ノーガホテル</span></div>
+          <div class="border-route-stop"><strong>Taxi</strong><span lang="ja">清水五条駅まで</span></div>
+          <div class="border-route-stop"><strong>Kiyomizu-Gojo</strong><span lang="ja">8:32AM · 清水五条駅</span></div>
+          <div class="border-route-stop"><strong>Semi-Express</strong><span lang="ja">8:42AM · 準急 淀屋橋行き</span></div>
+          <div class="border-route-stop"><strong>Temmabashi</strong><span lang="ja">10:00AM · 天満橋駅</span></div>
+          <div class="border-route-stop"><strong>DoubleTree</strong><span lang="ja">10:05–10:10AM · 徒歩</span></div>
+        </div>
+      </section>
+
+      <div class="border-guide-content">
+        <section class="border-step" id="osaka-transfer-step-1">
+          <header class="border-step-head"><span class="border-step-number">01</span><div><h3>Be ready in the NOHGA lobby</h3><p>Book the taxi for 8:20AM · pull away by 8:25AM</p></div></header>
+          <div class="border-step-body">
+            <p class="guide-place">Starting point: NOHGA HOTEL KIYOMIZU KYOTO<span lang="ja">ノーガホテル 清水 京都</span><span lang="ja">〒605-0846 京都府京都市東山区五条橋東4丁目450番1号</span></p>
+            <ol><li>Check out and bring all luggage to the lobby by <strong>8:15AM</strong>.</li><li>Ask reception to have the taxi ready for <strong>8:20AM</strong>.</li><li>Load the luggage and leave no later than <strong>8:25AM</strong>.</li><li>Keep one Suica or ICOCA ready for each traveller.</li></ol>
+            <div class="guide-warning">The train leaves at 8:42AM. If the taxi is not outside by 8:20AM, ask reception to call another taxi immediately.</div>
+          </div>
+        </section>
+
+        <section class="border-step" id="osaka-transfer-step-2">
+          <header class="border-step-head"><span class="border-step-number">02</span><div><h3>Take the taxi to Kiyomizu-Gojo Station</h3><p>Aim to arrive around 8:32AM · about 10 minutes before the train</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Confirm the destination is <strong>Kiyomizu-Gojo Station / 清水五条駅</strong>.</li><li>Ask for the entrance nearest the elevator because of the luggage.</li><li>Pay the taxi and unload every bag before the driver leaves.</li></ol>
+            <h4>Show the taxi driver</h4>
+            <blockquote class="guide-phrase"><span lang="ja">清水五条駅までお願いします。荷物が多いので、エレベーターに近い入口で降ろしてください。</span><span>Please take us to Kiyomizu-Gojo Station. We have lots of luggage, so please drop us near the entrance closest to the elevator.</span></blockquote>
+            <p><a href="https://www.google.com/maps/dir/?api=1&amp;origin=NOHGA%20HOTEL%20KIYOMIZU%20KYOTO&amp;destination=Kiyomizu-Gojo%20Station&amp;travelmode=driving" target="_blank" rel="noopener noreferrer">Open the NOHGA to Kiyomizu-Gojo taxi route</a></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="osaka-transfer-step-3">
+          <header class="border-step-head"><span class="border-step-number">03</span><div><h3>Enter Kiyomizu-Gojo and find Platform 2</h3><p>Keihan Main Line · toward Yodoyabashi and Nakanoshima</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-train"><div><span>Departure</span><strong>8:42AM<br>Kiyomizu-Gojo</strong></div><div><span>Service</span><strong>Semi-Express<br>準急</strong></div><div><span>Direction</span><strong>Yodoyabashi<br>淀屋橋行き</strong></div><div><span>Platform</span><strong>Platform 2<br>2番のりば</strong></div></div>
+            <p><strong>No booking is needed.</strong> This is a regular commuter train with <strong>unreserved seating</strong>. Each traveller should tap in with their own <strong>Suica</strong> or <strong>ICOCA</strong>. The fare to Temmabashi is <strong>¥490 per adult</strong>.</p>
+            <ol><li>Follow signs for <strong>Platform 2 / 2番のりば</strong>.</li><li>Check the display for <strong>8:42AM Semi-Express / 準急, Yodoyabashi / 淀屋橋</strong>.</li><li>Use the elevator with the luggage.</li><li>Board any standard carriage when the train arrives.</li></ol>
+            <h4>Ask station staff if needed</h4>
+            <blockquote class="guide-phrase"><span lang="ja">8時42分発の準急・淀屋橋行きで、天満橋まで行きたいです。2番のりばで合っていますか？</span><span>We want the 8:42 Semi-Express for Yodoyabashi and will get off at Temmabashi. Is Platform 2 correct?</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step" id="osaka-transfer-step-4">
+          <header class="border-step-head"><span class="border-step-number">04</span><div><h3>Stay on the direct train to Temmabashi</h3><p>8:42AM–10:00AM · no train change</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-train"><div><span>From</span><strong>Kiyomizu-Gojo<br>8:42AM</strong></div><div><span>Train</span><strong>Keihan<br>Semi-Express</strong></div><div><span>Changes</span><strong>None<br>Stay aboard</strong></div><div><span>To</span><strong>Temmabashi<br>10:00AM</strong></div></div>
+            <ol><li>Keep the luggage together and clear of the doors.</li><li>Seats are first come, first served. Stand together near the luggage if necessary.</li><li>Do not leave the train at an intermediate station.</li><li>Gather every bag before the scheduled <strong>10:00AM</strong> arrival.</li><li>Get off at <strong>Temmabashi / 天満橋</strong>.</li></ol>
+            <p class="guide-place">Destination station<span lang="ja">天満橋駅</span><span>Keihan Main Line</span></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="osaka-transfer-step-5">
+          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Walk from Temmabashi to DoubleTree</h3><p>Official hotel estimate: about 5 minutes · allow 5–10 minutes with luggage</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Tap each traveller’s Suica or ICOCA at the Temmabashi exit gate.</li><li>Use the elevator instead of carrying luggage on the stairs.</li><li>Open the walking map below before leaving the station.</li><li>Walk to DoubleTree by Hilton Osaka Castle on the riverfront.</li><li>Expected hotel arrival is <strong>10:05–10:10AM</strong>.</li></ol>
+            <p class="guide-place">DoubleTree by Hilton Osaka Castle<span lang="ja">ダブルツリーbyヒルトン大阪城</span><span lang="ja">〒540-0008 大阪府大阪市中央区大手前1丁目1番1号</span></p>
+            <p><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Temmabashi%20Station&amp;destination=DoubleTree%20by%20Hilton%20Osaka%20Castle&amp;travelmode=walking" target="_blank" rel="noopener noreferrer">Open the Temmabashi to DoubleTree walking route</a></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="osaka-transfer-step-6">
+          <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Use the confirmed early check-in</h3><p>Early check-in is available from 10:00AM</p></div></header>
+          <div class="border-step-body">
+            <ol><li>Give reception the booking name and both passports.</li><li>Say that early check-in from 10:00AM has been arranged.</li><li>Confirm the room and leave the luggage before travelling to Universal Studios Japan.</li></ol>
+            <h4>At reception</h4>
+            <blockquote class="guide-phrase"><span lang="ja">10時からのアーリーチェックインを予約しています。チェックインをお願いします。</span><span>We have arranged early check-in from 10:00. We would like to check in, please.</span></blockquote>
+          </div>
+        </section>
+
+        <section class="border-step">
+          <header class="border-step-head"><span class="border-step-number">PLAN</span><div><h3>The complete route at a glance</h3><p>One taxi, one direct train and one short walk</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-table-wrap"><table class="guide-table journey-route-summary"><thead><tr><th>Start</th><th>Transport</th><th>Time</th><th>Finish</th><th>Payment</th></tr></thead><tbody><tr><td data-label="Start">NOHGA Hotel</td><td data-label="Transport">Taxi</td><td data-label="Time">8:25–about 8:32AM</td><td data-label="Finish">Kiyomizu-Gojo</td><td data-label="Payment">Taxi fare</td></tr><tr><td data-label="Start">Kiyomizu-Gojo</td><td data-label="Transport">Keihan Semi-Express</td><td data-label="Time">8:42–10:00AM</td><td data-label="Finish">Temmabashi</td><td data-label="Payment">Suica/ICOCA · ¥490 adult</td></tr><tr><td data-label="Start">Temmabashi</td><td data-label="Transport">Walk</td><td data-label="Time">About 5–10 minutes</td><td data-label="Finish">DoubleTree</td><td data-label="Payment">None</td></tr></tbody></table></div>
+            <p><strong>Train booking:</strong> none. Board the regular 8:42AM Semi-Express for Yodoyabashi from Platform 2. Seating is unreserved. Tap one Suica or ICOCA per traveller at Kiyomizu-Gojo and again at Temmabashi.</p>
+          </div>
+        </section>
+
+        <section class="guide-sources">
+          <h3>Official route sources</h3>
+          <ul><li><a href="https://www.nohgahotel.com/kiyomizu/en/access/" target="_blank" rel="noopener noreferrer">NOHGA Hotel Kiyomizu Kyoto access</a></li><li><a href="https://www.keihan.co.jp/traffic/news/2026/detail/obondaiya.html" target="_blank" rel="noopener noreferrer">Keihan Obon timetable notice</a></li><li><a href="https://www.keihan.co.jp/traffic/station/assets/pdf/time/16122.pdf" target="_blank" rel="noopener noreferrer">Kiyomizu-Gojo Saturday/holiday timetable</a></li><li><a href="https://www.keihan.co.jp/traffic/station/161/info.html" target="_blank" rel="noopener noreferrer">Kiyomizu-Gojo station and platform information</a></li><li><a href="https://www.keihan.co.jp/traffic/station/assets/pdf/fare/161.pdf" target="_blank" rel="noopener noreferrer">Kiyomizu-Gojo fare chart</a></li><li><a href="https://www.hilton.com/en/hotels/osaocdi-doubletree-osaka-castle/" target="_blank" rel="noopener noreferrer">DoubleTree by Hilton Osaka Castle access</a></li></ul>
+        </section>
+      </div>
+    </div>
+    <div class="dialog-companion-dock" data-companion-dock aria-label="Pikachu travel companion"></div>
+  </dialog>
+
   <footer><p>Pack light. Book early. Leave room for the unexpected.</p><small>01–15 August 2026</small></footer>
 
   <script>
@@ -2443,7 +2546,7 @@
         tokyo: { id: 'tokyo-ginza', emoji: '🗼', location: 'Tokyo · Ginza', name: 'YOTEL Japan', address: '1-7-7 Shinbashi, Minato City, Tokyo 105-0004, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'YOTEL 東京 銀座', localAddress: '〒105-0004 東京都港区新橋1丁目7-7', checkIn: '2026-08-05', checkOut: '2026-08-09', dates: '5–9 August · 4 nights' },
         fuji: { id: 'fuji', emoji: '🗻', location: 'Mt Fuji', name: 'Shoji Lake Hotel', address: '255 Shoji, Fujikawaguchiko, Yamanashi 401-0336, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '精進レークホテル', localAddress: '〒401-0336 山梨県南都留郡富士河口湖町精進255', checkIn: '2026-08-09', checkOut: '2026-08-10', dates: '9–10 August · 1 night', shojiGuide: true },
         kyoto: { id: 'kyoto', emoji: '⛩️', location: 'Kyoto', name: 'NOHGA HOTEL KIYOMIZU KYOTO', address: '4-450-1 Gojobashi Higashi, Higashiyama-ku, Kyoto 605-0846, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ノーガホテル 清水 京都', localAddress: '〒605-0846 京都府京都市東山区五条橋東4丁目450番1号', checkIn: '2026-08-10', checkOut: '2026-08-13', dates: '10–13 August · 3 nights', kyotoTransferGuide: true },
-        osaka: { id: 'osaka', emoji: '🏯', location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ダブルツリーbyヒルトン大阪城', localAddress: '〒540-0008 大阪府大阪市中央区大手前1丁目1番1号', checkIn: '2026-08-13', checkOut: '2026-08-14', dates: '13–14 August · 1 night' },
+        osaka: { id: 'osaka', emoji: '🏯', location: 'Osaka', name: 'DoubleTree by Hilton Osaka Castle', address: '1-1-1 Otemae, Chuo-ku, Osaka 540-0008, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: 'ダブルツリーbyヒルトン大阪城', localAddress: '〒540-0008 大阪府大阪市中央区大手前1丁目1番1号', checkIn: '2026-08-13', checkOut: '2026-08-14', dates: '13–14 August · 1 night', osakaTransferGuide: true },
         narita: { id: 'narita', emoji: '✈️', location: 'Near Narita', name: 'Narita Tobu Hotel Airport', address: 'Tokko 320-1, Narita, Chiba, Japan', localLanguage: 'Japanese', localLang: 'ja', localName: '成田東武ホテルエアポート', localAddress: '〒286-0106 千葉県成田市取香320-1', checkIn: '2026-08-14', checkOut: '2026-08-15', dates: '14–15 August · 1 night' }
       };
       return [
@@ -2592,8 +2695,8 @@
           notes: []
         },
         {
-          id: 'day-13', day: 13, date: '2026-08-13', weekday: 'THU', region: 'osaka', location: 'Osaka', localLocation: '大阪', title: 'Universal Studios & Osaka night', localName: 'ユニバーサル・スタジオと大阪の夜', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'DoubleTree by Hilton Osaka Castle', weatherCity: 'Osaka', hotel: stays.osaka, usjGuide: true,
-          transit: { id: 'osaka-usj-transit', order: 0, mode: 'Rail', route: 'Osaka → Universal City → Dotonbori', detail: 'JR and Osaka Metro · check live route', localName: '大阪駅 → ユニバーサルシティ駅 → なんば駅', localLanguage: 'Japanese', localLang: 'ja' },
+          id: 'day-13', day: 13, date: '2026-08-13', weekday: 'THU', region: 'osaka', location: 'Osaka', localLocation: '大阪', title: 'Universal Studios & Osaka night', localName: 'ユニバーサル・スタジオと大阪の夜', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'DoubleTree by Hilton Osaka Castle', weatherCity: 'Osaka', hotel: stays.osaka, osakaTransferGuide: true, usjGuide: true,
+          transit: { id: 'kyoto-osaka-transfer', order: 0, mode: 'Taxi + Rail', route: 'NOHGA Hotel Kiyomizu Kyoto → DoubleTree by Hilton Osaka Castle', detail: '8:25AM taxi to Kiyomizu-Gojo · 8:42AM direct Keihan Semi-Express to Temmabashi · arrive 10:00AM · walk to DoubleTree', localName: 'ノーガホテル清水京都 → ダブルツリーbyヒルトン大阪城', localAddress: stays.osaka.localAddress, localLanguage: 'Japanese', localLang: 'ja', time: '8:25AM', leaveBy: '8:25AM', instant: '2026-08-13T08:25:00+09:00', durationMinutes: 105, address: stays.osaka.address },
           activities: [
             { id: 'universal-studios', order: 1, title: 'Universal Studios Japan and Super Nintendo World', localName: 'ユニバーサル・スタジオ・ジャパンとスーパー・ニンテンドー・ワールド', localAddress: '〒554-0031 大阪府大阪市此花区桜島2丁目1-33', localLanguage: 'Japanese', localLang: 'ja', address: 'Universal Studios Japan, Osaka, Japan', time: '11:50AM', instant: '2026-08-13T11:50:00+09:00', durationMinutes: 300, usjGuide: true, booking: { emoji: '🎢', name: 'USJ Express Pass + Super Nintendo World', shortName: 'USJ Express Pass', displayDate: 'Thursday 13 August', statusLabel: 'Express Pass 8 · 2 people' } },
             { id: 'umeda-sky', order: 2, title: 'Umeda Sky Building at night if energy allows', localName: '余力があれば夜の梅田スカイビルへ', localAddress: '〒531-6039 大阪府大阪市北区大淀中1丁目1-88', localLanguage: 'Japanese', localLang: 'ja', address: 'Umeda Sky Building, Osaka, Japan' },
@@ -3107,8 +3210,9 @@
         const borderGuideAction = plan.borderGuide ? `<button class="day-action" type="button" data-open-border-guide>${actionIcons.borderGuide}<span>Border guide</span></button>` : '';
         const shojiGuideAction = plan.shojiGuide ? `<button class="day-action" type="button" data-open-shoji-guide>${actionIcons.borderGuide}<span>Shoji guide</span></button>` : '';
         const kyotoTransferGuideAction = plan.kyotoTransferGuide ? `<button class="day-action" type="button" data-open-kyoto-transfer-guide>${actionIcons.borderGuide}<span>Kyoto guide</span></button>` : '';
+        const osakaTransferGuideAction = plan.osakaTransferGuide ? `<button class="day-action" type="button" data-open-osaka-transfer-guide>${actionIcons.borderGuide}<span>Osaka guide</span></button>` : '';
         const usjGuideAction = plan.usjGuide ? `<button class="day-action" type="button" data-open-usj-guide>${actionIcons.pass}<span>USJ pass</span></button>` : '';
-        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${usjGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
+        actions.innerHTML = `<button class="day-action primary" type="button" data-day-view="${dayNumber}">${actionIcons.dayView}<span>Day view</span></button>${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${usjGuideAction}<a class="day-action" href="${mapsUrl(plan.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Maps</span></a><a class="day-action" href="${weatherUrl(plan.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Weather</span></a>`;
         card.append(actions);
       });
     }
@@ -3229,8 +3333,9 @@
       const borderGuideAction = day.borderGuide ? `<button class="mini-action primary" type="button" data-open-border-guide>${actionIcons.borderGuide}<span>Open border guide</span></button>` : '';
       const shojiGuideAction = day.shojiGuide ? `<button class="mini-action primary" type="button" data-open-shoji-guide>${actionIcons.borderGuide}<span>Open Shoji guide</span></button>` : '';
       const kyotoTransferGuideAction = day.kyotoTransferGuide ? `<button class="mini-action primary" type="button" data-open-kyoto-transfer-guide>${actionIcons.borderGuide}<span>Open Kyoto travel guide</span></button>` : '';
+      const osakaTransferGuideAction = day.osakaTransferGuide ? `<button class="mini-action primary" type="button" data-open-osaka-transfer-guide>${actionIcons.borderGuide}<span>Open Osaka travel guide</span></button>` : '';
       const usjGuideAction = day.usjGuide ? `<button class="mini-action primary" type="button" data-open-usj-guide>${actionIcons.pass}<span>Open USJ Express Pass</span></button>` : '';
-      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${usjGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
+      body.innerHTML = `<section class="dialog-section"><p class="dialog-section-title">Live run sheet</p>${renderRunSheet(day, clock)}</section><section class="dialog-section"><p class="dialog-section-title">Tonight’s stay</p><div class="wallet-item local-place" data-local-place="${hotel.id}" data-english-name="${hotel.name}" data-english-detail="${hotel.address}"><div><strong data-local-name>${hotel.name}</strong><span data-local-detail>${hotel.address}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open map</span></a></div></div></section><div class="utility-actions">${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}${usjGuideAction}<a class="mini-action" href="${mapsUrl(day.mapQuery)}" target="_blank" rel="noopener noreferrer">${actionIcons.maps}<span>Open day map</span></a><a class="mini-action" href="${weatherUrl(day.weatherCity)}" target="_blank" rel="noopener noreferrer">${actionIcons.weather}<span>Check weather</span></a></div>`;
       syncLocalPlaceDisplays(hotel.id);
       activityTimeline(day, clock).forEach((activity) => syncLocalPlaceDisplays(activity.id));
       body.scrollTop = scrollTop;
@@ -3267,6 +3372,13 @@
     function openKyotoTransferGuide() {
       const dialog = document.querySelector('#kyotoTransferGuideDialog');
       const body = document.querySelector('#kyotoTransferGuideBody');
+      showModalDialog(dialog);
+      if (body) body.scrollTop = 0;
+    }
+
+    function openOsakaTransferGuide() {
+      const dialog = document.querySelector('#osakaTransferGuideDialog');
+      const body = document.querySelector('#osakaTransferGuideBody');
       showModalDialog(dialog);
       if (body) body.scrollTop = 0;
     }
@@ -3323,7 +3435,8 @@
         const borderGuideAction = hotel.borderGuide ? `<button class="mini-action primary" type="button" data-open-border-guide>${borderGuideIcon}<span>Border guide</span></button>` : '';
         const shojiGuideAction = hotel.shojiGuide ? `<button class="mini-action primary" type="button" data-open-shoji-guide>${borderGuideIcon}<span>Shoji guide</span></button>` : '';
         const kyotoTransferGuideAction = hotel.kyotoTransferGuide ? `<button class="mini-action primary" type="button" data-open-kyoto-transfer-guide>${borderGuideIcon}<span>Arrival guide</span></button>` : '';
-        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
+        const osakaTransferGuideAction = hotel.osakaTransferGuide ? `<button class="mini-action primary" type="button" data-open-osaka-transfer-guide>${borderGuideIcon}<span>Arrival guide</span></button>` : '';
+        row.innerHTML = `<div><strong data-local-name>${row.dataset.englishName}</strong><span data-local-detail>${row.dataset.englishDetail}</span></div><div class="wallet-actions">${localPlaceAction(hotel)}${borderGuideAction}${shojiGuideAction}${kyotoTransferGuideAction}${osakaTransferGuideAction}<a class="mini-action" href="${mapsUrl(hotel.address)}" target="_blank" rel="noopener noreferrer"><svg class="action-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Map</span></a></div>`;
         syncLocalPlaceDisplay(row, hotel);
         return row;
       }));
@@ -3339,6 +3452,8 @@
         if (shojiGuideButton) openShojiGuide();
         const kyotoTransferGuideButton = event.target.closest('[data-open-kyoto-transfer-guide]');
         if (kyotoTransferGuideButton) openKyotoTransferGuide();
+        const osakaTransferGuideButton = event.target.closest('[data-open-osaka-transfer-guide]');
+        if (osakaTransferGuideButton) openOsakaTransferGuide();
         const usjGuideButton = event.target.closest('[data-open-usj-guide]');
         if (usjGuideButton) openUsjGuide();
         const closeButton = event.target.closest('[data-close-dialog]');
@@ -3615,6 +3730,7 @@
       document.querySelector('#todayBorderGuide').hidden = !day.borderGuide;
       document.querySelector('#todayShojiGuide').hidden = !day.shojiGuide;
       document.querySelector('#todayKyotoTransferGuide').hidden = !day.kyotoTransferGuide;
+      document.querySelector('#todayOsakaTransferGuide').hidden = !day.osakaTransferGuide;
       document.querySelector('#todayUsjGuide').hidden = !day.usjGuide;
       const reservation = document.querySelector('#todayReservation');
       const focusLink = focus?.reservationLink || focus?.detailsLink;
