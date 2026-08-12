@@ -69,6 +69,7 @@ vm.runInContext([
   extractFunction('currentHotel'),
   extractFunction('activityTimeline'),
   extractFunction('todayPreviewActivities'),
+  extractFunction('renderTomorrowPreview'),
   extractFunction('renderTodayView'),
 ].join('\n'), context);
 
@@ -94,5 +95,6 @@ assert.equal(
   'the Day 15 Today card should use departure context instead of calling the checked-out hotel Tonight'
 );
 assert.equal(element('#todayHotelName').textContent, 'Narita Tobu Hotel Airport');
+assert.equal(element('#tomorrowPreview').hidden, true, 'the final trip day should not show a non-existent tomorrow');
 
 console.log('Day 15 stay context test passed');

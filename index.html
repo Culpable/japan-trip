@@ -1317,9 +1317,38 @@
     .guide-warning { padding: .75rem .85rem; border-radius: 12px; background: #fae4dc; color: #7e321e; font-weight: 900; }
     .guide-train { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .45rem; margin: .65rem 0; }
     .guide-train div { padding: .65rem; border-radius: 11px; background: #edf3f0; }
+    /* A train name and an exit station answer two different questions under pressure. Give
+       each one a persistent visual role so travellers do not confuse the service with the stop. */
+    .guide-train div.guide-train-service {
+      border: 2px solid #c58a16;
+      background: #fff3cf;
+      box-shadow: 0 3px 0 rgba(197, 138, 22, .14);
+    }
+    .guide-train div.guide-train-stop {
+      border: 2px solid #287261;
+      background: #e2f2ec;
+      box-shadow: 0 3px 0 rgba(40, 114, 97, .13);
+    }
     .guide-train span, .guide-train strong { display: block; }
     .guide-train span { color: #76766f; font-size: .57rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
     .guide-train strong { margin-top: .22rem; color: #173f3a; font-size: .74rem; line-height: 1.35; }
+    .guide-train .guide-train-service span { color: #8a570c; }
+    .guide-train .guide-train-service strong { color: #583706; }
+    .guide-train .guide-train-stop span { color: #287261; }
+    .guide-train .guide-train-stop strong { color: #144c40; }
+    .guide-walk-time {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .75rem;
+      align-items: center;
+      margin: .65rem 0;
+      padding: .75rem .85rem;
+      border: 2px solid #b54d2a;
+      border-radius: 12px;
+      background: #fff0e9;
+    }
+    .guide-walk-time strong { color: #7b321e; font: 900 1.05rem/1.1 "Nunito Sans", sans-serif; white-space: nowrap; }
+    .guide-walk-time span { color: #6f493d; font-size: .72rem; font-weight: 800; line-height: 1.4; }
     .guide-table-wrap { overflow-x: auto; margin-top: .75rem; border: 1px solid #ded8cc; border-radius: 12px; }
     .guide-table { width: 100%; border-collapse: collapse; min-width: 560px; font-size: .72rem; }
     .guide-table th, .guide-table td { padding: .65rem .7rem; border-bottom: 1px solid #e7e1d6; text-align: left; }
@@ -1360,6 +1389,13 @@
     .osaka-transfer-dialog .guide-place,
     .osaka-transfer-dialog .guide-train div,
     .osaka-transfer-dialog .guide-table th { background: #f8e9e2; }
+    /* Keep the shared train/exit key intact after each guide applies its regional palette. */
+    .border-guide-dialog .guide-train div.guide-train-service { background: #fff3cf; }
+    .border-guide-dialog .guide-train .guide-train-service span { color: #8a570c; }
+    .border-guide-dialog .guide-train .guide-train-service strong { color: #583706; }
+    .border-guide-dialog .guide-train div.guide-train-stop { background: #e2f2ec; }
+    .border-guide-dialog .guide-train .guide-train-stop span { color: #287261; }
+    .border-guide-dialog .guide-train .guide-train-stop strong { color: #144c40; }
     .ticket-proof { margin: .8rem 0; overflow: hidden; border: 1px solid #b9ccd6; border-radius: 14px; background: #f3f8fa; }
     .ticket-proof summary { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .35rem .75rem; align-items: center; padding: .8rem 3rem .8rem .9rem; color: #244f67; cursor: pointer; list-style: none; }
     .ticket-proof summary::-webkit-details-marker { display: none; }
@@ -1477,6 +1513,40 @@
     .today-run-time, .today-run-state { color: #647383; font-size: .68rem; font-weight: 900; text-transform: uppercase; }
     .today-run-title { min-width: 0; font-size: .82rem; font-weight: 800; }
     .today-run-row .moment-local-action { grid-column: 2 / -1; justify-self: start; }
+
+    /* Tomorrow is part of the default in-trip briefing. Its paper-like block stays quieter than
+       Today's live command centre while keeping next-day guides one tap away. */
+    .tomorrow-preview {
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 1px solid rgba(23, 47, 72, .16);
+      border-radius: 19px;
+      background: rgba(255, 255, 255, .66);
+      box-shadow: inset 5px 0 #c58a16;
+    }
+    .tomorrow-preview-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .tomorrow-preview h3 { margin: 0; color: #172f48; font: 800 1.1rem/1.25 "Nunito Sans", sans-serif; }
+    .tomorrow-preview-summary { margin: .3rem 0 0; color: #657485; font-size: .76rem; font-weight: 700; line-height: 1.45; }
+    .tomorrow-transit {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: .7rem;
+      margin-top: .8rem;
+      padding: .8rem .9rem;
+      border-radius: 14px;
+      background: #fff9e9;
+      box-shadow: inset 3px 0 #c58a16, var(--shadow-border);
+    }
+    .tomorrow-transit-time { color: #8a570c; font-size: .72rem; font-weight: 900; line-height: 1.35; }
+    .tomorrow-transit h4 { margin: 0; color: #3f351f; font: 800 .9rem/1.3 "Nunito Sans", sans-serif; }
+    .tomorrow-transit p { margin: .24rem 0 0; color: #746951; font-size: .7rem; font-weight: 700; line-height: 1.4; }
+    .tomorrow-preview .today-actions { margin-top: .75rem; }
+    .tomorrow-preview .today-run-sheet { margin-top: .75rem; padding-top: .75rem; }
 
     .run-sheet { display: grid; gap: .65rem; }
     .run-sheet-item {
@@ -1629,6 +1699,9 @@
       body.is-in-trip .live-greeting { margin-top: .35rem; }
       .today-view { border-radius: 18px; }
       .today-view-head { align-items: center; }
+      .tomorrow-preview-head { align-items: stretch; flex-direction: column; }
+      .tomorrow-preview-head .day-action { width: 100%; justify-content: center; }
+      .tomorrow-transit { grid-template-columns: 1fr; gap: .3rem; }
       /* Each essential gets the full phone width. This keeps station names and taxi-ready hotel
          details legible without narrow columns or empty grid cells when local text is shown. */
       .today-essentials { grid-template-columns: 1fr; }
@@ -1647,6 +1720,7 @@
       .border-route-stop:not(:last-child)::after { content: "↓"; right: 1rem; top: auto; bottom: -.55rem; transform: none; }
       .border-guide-content { padding: .7rem; }
       .guide-train { grid-template-columns: 1fr 1fr; }
+      .guide-walk-time { grid-template-columns: 1fr; gap: .3rem; }
       .guide-table { min-width: 0; table-layout: fixed; font-size: .62rem; }
       .guide-table th, .guide-table td { padding: .5rem .3rem; overflow-wrap: anywhere; }
       .guide-table th { font-size: .5rem; }
@@ -1934,6 +2008,33 @@
         </div>
       </div>
       <div class="today-run-sheet" id="todayRunSheet"></div>
+      <section class="tomorrow-preview" id="tomorrowPreview" hidden aria-labelledby="tomorrowPreviewTitle">
+        <div class="tomorrow-preview-head">
+          <div>
+            <p class="today-view-kicker" id="tomorrowPreviewKicker">Tomorrow · Day 2</p>
+            <h3 id="tomorrowPreviewTitle">Tomorrow’s plan</h3>
+            <p class="tomorrow-preview-summary" id="tomorrowPreviewSummary"></p>
+          </div>
+          <button class="day-action primary" id="tomorrowOpenRunSheet" type="button"><span>Open tomorrow’s full day</span></button>
+        </div>
+        <article class="tomorrow-transit local-place" id="tomorrowTransitCard">
+          <div class="tomorrow-transit-time" id="tomorrowTransitTime">Flexible start</div>
+          <div>
+            <h4 id="tomorrowTransitTitle" data-local-name>Checking tomorrow’s transfer…</h4>
+            <p id="tomorrowTransitDetail" data-local-detail></p>
+          </div>
+        </article>
+        <div class="today-actions">
+          <button class="day-action" id="tomorrowBorderGuide" type="button" data-open-border-guide hidden><span>Border guide</span></button>
+          <button class="day-action" id="tomorrowShojiGuide" type="button" data-open-shoji-guide hidden><span>Shoji travel guide</span></button>
+          <button class="day-action" id="tomorrowKyotoTransferGuide" type="button" data-open-kyoto-transfer-guide hidden><span>Kyoto travel guide</span></button>
+          <button class="day-action" id="tomorrowOsakaTransferGuide" type="button" data-open-osaka-transfer-guide hidden><span>Osaka travel guide</span></button>
+          <button class="day-action" id="tomorrowUsjGuide" type="button" data-open-usj-guide hidden><span>USJ Express Pass</span></button>
+          <a class="day-action" id="tomorrowMap" href="#" target="_blank" rel="noopener noreferrer"><span>Open tomorrow’s map</span></a>
+          <button class="day-action local-name-action" id="tomorrowTransitLocal" type="button" aria-pressed="false"><span>Show local name</span></button>
+        </div>
+        <div class="today-run-sheet" id="tomorrowRunSheet"></div>
+      </section>
     </section>
 
     <section class="next-booking local-place" id="nextBooking" aria-live="polite">
@@ -2126,7 +2227,7 @@
         <section class="border-step" id="border-step-5">
           <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Lok Ma Chau to Hung Hom</h3><p>Train 1 · East Rail Line towards Admiralty</p></div></header>
           <div class="border-step-body">
-            <div class="guide-train"><div><span>Line</span><strong>East Rail Line<br><span lang="zh-Hant">東鐵綫</span></strong></div><div><span>Direction</span><strong>Admiralty<br><span lang="zh-Hant">金鐘</span></strong></div><div><span>Leave at</span><strong>Hung Hom<br><span lang="zh-Hant">紅磡</span></strong></div><div><span>Map colour</span><strong>Light blue</strong></div></div>
+            <div class="guide-train"><div class="guide-train-service"><span>Train / line</span><strong>East Rail Line<br><span lang="zh-Hant">東鐵綫</span></strong></div><div><span>Direction</span><strong>Admiralty<br><span lang="zh-Hant">金鐘</span></strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Hung Hom<br><span lang="zh-Hant">紅磡</span></strong></div><div><span>Map colour</span><strong>Light blue</strong></div></div>
             <h4>Show MTR staff</h4>
             <blockquote class="guide-phrase"><span lang="zh-Hant">請問東鐵綫往金鐘方向的月台在哪裡？我們要在紅磡站轉車。</span><span>Where is the East Rail Line platform towards Admiralty? We need to change trains at Hung Hom Station.</span></blockquote>
             <p>Board a train displaying <strong>Admiralty / 金鐘</strong>. Stay aboard until <strong>Hung Hom / 紅磡</strong>.</p>
@@ -2138,7 +2239,7 @@
           <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Change at Hung Hom</h3><p>Train 2 · Tuen Ma Line towards Tuen Mun</p></div></header>
           <div class="border-step-body">
             <p>Leave the East Rail train but <strong>do not exit through the ticket gates</strong>. Follow signs for <strong>Tuen Ma Line / 屯馬綫</strong>.</p>
-            <div class="guide-train"><div><span>Line</span><strong>Tuen Ma Line<br><span lang="zh-Hant">屯馬綫</span></strong></div><div><span>Direction</span><strong>Tuen Mun<br><span lang="zh-Hant">屯門</span></strong></div><div><span>Leave at</span><strong>Nam Cheong<br><span lang="zh-Hant">南昌</span></strong></div><div><span>Map colour</span><strong>Brown</strong></div></div>
+            <div class="guide-train"><div class="guide-train-service"><span>Train / line</span><strong>Tuen Ma Line<br><span lang="zh-Hant">屯馬綫</span></strong></div><div><span>Direction</span><strong>Tuen Mun<br><span lang="zh-Hant">屯門</span></strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Nam Cheong<br><span lang="zh-Hant">南昌</span></strong></div><div><span>Map colour</span><strong>Brown</strong></div></div>
             <h4>Show MTR staff</h4>
             <blockquote class="guide-phrase"><span lang="zh-Hant">請問屯馬綫往屯門方向的月台在哪裡？我們要在南昌站下車。</span><span>Where is the Tuen Ma Line platform towards Tuen Mun? We need to get off at Nam Cheong Station.</span></blockquote>
             <p>Make sure the train displays <strong>Tuen Mun / 屯門</strong>.</p>
@@ -2151,7 +2252,7 @@
           <header class="border-step-head"><span class="border-step-number">07</span><div><h3>Change at Nam Cheong</h3><p>Train 3 · Tung Chung Line to the final station</p></div></header>
           <div class="border-step-body">
             <p>Leave the train but <strong>do not exit through the ticket gates</strong>. Follow the orange signs for <strong>Tung Chung Line / 東涌綫</strong>.</p>
-            <div class="guide-train"><div><span>Line</span><strong>Tung Chung Line<br><span lang="zh-Hant">東涌綫</span></strong></div><div><span>Direction</span><strong>Tung Chung<br><span lang="zh-Hant">東涌</span></strong></div><div><span>Leave at</span><strong>Tung Chung<br><span lang="zh-Hant">東涌</span></strong></div><div><span>Map colour</span><strong>Orange</strong></div></div>
+            <div class="guide-train"><div class="guide-train-service"><span>Train / line</span><strong>Tung Chung Line<br><span lang="zh-Hant">東涌綫</span></strong></div><div><span>Direction</span><strong>Tung Chung<br><span lang="zh-Hant">東涌</span></strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Tung Chung<br><span lang="zh-Hant">東涌</span></strong></div><div><span>Map colour</span><strong>Orange</strong></div></div>
             <h4>Show MTR staff</h4>
             <blockquote class="guide-phrase"><span lang="zh-Hant">請問東涌綫往東涌方向的月台在哪裡？</span><span>Where is the Tung Chung Line platform towards Tung Chung?</span></blockquote>
             <p>Make sure the train displays <strong>Tung Chung / 東涌</strong>.</p>
@@ -2231,7 +2332,7 @@
         <section class="border-step" id="shoji-step-2">
           <header class="border-step-head"><span class="border-step-number">02</span><div><h3>Enter JR Shinjuku and find KAIJI 27</h3><p>1:30PM departure · Chuo Line limited express · Track 9</p></div></header>
           <div class="border-step-body">
-            <div class="guide-train"><div><span>Train</span><strong>KAIJI 27<br><span lang="ja">特急かいじ27号</span></strong></div><div><span>Departure</span><strong>1:30PM<br>Shinjuku</strong></div><div><span>Platform</span><strong>Track 9<br><span lang="ja">9番線</span></strong></div><div><span>Leave at</span><strong>Otsuki<br><span lang="ja">大月</span></strong></div></div>
+            <div class="guide-train"><div class="guide-train-service"><span>Train / service</span><strong>KAIJI 27<br><span lang="ja">特急かいじ27号</span></strong></div><div><span>Departure</span><strong>1:30PM<br>Shinjuku</strong></div><div><span>Platform</span><strong>Track 9<br><span lang="ja">9番線</span></strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Otsuki<br><span lang="ja">大月</span></strong></div></div>
             <ol><li>Enter through the JR ticket gates and tap Suica for the base fare. The booked e-ticket covers the limited-express reserved seat.</li><li>Follow signs for <strong>Chuo Line Limited Express / 中央線特急</strong>.</li><li>Check the departure board for <strong>KAIJI 27 / かいじ27号</strong>, 1:30PM, toward Kofu.</li><li>Use the booked car and seat. The official timetable lists Track 9, but follow the live station board if it changes.</li></ol>
             <h4>Booked ticket</h4>
             <p><strong>KAIJI 27</strong> from Shinjuku to Otsuki is confirmed with <strong>ordinary reserved seats for two adults</strong>. Keep the booking confirmation ready, check the car and seat numbers, and use those seats when boarding.</p>
@@ -2253,7 +2354,7 @@
         <section class="border-step" id="shoji-step-3">
           <header class="border-step-head"><span class="border-step-number">03</span><div><h3>Ride KAIJI 27 to Otsuki</h3><p>1:30PM from Shinjuku · 2:30PM at Otsuki</p></div></header>
           <div class="border-step-body">
-            <div class="guide-train"><div><span>From</span><strong>Shinjuku<br>1:30PM</strong></div><div><span>Train</span><strong>KAIJI 27<br>Reserved seat</strong></div><div><span>Journey</span><strong>1 hour</strong></div><div><span>To</span><strong>Otsuki<br>2:30PM</strong></div></div>
+            <div class="guide-train"><div><span>From</span><strong>Shinjuku<br>1:30PM</strong></div><div class="guide-train-service"><span>Train / service</span><strong>KAIJI 27<br>Reserved seat</strong></div><div><span>Journey</span><strong>1 hour</strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Otsuki<br>2:30PM</strong></div></div>
             <ol><li>Board the car shown in the reservation.</li><li>Place large luggage securely without blocking the aisle.</li><li>Keep the reservation details available for inspection.</li><li>Prepare to leave after Hachioji. Otsuki is the next listed stop after Hachioji.</li></ol>
             <p class="guide-place">Leave at Otsuki Station<span lang="ja">大月駅</span><span>Scheduled arrival 2:30PM</span></p>
           </div>
@@ -2272,7 +2373,7 @@
         <section class="border-step" id="shoji-step-5">
           <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Take the Thomas Land local to Kawaguchiko</h3><p>3:03PM from Otsuki · 4:09PM at Kawaguchiko</p></div></header>
           <div class="border-step-body">
-            <div class="guide-train"><div><span>From</span><strong>Otsuki<br>3:03PM</strong></div><div><span>Train</span><strong>Thomas Land local<br><span lang="ja">トーマスランド号</span></strong></div><div><span>Fare</span><strong>¥1,170 ticket<br>about ¥1,161 Suica</strong></div><div><span>To</span><strong>Kawaguchiko<br>4:09PM</strong></div></div>
+            <div class="guide-train"><div><span>From</span><strong>Otsuki<br>3:03PM</strong></div><div class="guide-train-service"><span>Train / service</span><strong>Thomas Land local<br><span lang="ja">トーマスランド号</span></strong></div><div><span>Fare</span><strong>¥1,170 ticket<br>about ¥1,161 Suica</strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Kawaguchiko<br>4:09PM</strong></div></div>
             <ol><li>Board the local train displaying <strong>Kawaguchiko / 河口湖</strong>.</li><li>No seat reservation is required. Sit in any available seat.</li><li>Stay aboard through Fujisan and Fuji-Q Highland.</li><li>Leave at the final stop, Kawaguchiko Station, at 4:09PM.</li><li>Tap Suica at the exit gate.</li></ol>
             <div class="guide-warning">Do not leave at Fujisan / 富士山 or Fuji-Q Highland / 富士急ハイランド. Kawaguchiko / 河口湖 is the final stop.</div>
           </div>
@@ -2370,7 +2471,7 @@
         <section class="border-step" id="kyoto-transfer-step-4">
           <header class="border-step-head"><span class="border-step-number">04</span><div><h3>Board the booked Green Car on Kodama 821</h3><p>12:37PM from Shin-Fuji · 12:47PM at Shizuoka</p></div></header>
           <div class="border-step-body">
-            <div class="guide-train"><div><span>From</span><strong>Shin-Fuji<br>12:37PM</strong></div><div><span>Train</span><strong>Kodama 821<br>Green Car</strong></div><div><span>Journey</span><strong>10 minutes</strong></div><div><span>Stop</span><strong>Shizuoka<br>12:47PM</strong></div></div>
+            <div class="guide-train"><div><span>From</span><strong>Shin-Fuji<br>12:37PM</strong></div><div class="guide-train-service"><span>Train / service</span><strong>Kodama 821<br>Green Car</strong></div><div><span>Journey</span><strong>10 minutes</strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Shizuoka<br>12:47PM</strong></div></div>
             <ol><li>Follow the blue <strong>Shinkansen / 新幹線</strong> signs after the QR gate.</li><li>Check the live board for <strong>Kodama 821 / こだま821号</strong> at 12:37PM.</li><li>Follow the live board to the platform and queue at the marker for <strong>Green Car 9</strong>.</li><li>Use the booked pair: <strong>Seat 2-A and Seat 2-B</strong>.</li><li>Keep all luggage close and leave the train at Shizuoka. It is the next stop.</li></ol>
             <h4>Ask station staff</h4>
             <blockquote class="guide-phrase"><span lang="ja">12時37分発のこだま821号で静岡まで行きます。乗り場はどこですか？</span><span>We are taking Kodama 821 at 12:37 to Shizuoka. Where is the platform?</span></blockquote>
@@ -2392,7 +2493,7 @@
         <section class="border-step" id="kyoto-transfer-step-6">
           <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Take the booked Green Car on Hikari 711 to Kyoto</h3><p>1:07PM from Shizuoka · 2:37PM at Kyoto</p></div></header>
           <div class="border-step-body">
-            <div class="guide-train"><div><span>From</span><strong>Shizuoka<br>1:07PM</strong></div><div><span>Train</span><strong>Hikari 711<br>Green Car</strong></div><div><span>Journey</span><strong>1h 30m</strong></div><div><span>To</span><strong>Kyoto<br>2:37PM</strong></div></div>
+            <div class="guide-train"><div><span>From</span><strong>Shizuoka<br>1:07PM</strong></div><div class="guide-train-service"><span>Train / service</span><strong>Hikari 711<br>Green Car</strong></div><div><span>Journey</span><strong>1h 30m</strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Kyoto<br>2:37PM</strong></div></div>
             <ol><li>Settle into <strong>Green Car 9, Seat 4-A and Seat 4-B</strong>.</li><li>Keep luggage secure and the aisle clear.</li><li>Set an alarm for <strong>2:20PM</strong> and gather luggage before arrival.</li><li>Leave Hikari 711 at <strong>Kyoto / 京都</strong> at 2:37PM.</li><li>At the Kyoto Shinkansen exit, scan each traveller’s same QR ticket separately.</li><li>Keep the Seat Information slips until both QR scans open the exit gates.</li></ol>
             <p class="guide-place">Leave at Kyoto Station<span lang="ja">京都駅</span><span>Scheduled arrival 2:37PM</span></p>
           </div>
@@ -2474,7 +2575,7 @@
         <section class="border-step" id="osaka-transfer-step-3">
           <header class="border-step-head"><span class="border-step-number">03</span><div><h3>Enter Kiyomizu-Gojo and find Platform 2</h3><p>Keihan Main Line · toward Yodoyabashi and Nakanoshima</p></div></header>
           <div class="border-step-body">
-            <div class="guide-train"><div><span>Departure</span><strong>8:42AM<br>Kiyomizu-Gojo</strong></div><div><span>Service</span><strong>Semi-Express<br>準急</strong></div><div><span>Direction</span><strong>Yodoyabashi<br>淀屋橋行き</strong></div><div><span>Platform</span><strong>Platform 2<br>2番のりば</strong></div></div>
+            <div class="guide-train"><div><span>Departure</span><strong>8:42AM<br>Kiyomizu-Gojo</strong></div><div class="guide-train-service"><span>Train / service</span><strong>Keihan Semi-Express<br>準急 · 淀屋橋行き</strong></div><div><span>Platform</span><strong>Platform 2<br>2番のりば</strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Temmabashi<br>10:00AM · 天満橋</strong></div></div>
             <p><strong>No booking is needed.</strong> This is a regular commuter train with <strong>unreserved seating</strong>. Each traveller should tap in with their own <strong>Suica</strong> or <strong>ICOCA</strong>. The fare to Temmabashi is <strong>¥490 per adult</strong>.</p>
             <ol><li>Follow signs for <strong>Platform 2 / 2番のりば</strong>.</li><li>Check the display for <strong>8:42AM Semi-Express / 準急, Yodoyabashi / 淀屋橋</strong>.</li><li>Use the elevator with the luggage.</li><li>Board any standard carriage when the train arrives.</li></ol>
             <h4>Ask station staff if needed</h4>
@@ -2485,16 +2586,17 @@
         <section class="border-step" id="osaka-transfer-step-4">
           <header class="border-step-head"><span class="border-step-number">04</span><div><h3>Stay on the direct train to Temmabashi</h3><p>8:42AM–10:00AM · no train change</p></div></header>
           <div class="border-step-body">
-            <div class="guide-train"><div><span>From</span><strong>Kiyomizu-Gojo<br>8:42AM</strong></div><div><span>Train</span><strong>Keihan<br>Semi-Express</strong></div><div><span>Changes</span><strong>None<br>Stay aboard</strong></div><div><span>To</span><strong>Temmabashi<br>10:00AM</strong></div></div>
+            <div class="guide-train"><div><span>From</span><strong>Kiyomizu-Gojo<br>8:42AM</strong></div><div class="guide-train-service"><span>Train / service</span><strong>Keihan<br>Semi-Express</strong></div><div><span>Changes</span><strong>None<br>Stay aboard</strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Temmabashi<br>10:00AM · 天満橋</strong></div></div>
             <ol><li>Keep the luggage together and clear of the doors.</li><li>Seats are first come, first served. Stand together near the luggage if necessary.</li><li>Do not leave the train at an intermediate station.</li><li>Gather every bag before the scheduled <strong>10:00AM</strong> arrival.</li><li>Get off at <strong>Temmabashi / 天満橋</strong>.</li></ol>
             <p class="guide-place">Destination station<span lang="ja">天満橋駅</span><span>Keihan Main Line</span></p>
           </div>
         </section>
 
         <section class="border-step" id="osaka-transfer-step-5">
-          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Walk from Temmabashi to DoubleTree</h3><p>Official hotel estimate: about 5 minutes · allow 5–10 minutes with luggage</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Walk 5–10 minutes from Temmabashi to DoubleTree</h3><p>About 5 minutes normally · allow up to 10 minutes with luggage</p></div></header>
           <div class="border-step-body">
-            <ol><li>Tap each traveller’s Suica or ICOCA at the Temmabashi exit gate.</li><li>Use the elevator instead of carrying luggage on the stairs.</li><li>Open the walking map below before leaving the station.</li><li>Walk to DoubleTree by Hilton Osaka Castle on the riverfront.</li><li>Expected hotel arrival is <strong>10:05–10:10AM</strong>.</li></ol>
+            <div class="guide-walk-time"><strong>5–10 min walk</strong><span>The hotel lists about 5 minutes. Allow up to 10 minutes with luggage and the elevator.</span></div>
+            <ol><li>Tap each traveller’s Suica or ICOCA at the Temmabashi exit gate.</li><li>Use the elevator instead of carrying luggage on the stairs.</li><li>Open the walking map below before leaving the station.</li><li>Allow <strong>5–10 minutes</strong> to walk to DoubleTree by Hilton Osaka Castle on the riverfront.</li><li>Expected hotel arrival is <strong>10:05–10:10AM</strong>.</li></ol>
             <p class="guide-place">DoubleTree by Hilton Osaka Castle<span lang="ja">ダブルツリーbyヒルトン大阪城</span><span lang="ja">〒540-0008 大阪府大阪市中央区大手前1丁目1番1号</span></p>
             <p><a href="https://www.google.com/maps/dir/?api=1&amp;origin=Temmabashi%20Station&amp;destination=DoubleTree%20by%20Hilton%20Osaka%20Castle&amp;travelmode=walking" target="_blank" rel="noopener noreferrer">Open the Temmabashi to DoubleTree walking route</a></p>
           </div>
@@ -3696,6 +3798,54 @@
         .slice(0, 3);
     }
 
+    function renderBriefingRows(timeline, stateLabels) {
+      const preview = todayPreviewActivities(timeline);
+      return {
+        activities: preview,
+        html: preview.map((activity) => {
+          const title = activity.route || activity.title;
+          return `<div class="today-run-row local-place" data-local-place="${activity.id}" data-english-name="${title}" data-state="${activity.state}"><span class="today-run-time">${activity.time || 'Flexible'}</span><span class="today-run-title" data-local-name>${title}</span><span class="today-run-state">${stateLabels[activity.state]}</span>${localPlaceAction(activity, '', true)}</div>`;
+        }).join('')
+      };
+    }
+
+    function renderTomorrowPreview(clock, stateLabels) {
+      const preview = document.querySelector('#tomorrowPreview');
+      const day = tripData[clock.dayNumber];
+      if (!day) {
+        preview.hidden = true;
+        return;
+      }
+
+      preview.hidden = false;
+      const timeline = activityTimeline(day, clock);
+      const transit = day.transit;
+      document.querySelector('#tomorrowPreviewKicker').textContent = `Tomorrow · Day ${day.day} · ${day.location}`;
+      document.querySelector('#tomorrowPreviewTitle').textContent = day.title;
+      document.querySelector('#tomorrowPreviewSummary').textContent = `${timeline.length} planned stops · next-day details are ready now`;
+      document.querySelector('#tomorrowTransitTime').textContent = transit.leaveBy ? `Leave by ${transit.leaveBy}` : transit.time || 'Flexible start';
+
+      const transitCard = document.querySelector('#tomorrowTransitCard');
+      transitCard.dataset.localPlace = transit.id;
+      transitCard.dataset.englishName = transit.route;
+      transitCard.dataset.englishDetail = transit.detail;
+      document.querySelector('#tomorrowTransitLocal').dataset.localToggle = transit.id;
+      document.querySelector('#tomorrowTransitLocal').innerHTML = `${actionIcons.language}<span>Show local name</span>`;
+      syncLocalPlaceDisplay(transitCard, transit);
+
+      document.querySelector('#tomorrowBorderGuide').hidden = !day.borderGuide;
+      document.querySelector('#tomorrowShojiGuide').hidden = !day.shojiGuide;
+      document.querySelector('#tomorrowKyotoTransferGuide').hidden = !day.kyotoTransferGuide;
+      document.querySelector('#tomorrowOsakaTransferGuide').hidden = !day.osakaTransferGuide;
+      document.querySelector('#tomorrowUsjGuide').hidden = !day.usjGuide;
+      document.querySelector('#tomorrowMap').href = mapsUrl(day.mapQuery);
+      document.querySelector('#tomorrowOpenRunSheet').onclick = () => openDayView(day.day);
+
+      const briefing = renderBriefingRows(timeline, stateLabels);
+      document.querySelector('#tomorrowRunSheet').innerHTML = briefing.html;
+      briefing.activities.forEach((activity) => syncLocalPlaceDisplays(activity.id));
+    }
+
     function renderTodayView(clock) {
       if (!clock.inTrip) return;
       const day = tripData[clock.dayNumber - 1];
@@ -3765,6 +3915,7 @@
         return `<div class="today-run-row local-place" data-local-place="${activity.id}" data-english-name="${title}" data-state="${activity.state}"><span class="today-run-time">${activity.time || 'Flexible'}</span><span class="today-run-title" data-local-name>${title}</span><span class="today-run-state">${stateLabels[activity.state]}</span>${localPlaceAction(activity, '', true)}</div>`;
       }).join('');
       preview.forEach((activity) => syncLocalPlaceDisplays(activity.id));
+      renderTomorrowPreview(clock, stateLabels);
 
       document.querySelector('#todayOpenRunSheet').onclick = () => openDayView(day.day);
       document.querySelector('#todayFullRoute').onclick = () => {

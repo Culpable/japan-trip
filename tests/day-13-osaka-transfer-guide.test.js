@@ -31,12 +31,16 @@ for (let step = 1; step <= 6; step += 1) {
 assert.match(guide, /NOHGA Hotel.*8:25AM.*taxi.*Kiyomizu-Gojo.*8:42AM.*Temmabashi.*10:00AM.*DoubleTree/is, 'the route overview should include every fixed leg and time in order');
 assert.match(guide, /Thursday 13 August.*Saturday\/holiday timetable.*Obon/is, 'the guide should explain the special timetable in force');
 assert.match(guide, /8:42AM.*Semi-Express.*Yodoyabashi.*Platform 2/is, 'the guide should identify the exact direct train and platform');
+assert.match(guide, /guide-train-service[^>]*><span>Train \/ service<\/span><strong>Keihan Semi-Express/is, 'the selected train service should have a dedicated visual highlight');
+assert.match(guide, /guide-train-stop[^>]*><span>Get off here<\/span><strong>Temmabashi/is, 'the exit station should have a separate visual highlight');
 assert.match(guide, /one direct train.*no transfers/is, 'the guide should make the single-train route explicit');
 assert.match(guide, /No booking.*unreserved.*Suica.*ICOCA.*¥490/is, 'the guide should explain reservation, seating, payment and fare');
 assert.match(guide, /清水五条駅までお願いします。荷物が多いので、エレベーターに近い入口で降ろしてください。/, 'the guide should include the origin taxi phrase');
 assert.match(guide, /8時42分発の準急・淀屋橋行きで、天満橋まで行きたいです。2番のりばで合っていますか？/, 'the guide should include the station-staff phrase');
 assert.match(guide, /天満橋駅.*ダブルツリーbyヒルトン大阪城.*大阪府大阪市中央区大手前1丁目1番1号/is, 'the guide should include the destination station, hotel and Japanese address');
 assert.match(guide, /10:05–10:10AM/, 'the guide should show the expected hotel arrival window');
+assert.match(guide, /guide-walk-time[^>]*><strong>5–10 min walk<\/strong>/, 'the final walk time should be prominent inside the actionable step');
+assert.match(guide, /Allow <strong>5–10 minutes<\/strong> to walk to DoubleTree/, 'the walking instruction should repeat the luggage-adjusted duration');
 assert.doesNotMatch(guide, /reservation required|<strong>reserved seat|Premium Car|Liner ticket/i, 'the guide should not imply that the selected train needs a reservation or supplement');
 
 assert.match(html, /id="todayOsakaTransferGuide"[^>]*data-open-osaka-transfer-guide/, 'Today should include an Osaka transfer action');
