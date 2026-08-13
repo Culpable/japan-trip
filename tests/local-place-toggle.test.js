@@ -21,7 +21,7 @@ vm.runInContext(`${html.slice(tripDataStart, tripDataEnd)}; this.tripData = trip
 
 const itineraryPlaces = context.tripData.flatMap((day) => [day, day.transit, ...day.activities]);
 assert.equal(context.tripData.length, 15, 'all 15 itinerary days should be represented');
-assert.equal(itineraryPlaces.filter((place) => place !== undefined).length, 83, 'all current day headings and itinerary moments should be represented');
+assert.equal(itineraryPlaces.filter((place) => place !== undefined).length, 85, 'all current day headings and itinerary moments should be represented');
 itineraryPlaces.forEach((place) => {
   assert.ok(place.localName, `${place.id} should include a local name`);
   assert.ok(place.localLanguage, `${place.id} should identify its local language`);
