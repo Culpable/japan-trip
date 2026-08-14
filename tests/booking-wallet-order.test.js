@@ -90,7 +90,7 @@ function verifyNextBookingPromotion() {
   assert.equal(walletNames(bookingWallet.rows)[3], 'Nozomi 18', 'the confirmed Day 14 Shinkansen should appear in booking order');
   assert.equal(walletNames(bookingWallet.rows)[4], 'Narita Express 35', 'the confirmed airport train should follow the Shinkansen');
   assert.match(bookingWallet.rows[3].dataset.englishDetail, /12:06PM.*Green Car 8.*15-A\/15-B/, 'the Nozomi wallet row should show its time and seats');
-  assert.match(bookingWallet.rows[4].dataset.englishDetail, /3:03PM.*Green Car 12.*3-C\/3-D/, 'the Narita Express wallet row should show its time and seats');
+  assert.match(bookingWallet.rows[4].dataset.englishDetail, /3:03PM.*Cancelled.*automatic refund/, 'the Narita Express wallet row should show that the booked train is cancelled');
   assert.match(bookingWallet.rows[0].className, /\blocal-place\b/);
   assert.doesNotMatch(bookingWallet.rows[0].className, /\bis-past\b/);
   assert.match(bookingWallet.rows[1].className, /\blocal-place\b/);

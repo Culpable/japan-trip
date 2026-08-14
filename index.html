@@ -1417,6 +1417,25 @@
     .narita-transfer-dialog .guide-place,
     .narita-transfer-dialog .guide-train div,
     .narita-transfer-dialog .guide-table th { background: #e6f2f3; }
+    .narita-cancelled-alert {
+      margin-top: 1rem;
+      padding: .85rem .95rem;
+      border: 2px solid #ffb7a5;
+      border-radius: 13px;
+      background: #4b1f19;
+      color: #ffe8e1;
+      font-size: .8rem;
+      font-weight: 900;
+      line-height: 1.5;
+    }
+    .narita-cancelled-alert strong { color: #fff; }
+    .narita-transfer-dialog .border-step.is-cancelled { border-color: #d9927e; }
+    .narita-transfer-dialog .border-step.is-cancelled .border-step-head { background: #fff0e9; }
+    .narita-transfer-dialog .border-step.is-cancelled .border-step-number { background: #8b351f; }
+    .narita-bus-table tr.is-recommended td { background: #e5f4ea; color: #174d2f; font-weight: 900; }
+    .narita-bus-table tr.is-possible td { background: #fff9e9; }
+    .narita-bus-table .bus-decision { display: inline-flex; padding: .22rem .42rem; border-radius: 999px; background: #eceae5; font-size: .57rem; font-weight: 900; white-space: nowrap; }
+    .narita-bus-table tr.is-recommended .bus-decision { background: #cce8d5; color: #174d2f; }
     /* The final-flight field guide uses an aviation-blue palette. It shares the proven
        long-form guide layout while keeping terminals, transfer signs and lounge names easy
        to distinguish from the rail and border guides. */
@@ -2774,16 +2793,17 @@
     <div class="dialog-head"><div><p>14 August · Osaka to Narita</p><h2 id="naritaTransferGuideTitle">DoubleTree Osaka Castle to Narita Tobu Hotel Airport</h2></div><button class="dialog-close" type="button" data-close-dialog="naritaTransferGuideDialog" aria-label="Close Narita travel guide">×</button></div>
     <div class="dialog-body" id="naritaTransferGuideBody">
       <section class="border-guide-hero">
-        <p><strong>Leave DoubleTree at 11:05AM for the confirmed trains to Narita.</strong> Take a taxi to Shin-Osaka, ride Nozomi 18 from 12:06PM to 2:33PM, then use the 30-minute Tokyo transfer to Narita Express 35 at 3:03PM. Arrive at Airport Terminal 2·3 at 3:53PM, then choose the free hotel shuttle or a taxi for the final short trip to Narita Tobu Hotel.</p>
-        <div class="border-alert">Both Green Car trains are confirmed for Friday 14 August in the Obon peak period. Nozomi 18 is Car 8, Seats 15-A and 15-B. Narita Express 35 is Car 12, Seats 3-C and 3-D.</div>
+        <p><strong>The active route now uses the TYO-NRT airport bus from Tokyo Station.</strong> Keep Nozomi 18 from Shin-Osaka to Tokyo. At Tokyo, leave through the Yaesu South Exit, board the first practical TYO-NRT bus from platforms 7 or 8, get off at Narita Airport Terminal 2, then use the hotel shuttle or a short taxi to Narita Tobu Hotel.</p>
+        <div class="narita-cancelled-alert"><strong>Narita Express 35 is cancelled.</strong> JR East cancelled Narita Express service for the entire day because of heavy rain. Do not go to the N’EX platform and do not scan or use the cancelled reservation.</div>
+        <div class="border-alert">Nozomi 18 remains the confirmed cross-country train: Green Car 8, Seats 15-A and 15-B. TYO-NRT buses are non-reserved. Pay the ¥1,500 adult fare by tapping one Suica per traveller when boarding.</div>
         <div class="border-route" aria-label="Complete route from DoubleTree by Hilton Osaka Castle to Narita Tobu Hotel Airport">
           <div class="border-route-stop"><strong>DoubleTree</strong><span lang="ja">11:05AM · ダブルツリー</span></div>
           <div class="border-route-stop"><strong>Taxi</strong><span lang="ja">新大阪駅まで</span></div>
           <div class="border-route-stop"><strong>Shin-Osaka</strong><span lang="ja">新大阪駅 · 新幹線</span></div>
           <div class="border-route-stop"><strong>Nozomi 18</strong><span lang="ja">12:06PM · のぞみ18号</span></div>
           <div class="border-route-stop"><strong>Tokyo</strong><span lang="ja">2:33PM · 東京駅</span></div>
-          <div class="border-route-stop"><strong>Narita Express 35</strong><span lang="ja">3:03PM · 成田エクスプレス35号</span></div>
-          <div class="border-route-stop"><strong>Airport Terminal 2·3</strong><span lang="ja">3:53PM · 空港第2ビル駅</span></div>
+          <div class="border-route-stop"><strong>TYO-NRT bus</strong><span lang="ja">八重洲南口 · 7・8番</span></div>
+          <div class="border-route-stop"><strong>Airport Terminal 2</strong><span lang="ja">成田空港第2ターミナル</span></div>
           <div class="border-route-stop"><strong>Narita Tobu</strong><span lang="ja">無料送迎 / タクシー</span></div>
         </div>
       </section>
@@ -2793,8 +2813,8 @@
           <header class="border-step-head"><span class="border-step-number">01</span><div><h3>Check out and leave DoubleTree</h3><p>Be ready by 10:55AM · taxi away at 11:05AM</p></div></header>
           <div class="border-step-body">
             <p class="guide-place">Starting point: DoubleTree by Hilton Osaka Castle<span lang="ja">ダブルツリーbyヒルトン大阪城</span><span lang="ja">〒540-0008 大阪府大阪市中央区大手前1丁目1番1号</span></p>
-            <ol><li>Pack and bring every bag to the lobby before <strong>10:55AM</strong>.</li><li>Complete check-out and ask reception to call a taxi large enough for two travellers and all luggage.</li><li>Confirm both the SmartEX and Narita Express reservations are easy to open.</li><li>Leave the hotel at <strong>11:05AM</strong> for Nozomi 18 at 12:06PM.</li></ol>
-            <div class="guide-warning">The Shinkansen and Narita Express seats are separate confirmed reservations. Keep both confirmations easy to open before leaving the hotel.</div>
+            <ol><li>Pack and bring every bag to the lobby before <strong>10:55AM</strong>.</li><li>Complete check-out and ask reception to call a taxi large enough for two travellers and all luggage.</li><li>Open both travellers’ separate SmartEX QR codes for Nozomi 18.</li><li>Check that each Suica has at least <strong>¥1,500</strong> available for the airport bus.</li><li>Leave the hotel at <strong>11:05AM</strong> for Nozomi 18 at 12:06PM.</li></ol>
+            <div class="guide-warning">Narita Express 35 is cancelled. The only rail booking needed for the active route is Nozomi 18. Keep the cancelled N’EX reservation for the automatic refund record.</div>
           </div>
         </section>
 
@@ -2812,7 +2832,7 @@
           <header class="border-step-head"><span class="border-step-number">03</span><div><h3>Use the Nozomi 18 ticket at Shin-Osaka</h3><p>12:06PM departure · Green Car 8 · Seats 15-A and 15-B</p></div></header>
           <div class="border-step-body">
             <div class="guide-train"><div><span>Board at</span><strong>Shin-Osaka<br>12:06PM</strong></div><div class="guide-train-service"><span>Train / service</span><strong>Nozomi 18<br><span lang="ja">のぞみ18号</span></strong></div><div><span>Reserved seats</span><strong>Green Car 8<br>15-A · 15-B</strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Tokyo Station<br>2:33PM</strong></div></div>
-            <ol><li>At the gate, use the QR or IC method attached to the SmartEX reservation.</li><li>Check the departure board for <strong>Nozomi 18 at 12:06PM</strong> and its platform.</li><li>Board <strong>Green Car 8</strong> and use <strong>Seats 15-A and 15-B</strong>.</li><li>Because this is Obon, all Nozomi seats are reserved. Use only the booked seats.</li><li>Buy drinks and food only after the platform and boarding time are confirmed.</li></ol>
+            <ol><li>Open one separate SmartEX QR for each traveller before approaching the Shinkansen gate.</li><li>At Shin-Osaka, each traveller scans their own QR once to enter the Shinkansen area. Keep any seat-information slips issued by the gate.</li><li>Check the departure board for <strong>Nozomi 18 at 12:06PM</strong> and its platform.</li><li>Board <strong>Green Car 8</strong> and use <strong>Seats 15-A and 15-B</strong>.</li><li>Because this is Obon, all Nozomi seats are reserved. Use only the booked seats.</li><li>Buy drinks and food only after the platform and boarding time are confirmed.</li></ol>
             <div class="guide-warning">Do not miss Nozomi 18. Leave the hotel at 11:05AM and go directly to the Shinkansen gate after the taxi arrives.</div>
             <h4>If station help is needed</h4>
             <blockquote class="guide-phrase"><span lang="ja">東京駅までの、予約している「のぞみ」の乗り場を教えてください。</span><span>Please show us the platform for our reserved Nozomi to Tokyo Station.</span></blockquote>
@@ -2823,32 +2843,50 @@
         <section class="border-step" id="narita-transfer-step-4">
           <header class="border-step-head"><span class="border-step-number">04</span><div><h3>Ride Nozomi 18 to Tokyo Station</h3><p>12:06PM–2:33PM · one direct Shinkansen</p></div></header>
           <div class="border-step-body">
-            <ol><li>Board Green Car 8 and sit in Seats 15-A and 15-B.</li><li>Place the luggage in the space shown on the booking.</li><li>Keep the SmartEX ticket method available for the Tokyo gate.</li><li>Ignore stops before Tokyo. <strong>Arrive at Tokyo Station at 2:33PM.</strong></li><li>Follow signs for the Shinkansen exit and then for the Narita Express.</li></ol>
-            <div class="guide-warning">The train may show Tokyo as its final destination. Do not get off early at Shinagawa for this plan, because the guide and Narita Express connection start at Tokyo Station.</div>
+            <ol><li>Board Green Car 8 and sit in Seats 15-A and 15-B.</li><li>Place the luggage in the space shown on the booking.</li><li>Keep both separate SmartEX QR codes ready for the Tokyo Shinkansen exit.</li><li>Ignore stops before Tokyo. <strong>Arrive at Tokyo Station at 2:33PM.</strong></li><li>Follow signs for <strong>Yaesu South Exit / 八重洲南口</strong>, not Narita Express.</li></ol>
+            <div class="guide-warning">Do not get off early at Shinagawa. At Tokyo, do not follow the red-and-black N’EX signs or go toward the underground Sobu Line platforms.</div>
           </div>
         </section>
 
         <section class="border-step" id="narita-transfer-step-5">
-          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Change to Narita Express 35 at Tokyo</h3><p>2:33PM arrival · 30-minute transfer · 3:03PM departure</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">05</span><div><h3>Exit Tokyo Station through Yaesu South</h3><p>Use both SmartEX QR codes · then go straight to bus platforms 7 or 8</p></div></header>
           <div class="border-step-body">
-            <ol><li>Finish the SmartEX journey at the Shinkansen gate after arriving at 2:33PM.</li><li>Follow the red-and-black <strong>N’EX / Narita Express</strong> signs toward the underground Sobu Line platforms.</li><li>Use the separately booked Narita Express 35 Green Car ticket. A Suica tap alone does not include the limited-express reservation.</li><li>Go directly to the platform for the <strong>3:03PM departure</strong>.</li><li>Board Car 12 and use Seats 3-C and 3-D.</li></ol>
-            <h4>Ask JR East staff</h4>
-            <blockquote class="guide-phrase"><span lang="ja">成田エクスプレスで空港第2ビル駅まで行きたいです。予約した指定席の乗り場を教えてください。</span><span>We want to take the Narita Express to Airport Terminal 2·3 Station. Please show us the platform for our reserved seats.</span></blockquote>
-            <p><a href="https://www.eki-net.com/en/jreast-train-reservation/Top/Index" target="_blank" rel="noopener noreferrer">Open JR-EAST Train Reservation</a></p>
+            <div class="guide-train"><div><span>Arrive at</span><strong>Tokyo Station<br>2:33PM</strong></div><div class="guide-train-service"><span>Follow this exit</span><strong>Yaesu South Exit<br><span lang="ja">八重洲南口</span></strong></div><div><span>Use at exit</span><strong>One SmartEX QR<br>per traveller</strong></div><div class="guide-train-stop"><span>Walk to</span><strong>Bus platforms<br>7 or 8</strong></div></div>
+            <ol><li>Leave Nozomi 18 at Tokyo Station with every bag.</li><li>Follow <strong>Yaesu South Exit / 八重洲南口</strong>.</li><li>Choose a Shinkansen gate marked as an <strong>Exit</strong>. Do not use a transfer gate into another JR line.</li><li>Each traveller scans their own SmartEX QR at the Shinkansen exit. Scan one QR, move through with that traveller’s luggage, then scan the second QR for the second traveller.</li><li>Keep any seat-information slip issued by the gate.</li><li>After the gate, continue straight until the outdoor bus terminal is visible. Use <strong>platform 7 or 8</strong>.</li></ol>
+            <div class="guide-warning">Do not scan the cancelled Narita Express booking. Do not go to the N’EX platform. The active route leaves the JR paid area and uses the road bus.</div>
+            <h4>Ask station staff</h4>
+            <blockquote class="guide-phrase"><span lang="ja">八重洲南口から、成田空港行きTYO-NRTバスの7番か8番乗り場へ行きたいです。</span><span>We want to go from the Yaesu South Exit to platform 7 or 8 for the TYO-NRT bus to Narita Airport.</span></blockquote>
+            <p><a href="https://tyo-nrt.com/en/busstop/tokyo" target="_blank" rel="noopener noreferrer">Open the official Tokyo Station bus-stop guide</a></p>
           </div>
         </section>
 
         <section class="border-step" id="narita-transfer-step-6">
-          <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Take Narita Express 35 to Airport Terminal 2·3</h3><p>3:03PM–3:53PM · do not continue to Terminal 1</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">06</span><div><h3>Take the first practical TYO-NRT bus</h3><p>Four useful departures · 3:00PM is the recommended target</p></div></header>
           <div class="border-step-body">
-            <div class="guide-train"><div><span>Board at</span><strong>Tokyo Station<br>3:03PM</strong></div><div class="guide-train-service"><span>Train / service</span><strong>Narita Express 35<br><span lang="ja">成田エクスプレス35号</span></strong></div><div><span>Reserved seats</span><strong>Green Car 12<br>3-C · 3-D</strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Airport Terminal 2·3<br>3:53PM</strong></div></div>
-            <ol><li>Board Green Car 12 and sit in Seats 3-C and 3-D.</li><li>Listen for <strong>Narita Airport Terminal 2·3 / Airport Terminal 2</strong>.</li><li>Get off at <strong>Airport Terminal 2·3 Station / 空港第2ビル駅</strong> at 3:53PM.</li><li>Do not stay aboard to Narita Airport Terminal 1.</li><li>Use the JR exit gates and follow signs to Terminal 2 Arrivals, Level 1.</li></ol>
+            <div class="guide-table-wrap"><table class="guide-table journey-route-summary narita-bus-table"><thead><tr><th>Tokyo departure</th><th>Terminal 2 scheduled</th><th>Decision</th><th>What to do</th></tr></thead><tbody><tr><td data-label="Departure"><strong>2:40PM</strong></td><td data-label="Terminal 2">3:45PM</td><td data-label="Decision"><span class="bus-decision">Not realistic</span></td><td data-label="Action">Only 7 minutes after the Shinkansen arrives. Do not rush or split up.</td></tr><tr class="is-possible"><td data-label="Departure"><strong>2:50PM</strong></td><td data-label="Terminal 2">3:55PM</td><td data-label="Decision"><span class="bus-decision">Possible</span></td><td data-label="Action">Take it only if both travellers and all luggage reach the queue together.</td></tr><tr class="is-recommended"><td data-label="Departure"><strong>3:00PM</strong><br>Two scheduled buses</td><td data-label="Terminal 2">4:05PM</td><td data-label="Decision"><span class="bus-decision">Recommended</span></td><td data-label="Action">Best balance of time and a calm station exit.</td></tr><tr><td data-label="Departure"><strong>3:10PM</strong></td><td data-label="Terminal 2">4:15PM</td><td data-label="Decision"><span class="bus-decision">Comfortable backup</span></td><td data-label="Action">Use this if the 3:00PM queue is full or the Shinkansen is late.</td></tr></tbody></table></div>
+            <p><strong>These are scheduled times.</strong> Heavy rain and road traffic can delay the journey. The buses are non-reserved, so join the next available queue rather than waiting for one operator.</p>
+            <h4>Ask which bus leaves first</h4>
+            <blockquote class="guide-phrase"><span lang="ja">成田空港第2ターミナルへ行く、一番早いTYO-NRTバスはどれですか？</span><span>Which is the earliest TYO-NRT bus to Narita Airport Terminal 2?</span></blockquote>
+            <p><a href="https://tyo-nrt.com/en/timetable" target="_blank" rel="noopener noreferrer">Open the official TYO-NRT timetable</a></p>
           </div>
         </section>
 
         <section class="border-step" id="narita-transfer-step-7">
-          <header class="border-step-head"><span class="border-step-number">07</span><div><h3>At Terminal 2, choose the shuttle or a taxi</h3><p>Both finish at Narita Tobu Hotel · neither needs advance booking</p></div></header>
+          <header class="border-step-head"><span class="border-step-number">07</span><div><h3>Board at platform 7 or 8 and pay with Suica</h3><p>¥1,500 per adult · non-reserved seating · no ticket-office stop</p></div></header>
           <div class="border-step-body">
+            <div class="guide-train"><div><span>Board at</span><strong>Tokyo Station<br>platform 7 or 8</strong></div><div class="guide-train-service"><span>Bus / service</span><strong>TYO-NRT<br><span lang="ja">成田空港行き</span></strong></div><div><span>Pay</span><strong>Tap one Suica<br>per traveller</strong></div><div class="guide-train-stop"><span>Get off here</span><strong>Narita Airport<br>Terminal 2</strong></div></div>
+            <ol><li>Join the queue for <strong>Narita Airport / 成田空港</strong> at platform 7 or 8.</li><li>Confirm with the attendant that the bus stops at <strong>Narita Airport Terminal 2 / 成田空港第2ターミナル</strong>.</li><li>Give large bags to the attendant for the luggage hold. Keep passports, phones and valuables with you.</li><li>Each traveller uses their own Suica. Tap once on the IC reader when boarding to pay <strong>¥1,500 per adult</strong>.</li><li>After tapping, take any unassigned seats together. There is no seat reservation.</li><li><strong>Do not tap Suica when getting off.</strong> This is a flat-fare airport bus.</li></ol>
+            <div class="guide-warning">If either Suica does not work, ask the attendant before boarding. Do not hold up the line trying the same card for both travellers.</div>
+            <blockquote class="guide-phrase"><span lang="ja">二人ともSuicaで払います。このバスは成田空港第2ターミナルに停まりますか？</span><span>We will both pay with Suica. Does this bus stop at Narita Airport Terminal 2?</span></blockquote>
+            <p><a href="https://tyo-nrt.com/en/flow" target="_blank" rel="noopener noreferrer">Open the official boarding and Suica instructions</a></p>
+          </div>
+        </section>
+
+        <section class="border-step" id="narita-transfer-step-8">
+          <header class="border-step-head"><span class="border-step-number">08</span><div><h3>Get off at Terminal 2, then choose shuttle or taxi</h3><p>Do not continue to Terminal 1 · both final options finish at Narita Tobu</p></div></header>
+          <div class="border-step-body">
+            <ol><li>The airport bus normally stops at Terminal 3 first.</li><li>Remain aboard at Terminal 3.</li><li>Get off when the display and announcement say <strong>Narita Airport Terminal 2 / 成田空港第2ターミナル</strong>.</li><li>Collect every tagged bag from the luggage hold.</li><li><strong>Do not continue to Terminal 1.</strong></li><li>Follow signs to Terminal 2 Arrivals, Level 1.</li></ol>
+            <blockquote class="guide-phrase"><span lang="ja">成田空港第2ターミナルで降ります。荷物を二つ預けています。</span><span>We are getting off at Narita Airport Terminal 2. We have two bags in the luggage hold.</span></blockquote>
             <div class="guide-table-wrap"><table class="guide-table journey-route-summary"><thead><tr><th>Option</th><th>Where to go</th><th>Travel</th><th>Cost</th><th>Book?</th></tr></thead><tbody><tr><td data-label="Option"><strong>Free hotel shuttle</strong></td><td data-label="Where">Terminal 2 Arrivals, Level 1 · Bus Stop 25</td><td data-label="Travel">About 5–15 min plus the wait</td><td data-label="Cost">Free</td><td data-label="Book">No booking</td></tr><tr><td data-label="Option"><strong>Taxi</strong></td><td data-label="Where">Terminal 2 Arrivals, Level 1 · official taxi rank</td><td data-label="Travel">About 5–10 min, depending on traffic</td><td data-label="Cost">Metered fare</td><td data-label="Book">No booking</td></tr></tbody></table></div>
             <h4>Option A · Free hotel shuttle</h4>
             <ol><li>Go to the Terminal 2 arrival floor on Level 1.</li><li>Exit the building and find <strong>Bus Stop 25 / 25番バス停</strong>.</li><li>Check the official timetable before waiting. Terminal 2 departures are normally at <strong>:10 and :40</strong> from 2:00PM through 4:00PM, then <strong>:10, :30 and :50</strong> from 5:00PM.</li><li>Confirm the bus says <strong>Narita Tobu Hotel Airport / 成田東武ホテルエアポート</strong>.</li><li>Load the luggage into the bus hold and make sure it is removed at the hotel.</li></ol>
@@ -2862,8 +2900,8 @@
           </div>
         </section>
 
-        <section class="border-step" id="narita-transfer-step-8">
-          <header class="border-step-head"><span class="border-step-number">08</span><div><h3>Check in at Narita Tobu Hotel Airport</h3><p>Expected arrival roughly 4:05–4:30PM</p></div></header>
+        <section class="border-step" id="narita-transfer-step-9">
+          <header class="border-step-head"><span class="border-step-number">09</span><div><h3>Check in at Narita Tobu Hotel Airport</h3><p>Expected arrival roughly 4:10–4:40PM with the recommended 3:00PM bus</p></div></header>
           <div class="border-step-body">
             <p class="guide-place">Narita Tobu Hotel Airport<span lang="ja">成田東武ホテルエアポート</span><span lang="ja">〒286-0106 千葉県成田市取香320-1</span></p>
             <ol><li>Give reception the booking name and both passports.</li><li>Confirm the next morning’s free shuttle to Narita Airport Terminal 1.</li><li>Ask where to wait and how early to queue with luggage.</li><li>Prepare passports and flight documents before sleeping.</li></ol>
@@ -2872,17 +2910,29 @@
           </div>
         </section>
 
-        <section class="border-step">
-          <header class="border-step-head"><span class="border-step-number">PLAN</span><div><h3>The complete route at a glance</h3><p>About 5–6 hours, depending on the booked connections and final option</p></div></header>
+        <section class="border-step is-cancelled" id="narita-transfer-step-10">
+          <header class="border-step-head"><span class="border-step-number">N’EX</span><div><h3>Cancelled reference: Narita Express 35</h3><p>Keep the reservation for its refund · do not attempt this route today</p></div></header>
           <div class="border-step-body">
-            <div class="guide-table-wrap"><table class="guide-table journey-route-summary"><thead><tr><th>Start</th><th>Transport</th><th>Time</th><th>Finish</th><th>Seats</th></tr></thead><tbody><tr><td data-label="Start">DoubleTree</td><td data-label="Transport">Taxi</td><td data-label="Time">Leave 11:05AM · about 25–40 min</td><td data-label="Finish">Shin-Osaka</td><td data-label="Seats">Taxi fare</td></tr><tr><td data-label="Start">Shin-Osaka</td><td data-label="Transport">Nozomi 18</td><td data-label="Time">12:06PM–2:33PM</td><td data-label="Finish">Tokyo Station</td><td data-label="Seats">Green Car 8 · 15-A/15-B</td></tr><tr><td data-label="Start">Tokyo Station</td><td data-label="Transport">Narita Express 35</td><td data-label="Time">3:03PM–3:53PM</td><td data-label="Finish">Airport Terminal 2·3</td><td data-label="Seats">Green Car 12 · 3-C/3-D</td></tr><tr><td data-label="Start">Terminal 2</td><td data-label="Transport">Free hotel shuttle</td><td data-label="Time">About 5–15 min plus wait</td><td data-label="Finish">Narita Tobu Hotel</td><td data-label="Seats">No booking</td></tr><tr><td data-label="Start">Terminal 2</td><td data-label="Transport">Taxi alternative</td><td data-label="Time">About 5–10 min</td><td data-label="Finish">Narita Tobu Hotel</td><td data-label="Seats">No booking</td></tr></tbody></table></div>
-            <p><strong>Booking status:</strong> Nozomi 18 and Narita Express 35 are confirmed in Green Car for two adults. The Tokyo connection is 30 minutes. The final hotel shuttle and taxi do not need advance booking.</p>
+            <div class="guide-warning">Narita Express 35 is cancelled as part of the all-day Narita Express service cancellation caused by heavy rain. Do not go to the N’EX platform and do not scan or use this reservation.</div>
+            <div class="guide-train"><div><span>Would board at</span><strong>Tokyo Station<br>3:03PM</strong></div><div class="guide-train-service"><span>Cancelled train</span><strong>Narita Express 35<br><span lang="ja">成田エクスプレス35号</span></strong></div><div><span>Booked seats</span><strong>Green Car 12<br>3-C · 3-D</strong></div><div class="guide-train-stop"><span>Would arrive</span><strong>Airport Terminal 2·3<br>3:53PM</strong></div></div>
+            <h4>Refund</h4>
+            <ol><li>If the booking was made through JR-EAST Train Reservation and no paper ticket was collected, JR East should issue a full automatic refund with no cancellation fee.</li><li>Do not manually cancel the reservation while JR East is processing the service-cancellation refund.</li><li>JR East normally sends the refund email within six days.</li><li>If paper tickets were collected, show them to JR staff at Tokyo Station and request the cancellation refund.</li><li>Keep a screenshot of the cancellation and the booking details until the refund appears.</li></ol>
+            <blockquote class="guide-phrase"><span lang="ja">成田エクスプレス35号が運休になりました。この予約の払い戻し方法を確認したいです。</span><span>Narita Express 35 has been cancelled. We would like to confirm how this reservation will be refunded.</span></blockquote>
+            <p><a href="https://traininfo.jreast.co.jp/train_info/e/express.aspx?group=nex" target="_blank" rel="noopener noreferrer">Open live Narita Express status</a> · <a href="https://www.eki-net.com/en/jreast-train-reservation/Top/Index" target="_blank" rel="noopener noreferrer">Open JR-EAST Train Reservation</a></p>
+          </div>
+        </section>
+
+        <section class="border-step">
+          <header class="border-step-head"><span class="border-step-number">PLAN</span><div><h3>The complete route at a glance</h3><p>Active route uses Nozomi 18, TYO-NRT and the final hotel shuttle or taxi</p></div></header>
+          <div class="border-step-body">
+            <div class="guide-table-wrap"><table class="guide-table journey-route-summary"><thead><tr><th>Start</th><th>Transport</th><th>Time</th><th>Finish</th><th>Payment/status</th></tr></thead><tbody><tr><td data-label="Start">DoubleTree</td><td data-label="Transport">Taxi</td><td data-label="Time">Leave 11:05AM · about 25–40 min</td><td data-label="Finish">Shin-Osaka</td><td data-label="Status">Taxi fare</td></tr><tr><td data-label="Start">Shin-Osaka</td><td data-label="Transport">Nozomi 18</td><td data-label="Time">12:06PM–2:33PM</td><td data-label="Finish">Tokyo Station</td><td data-label="Status">Booked QR · Green Car 8 · 15-A/15-B</td></tr><tr><td data-label="Start">Tokyo Station</td><td data-label="Transport">TYO-NRT airport bus</td><td data-label="Time">Target 3:00PM · about 65 min</td><td data-label="Finish">Narita Airport Terminal 2</td><td data-label="Status">Suica · ¥1,500 each · non-reserved</td></tr><tr><td data-label="Start">Terminal 2</td><td data-label="Transport">Free hotel shuttle</td><td data-label="Time">About 5–15 min plus wait</td><td data-label="Finish">Narita Tobu Hotel</td><td data-label="Status">No booking</td></tr><tr><td data-label="Start">Terminal 2</td><td data-label="Transport">Taxi alternative</td><td data-label="Time">About 5–10 min</td><td data-label="Finish">Narita Tobu Hotel</td><td data-label="Status">Metered · no booking</td></tr><tr><td data-label="Start">Tokyo Station</td><td data-label="Transport">Narita Express 35</td><td data-label="Time">3:03PM–3:53PM</td><td data-label="Finish">Airport Terminal 2·3</td><td data-label="Status"><strong>Cancelled · do not board</strong></td></tr></tbody></table></div>
+            <p><strong>Current status:</strong> Nozomi 18 is confirmed. TYO-NRT is the active airport route and accepts Suica on board. Narita Express 35 is cancelled and retained only for refund/reference.</p>
           </div>
         </section>
 
         <section class="guide-sources">
           <h3>Official route sources</h3>
-          <ul><li><a href="https://www.hilton.com/en-gb/hotels/osaocdi-doubletree-osaka-castle/hotel-location/" target="_blank" rel="noopener noreferrer">DoubleTree Osaka Castle location</a></li><li><a href="https://smart-ex.jp/en/" target="_blank" rel="noopener noreferrer">SmartEX Shinkansen reservations</a></li><li><a href="https://global.jr-central.co.jp/en/info/timetable/" target="_blank" rel="noopener noreferrer">JR Central Shinkansen timetable</a></li><li><a href="https://www.eki-net.com/en/jreast-train-reservation/Top/Index" target="_blank" rel="noopener noreferrer">JR-EAST Train Reservation</a></li><li><a href="https://www.jreast.co.jp/multi/en/nex/" target="_blank" rel="noopener noreferrer">JR East Narita Express guide</a></li><li><a href="https://www.tobuhotel.co.jp/narita/access/" target="_blank" rel="noopener noreferrer">Narita Tobu Hotel access</a></li><li><a href="https://www.tobuhotel.co.jp/narita/access/pdf/bus_tt_img_airport_03.pdf" target="_blank" rel="noopener noreferrer">Narita Tobu airport shuttle timetable</a></li></ul>
+          <ul><li><a href="https://www.hilton.com/en-gb/hotels/osaocdi-doubletree-osaka-castle/hotel-location/" target="_blank" rel="noopener noreferrer">DoubleTree Osaka Castle location</a></li><li><a href="https://smart-ex.jp/en/" target="_blank" rel="noopener noreferrer">SmartEX Shinkansen reservations</a></li><li><a href="https://global.jr-central.co.jp/en/info/timetable/" target="_blank" rel="noopener noreferrer">JR Central Shinkansen timetable</a></li><li><a href="https://tyo-nrt.com/en/busstop/tokyo" target="_blank" rel="noopener noreferrer">TYO-NRT Tokyo Station platforms</a></li><li><a href="https://tyo-nrt.com/en/flow" target="_blank" rel="noopener noreferrer">TYO-NRT boarding, Suica and fare guide</a></li><li><a href="https://tyo-nrt.com/en/timetable" target="_blank" rel="noopener noreferrer">TYO-NRT official timetable</a></li><li><a href="https://traininfo.jreast.co.jp/train_info/e/express.aspx?group=nex" target="_blank" rel="noopener noreferrer">JR East live Narita Express status</a></li><li><a href="https://www.eki-net.com/en/jreast-train-reservation/Top/Index" target="_blank" rel="noopener noreferrer">JR-EAST Train Reservation</a></li><li><a href="https://www.jreast.co.jp/multi/en/nex/" target="_blank" rel="noopener noreferrer">JR East Narita Express guide</a></li><li><a href="https://www.tobuhotel.co.jp/narita/access/" target="_blank" rel="noopener noreferrer">Narita Tobu Hotel access</a></li><li><a href="https://www.tobuhotel.co.jp/narita/access/pdf/bus_tt_img_airport_03.pdf" target="_blank" rel="noopener noreferrer">Narita Tobu airport shuttle timetable</a></li></ul>
         </section>
       </div>
     </div>
@@ -3070,13 +3120,14 @@
         },
         {
           id: 'day-14', day: 14, date: '2026-08-14', weekday: 'FRI', region: 'osaka', location: 'Osaka → Narita', localLocation: '大阪 → 成田', title: 'Osaka → Narita airport hotel', localName: '大阪 → 成田空港ホテル', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Narita Tobu Hotel Airport', weatherCity: 'Narita', hotel: stays.narita, naritaTransferGuide: true,
-          transit: { id: 'osaka-narita-transfer', order: 1, mode: 'Taxi + Rail + Shuttle/Taxi', route: 'DoubleTree by Hilton Osaka Castle → Narita Tobu Hotel Airport', detail: '11:05AM taxi to Shin-Osaka · Nozomi 18 12:06PM → Tokyo 2:33PM · Narita Express 35 3:03PM → Airport Terminal 2·3 3:53PM · free hotel shuttle or taxi', localName: 'ダブルツリーbyヒルトン大阪城 → 成田東武ホテルエアポート', localAddress: '11時05分出発 · タクシー · 新大阪駅12時06分発 のぞみ18号 · 東京駅14時33分着 · 15時03分発 成田エクスプレス35号 · 空港第2ビル駅15時53分着 · 無料送迎またはタクシー', localLanguage: 'Japanese', localLang: 'ja', time: '11:05AM', leaveBy: '11:05AM', instant: '2026-08-14T11:05:00+09:00', durationMinutes: 220, address: stays.narita.address },
+          transit: { id: 'osaka-narita-transfer', order: 1, mode: 'Taxi + Shinkansen + Airport Bus + Shuttle/Taxi', route: 'DoubleTree by Hilton Osaka Castle → Narita Tobu Hotel Airport', detail: '11:05AM taxi to Shin-Osaka · Nozomi 18 12:06PM → Tokyo 2:33PM · TYO-NRT buses 2:40PM, 2:50PM, 3:00PM or 3:10PM → Narita Airport Terminal 2 · free hotel shuttle or taxi · Narita Express 35 cancelled', localName: 'ダブルツリーbyヒルトン大阪城 → 成田東武ホテルエアポート', localAddress: '11時05分出発 · タクシー · 新大阪駅12時06分発 のぞみ18号 · 東京駅14時33分着 · 八重洲南口7番・8番乗り場からTYO-NRTバス · 成田空港第2ターミナル · 無料送迎またはタクシー · 成田エクスプレス35号は運休', localLanguage: 'Japanese', localLang: 'ja', time: '11:05AM', leaveBy: '11:05AM', instant: '2026-08-14T11:05:00+09:00', durationMinutes: 315, address: stays.narita.address },
           activities: [
             { id: 'leave-doubletree', order: 0.5, title: 'Check out of DoubleTree and take a taxi to Shin-Osaka', localName: 'ダブルツリーをチェックアウトしてタクシーで新大阪駅へ', localAddress: stays.osaka.localAddress, localLanguage: 'Japanese', localLang: 'ja', time: '11:05AM', instant: '2026-08-14T11:05:00+09:00', durationMinutes: 40, leaveBy: '11:05AM', address: stays.osaka.address },
             { id: 'nozomi-18', order: 1, title: 'Take Nozomi 18 from Shin-Osaka to Tokyo', localName: '新大阪駅からのぞみ18号で東京駅へ', localAddress: '新大阪駅 12時06分発 → 東京駅 14時33分着 · グリーン車8号車 15-A・15-B', localLanguage: 'Japanese', localLang: 'ja', time: '12:06PM', instant: '2026-08-14T12:06:00+09:00', durationMinutes: 147, address: 'Shin-Osaka Station, Osaka, Japan', booking: { emoji: '🚅', name: 'Nozomi 18', shortName: 'Nozomi 18', displayDate: 'Friday 14 August', statusLabel: 'Green Car 8 · 15-A/15-B' } },
-            { id: 'narita-express-35', order: 2, title: 'Take Narita Express 35 from Tokyo to Airport Terminal 2·3', localName: '東京駅から成田エクスプレス35号で空港第2ビル駅へ', localAddress: '東京駅 15時03分発 → 空港第2ビル駅 15時53分着 · グリーン車12号車 3-C・3-D', localLanguage: 'Japanese', localLang: 'ja', time: '3:03PM', instant: '2026-08-14T15:03:00+09:00', durationMinutes: 50, address: 'Narita Airport Terminal 2·3 Station, Chiba, Japan', booking: { emoji: '🚆', name: 'Narita Express 35', shortName: 'Narita Express 35', displayDate: 'Friday 14 August', statusLabel: 'Green Car 12 · 3-C/3-D' } }
+            { id: 'tyo-nrt-airport-bus', order: 2, title: 'Take the next practical TYO-NRT bus to Narita Airport Terminal 2', localName: '東京駅八重洲南口からTYO-NRTバスで成田空港第2ターミナルへ', localAddress: '東京駅八重洲南口 7番・8番乗り場 · 14時40分、14時50分、15時00分または15時10分発 · 成田空港第2ターミナルで下車', localLanguage: 'Japanese', localLang: 'ja', time: '2:40PM', instant: '2026-08-14T14:40:00+09:00', durationMinutes: 95, address: 'Tokyo Station Yaesu South Exit bus platforms 7 and 8, Tokyo, Japan' },
+            { id: 'narita-express-35', order: 3, title: 'Narita Express 35 cancelled - use the TYO-NRT bus', localName: '成田エクスプレス35号は運休 · TYO-NRTバスを利用', localAddress: '運休 · 東京駅 15時03分発 → 空港第2ビル駅 15時53分着予定だった便 · グリーン車12号車 3-C・3-D', localLanguage: 'Japanese', localLang: 'ja', time: '3:03PM', instant: '2026-08-14T15:03:00+09:00', durationMinutes: 1, address: 'Tokyo Station, Tokyo, Japan', booking: { emoji: '🚆', name: 'Narita Express 35', shortName: 'Narita Express 35', displayDate: 'Friday 14 August', statusLabel: 'Cancelled · automatic refund' } }
           ],
-          notes: [{ kind: 'confirmed', text: 'Nozomi 18 · Shin-Osaka 12:06PM → Tokyo 2:33PM · Green Car 8 Seats 15-A and 15-B · Narita Express 35 · Tokyo 3:03PM → Airport Terminal 2·3 3:53PM · Green Car 12 Seats 3-C and 3-D' }]
+          notes: [{ kind: 'confirmed', text: 'Nozomi 18 · Shin-Osaka 12:06PM → Tokyo 2:33PM · Green Car 8 Seats 15-A and 15-B' }, { kind: 'note', text: 'Narita Express 35 is cancelled. Use the next practical TYO-NRT bus from Tokyo Station Yaesu South Exit platforms 7 or 8 and pay ¥1,500 per traveller with Suica.' }]
         },
         {
           id: 'day-15', day: 15, date: '2026-08-15', weekday: 'SAT', region: 'osaka', location: 'Tokyo', localLocation: '東京', title: 'Tokyo → Perth via Ho Chi Minh City', localName: '東京 → ホーチミン市経由でパースへ', localLanguage: 'Japanese', localLang: 'ja', mapQuery: 'Narita Airport Terminal 1', weatherCity: 'Narita', hotel: stays.narita, flightGuide: true,
