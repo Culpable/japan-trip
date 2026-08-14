@@ -1731,6 +1731,14 @@
       .pikachu-page-dock .pikachu-companion.is-inline .pikachu-stage,
       .dialog-companion-dock .pikachu-companion.is-inline .pikachu-stage { width: 42px; height: 37px; }
     }
+    @media (max-height: 620px) {
+      /* A definite block size gives Safari a real amount to divide between the header, scroll
+         body and companion dock. With max-height alone, the middle grid row can collapse to 0. */
+      .trip-dialog {
+        height: calc(100dvh - 1rem);
+        max-height: calc(100dvh - 1rem);
+      }
+    }
     @media (min-width: 1280px) {
       .controls { width: min(1280px, calc(100% - 2rem)); }
     }

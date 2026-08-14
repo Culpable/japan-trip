@@ -9,6 +9,11 @@ assert.match(
   /html\s*\{[^}]*-webkit-text-size-adjust:\s*100%[^}]*text-size-adjust:\s*100%/s,
   'mobile browsers must keep text sizing stable across portrait and landscape rotations'
 );
+assert.match(
+  html,
+  /@media \(max-height: 620px\)[\s\S]*?\.trip-dialog\s*\{[^}]*height:\s*calc\(100dvh - 1rem\)/s,
+  'short landscape dialogs need a definite height so Safari cannot collapse the scrollable content row'
+);
 
 assert.match(
   html,
