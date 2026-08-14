@@ -49,7 +49,13 @@
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      /* Safari otherwise enlarges text after a portrait/landscape rotation. Keep the authored
+         sizes stable without disabling pinch-to-zoom or changing the viewport scale. */
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
     body {
       margin: 0;
       color: var(--ink);

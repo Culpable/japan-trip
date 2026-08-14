@@ -6,6 +6,12 @@ const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 
 assert.match(
   html,
+  /html\s*\{[^}]*-webkit-text-size-adjust:\s*100%[^}]*text-size-adjust:\s*100%/s,
+  'mobile browsers must keep text sizing stable across portrait and landscape rotations'
+);
+
+assert.match(
+  html,
   /id="pikachuPageDock"/,
   'compact layouts should provide an in-flow page dock so Pikachu cannot cover page content'
 );
